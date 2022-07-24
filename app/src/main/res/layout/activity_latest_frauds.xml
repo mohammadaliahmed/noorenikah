@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/blue_border"
+        android:padding="10dp"
+
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OCBC to Give S$13.7 Million of Goodwill Payouts After Scam"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+
+            android:layout_height="wrap_content"
+            android:text="Oversea-Chinese Banking Corp. said it completed
+making arrangements for S$13.7 million ($10.1
+nillion) in goodwil payouts to 790 customers who
+fell prey to an text message phishing scam
+impersonating the lender.
+\n
+About 80% of the amount lost occurred during Dec.
+23-30 festive period, at which time calls to the bank's
+contact center surged by over 40%, OCBC said in a
+statement on Sunday A previous figure that over 450
+Customers had been scammed of S$8.5 million was
+based on police reports made in December, and
+more victims came forward or were discovered this
+month, it said."
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="https://www.bloomberq.com/news/articles/2022-01-30/ocbc-completes-s-13-7-milion-of-goodwill-payouts-from-SmS SCams"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/latestFraud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+
+        android:background="@drawable/blue_border"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+
+            android:layout_margin="10dp"
+            android:src="@drawable/fraud_alert" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="OCBC to give S$13.7 Million of goodwill \npayouts adter scam"
+            android:textColor="#000"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

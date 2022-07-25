@@ -3,18 +3,19 @@ package com.appsinventiv.noorenikah.Models;
 import java.util.List;
 
 public class User {
-    String name,phone,email,password,gender,age,maritalStatus,height,qualification,job,
-    religion,sect,cast,belonging,homeTown,size,city,address,nationality,fathersName,mothersName
-
-    ;
-    int income,brothers,sisters;
+    String name, phone, password;
     String fcmKey;
-    List<String> pictures;
+    String livePicPath,  belonging, houseSize, city, houseAddress,
+            nationality, fatherName, motherName, gender, jobOrBusiness,
+            maritalStatus, education, religion, cast, homeType,sect;
+    int age,income,brothers,sisters;
+    float height;
+
 
     public User() {
     }
 
-    public User(String name, String phone,  String password) {
+    public User(String name, String phone, String password) {
         this.name = name;
         this.phone = phone;
         this.password = password;
@@ -22,6 +23,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getSect() {
+        return sect;
+    }
+
+    public void setSect(String sect) {
+        this.sect = sect;
     }
 
     public void setName(String name) {
@@ -36,14 +45,6 @@ public class User {
         this.phone = phone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -52,76 +53,20 @@ public class User {
         this.password = password;
     }
 
-    public String getGender() {
-        return gender;
+    public String getFcmKey() {
+        return fcmKey;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setFcmKey(String fcmKey) {
+        this.fcmKey = fcmKey;
     }
 
-    public String getAge() {
-        return age;
+    public String getLivePicPath() {
+        return livePicPath;
     }
 
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public String getQualification() {
-        return qualification;
-    }
-
-    public void setQualification(String qualification) {
-        this.qualification = qualification;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public String getReligion() {
-        return religion;
-    }
-
-    public void setReligion(String religion) {
-        this.religion = religion;
-    }
-
-    public String getSect() {
-        return sect;
-    }
-
-    public void setSect(String sect) {
-        this.sect = sect;
-    }
-
-    public String getCast() {
-        return cast;
-    }
-
-    public void setCast(String cast) {
-        this.cast = cast;
+    public void setLivePicPath(String livePicPath) {
+        this.livePicPath = livePicPath;
     }
 
     public String getBelonging() {
@@ -132,20 +77,12 @@ public class User {
         this.belonging = belonging;
     }
 
-    public String getHomeTown() {
-        return homeTown;
+    public String getHouseSize() {
+        return houseSize;
     }
 
-    public void setHomeTown(String homeTown) {
-        this.homeTown = homeTown;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
+    public void setHouseSize(String houseSize) {
+        this.houseSize = houseSize;
     }
 
     public String getCity() {
@@ -156,12 +93,12 @@ public class User {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getHouseAddress() {
+        return houseAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setHouseAddress(String houseAddress) {
+        this.houseAddress = houseAddress;
     }
 
     public String getNationality() {
@@ -172,20 +109,84 @@ public class User {
         this.nationality = nationality;
     }
 
-    public String getFathersName() {
-        return fathersName;
+    public String getFatherName() {
+        return fatherName;
     }
 
-    public void setFathersName(String fathersName) {
-        this.fathersName = fathersName;
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
     }
 
-    public String getMothersName() {
-        return mothersName;
+    public String getMotherName() {
+        return motherName;
     }
 
-    public void setMothersName(String mothersName) {
-        this.mothersName = mothersName;
+    public void setMotherName(String motherName) {
+        this.motherName = motherName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getJobOrBusiness() {
+        return jobOrBusiness;
+    }
+
+    public void setJobOrBusiness(String jobOrBusiness) {
+        this.jobOrBusiness = jobOrBusiness;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getCast() {
+        return cast;
+    }
+
+    public void setCast(String cast) {
+        this.cast = cast;
+    }
+
+    public String getHomeType() {
+        return homeType;
+    }
+
+    public void setHomeType(String homeType) {
+        this.homeType = homeType;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public int getIncome() {
@@ -212,19 +213,11 @@ public class User {
         this.sisters = sisters;
     }
 
-    public String getFcmKey() {
-        return fcmKey;
+    public float getHeight() {
+        return height;
     }
 
-    public void setFcmKey(String fcmKey) {
-        this.fcmKey = fcmKey;
-    }
-
-    public List<String> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<String> pictures) {
-        this.pictures = pictures;
+    public void setHeight(float height) {
+        this.height = height;
     }
 }

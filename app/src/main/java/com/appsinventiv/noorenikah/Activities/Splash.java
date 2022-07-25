@@ -26,7 +26,7 @@ public class Splash extends AppCompatActivity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
                 if (SharedPrefs.getUser() != null) {
-                    if(SharedPrefs.getUser().getPictures()==null) {
+                    if(SharedPrefs.getUser().getLivePicPath()==null) {
                         startActivity(new Intent(Splash.this,CompleteProfileScreen.class));
                     }else{
                         startActivity(new Intent(Splash.this,MainActivity.class));

@@ -84,7 +84,7 @@ public class LoginScreen extends AppCompatActivity {
             User user = usersMap.get(phone);
             if (user.getPassword().equals(pass)) {
                 SharedPrefs.setUser(user);
-                if (user.getPictures() == null) {
+                if (user.getLivePicPath() == null) {
                     startActivity(new Intent(LoginScreen.this, CompleteProfileScreen.class));
 
                 } else {

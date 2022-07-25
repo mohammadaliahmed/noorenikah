@@ -21,6 +21,7 @@
             android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity
             android:name="com.appsinventiv.noorenikah.Activities.MainActivity"
+            android:theme="@style/Theme.VerifyPe.NoActionBar"
             android:exported="true"/>
         <activity
             android:theme="@style/Theme.VerifyPe.NoActionBar"
@@ -43,7 +44,8 @@
         <activity android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
 
-        <service android:name=".Utils.MyFirebaseMessagingService" />
+        <service android:name=".Utils.MyFirebaseMessagingService"
+            android:exported="false"/>
     </application>
 
 </manifest>

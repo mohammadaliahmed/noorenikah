@@ -63,11 +63,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
                     return true;
-                case R.id.navigation_contact:
-                    fragment = new ContactsFragment();
-                    loadFragment(fragment);
-
-                    return true;
+//                case R.id.navigation_contact:
+//                    fragment = new ContactsFragment();
+//                    loadFragment(fragment);
+//
+//                    return true;
 //                case R.id.navigation_premium:
 //                    fragment = new PremiumFragment();
 //                    loadFragment(fragment);

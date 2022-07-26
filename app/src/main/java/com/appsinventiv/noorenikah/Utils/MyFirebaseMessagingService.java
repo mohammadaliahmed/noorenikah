@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat;
 
 import android.util.Log;
 
+import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Activities.RequestReceived;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -87,7 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //            resultIntent.putExtra("adId", Id);
 //
 //        } else {
-//            resultIntent = new Intent(this, MainActivity.class);
+            resultIntent = new Intent(this, RequestReceived.class);
 //        }
 //        }
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

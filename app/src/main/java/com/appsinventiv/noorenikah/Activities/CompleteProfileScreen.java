@@ -296,7 +296,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
     }
 
     private void setHomeSpinner() {
-        String[] homeTypeList = {"Home type", "Own", "Rental"};
+        String[] homeTypeList = {"Home type", "Own", "Rental","Flat","Apartment"};
         Spinner homeSpinner = findViewById(R.id.homeSpinner);
         homeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

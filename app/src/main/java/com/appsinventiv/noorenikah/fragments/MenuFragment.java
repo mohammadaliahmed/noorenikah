@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,20 +21,24 @@ public class MenuFragment extends Fragment {
     private View rootView;
     Button logout;
 
+    TextView name;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_menu, container, false);
-        logout=rootView.findViewById(R.id.logout);
+        name = rootView.findViewById(R.id.name);
+        logout = rootView.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPrefs.logout();
-                Intent i=new Intent(getActivity(), Splash.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent i = new Intent(getActivity(), Splash.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 getActivity().finish();
             }
         });
+        name.setText("Hi, "+SharedPrefs.getUser().getName());
         return rootView;
     }
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDatabase= FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
         fragment = new HomeFragment();
@@ -64,16 +65,16 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(fragment);
 
                     return true;
-//                case R.id.navigation_block:
-////                    fragment = new FAQsFragment();
-//                    loadFragment(fragment);
-//                    return true;
+                case R.id.navigation_notification:
+                    startActivity(new Intent(MainActivity.this, RequestReceived.class));
+                    return true;
 
 
             }
             return false;
         }
     };
+
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

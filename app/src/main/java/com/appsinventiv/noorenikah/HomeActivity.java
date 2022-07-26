@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
+import com.appsinventiv.noorenikah.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -63,11 +64,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
                     return true;
-//                case R.id.navigation_contact:
-//                    fragment = new ContactsFragment();
-//                    loadFragment(fragment);
-//
-//                    return true;
+                case R.id.navigation_search:
+                    fragment = new SearchFragment();
+                    loadFragment(fragment);
+
+                    return true;
 //                case R.id.navigation_premium:
 //                    fragment = new PremiumFragment();
 //                    loadFragment(fragment);

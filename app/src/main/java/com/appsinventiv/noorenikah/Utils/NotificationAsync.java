@@ -23,7 +23,7 @@ public class NotificationAsync extends AsyncTask<String, String, String> {
     Context context;
 
 
-    public final static String AUTH_KEY_FCM_LIVE = "AAAAp0-IeGQ:APA91bGK6kFLrMWjyO-yjvTNw_hKsX8F-_hbpJclvvsHp5j-0mlWIGmuCB7pH7YTa2yAtvEF5szvi_bDFqiepDlB1VU1cOUUMAUb_gWciW8nEaJFEAW1ujeqfqYU9HD0anq1nxwjJTq9";
+    public final static String AUTH_KEY_FCM_LIVE = "AAAA91yjyaU:APA91bFM4SHeu_4MCchQSW19DODeaHGCyZP2fPw7vPgNYnEu020By2uAMuXFUDRagCHOs86VZWRfI6ZjtPyrYJu-vNeuEHPDlNmZrQpQuSlTvg3TU8CZ2655G3fwu7bCPBO8OVUunDxn";
     public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
     public NotificationAsync(Context context) {
@@ -37,6 +37,7 @@ public class NotificationAsync extends AsyncTask<String, String, String> {
         String sendTo = params[1];
         String NotificationTitle = params[2];
         String NotificationMessage = params[3];
+        String UserId = params[4];
 
         try {
             url = new URL(API_URL_FCM);
@@ -60,6 +61,7 @@ public class NotificationAsync extends AsyncTask<String, String, String> {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Title", NotificationTitle);
             jsonObject.put("Message", NotificationMessage);
+            jsonObject.put("UserId", UserId);
 
             json.put("data", jsonObject);
             json.put("to", sendTo);

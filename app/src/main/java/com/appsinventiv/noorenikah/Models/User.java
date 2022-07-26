@@ -1,8 +1,9 @@
 package com.appsinventiv.noorenikah.Models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     String name, phone, password;
     String fcmKey;
     String livePicPath,  belonging, houseSize, city, houseAddress,

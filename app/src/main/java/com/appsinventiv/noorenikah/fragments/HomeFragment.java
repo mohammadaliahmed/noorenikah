@@ -17,6 +17,7 @@ import com.appsinventiv.noorenikah.LatestFrauds;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.ReportScreen;
+import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.VerifyScreen;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +52,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onRequestClicked(User user) {
+                sendNotification(user);
 
             }
         });
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
+                    usersList.clear();
                     for (DataSnapshot snapshot:dataSnapshot.getChildren()){
                         User user=snapshot.getValue(User.class);
                         if(user!=null && user.getName()!=null){
@@ -83,6 +86,23 @@ public class HomeFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void sendNotification(User user) {
+        NotificationAsync notificationAsync = new NotificationAsync(getContext());
+        String NotificationTitle = "New request";
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                SharedPrefs.getFcmKey(),
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "");
+        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
+                .child("sent").child(user.getPhone()).setValue(user.getPhone());
+        mDatabase.child("Requests").child(user.getPhone()).child("received")
+                .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
     }
 
     @Override

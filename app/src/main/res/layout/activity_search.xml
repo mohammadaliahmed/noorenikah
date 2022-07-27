@@ -229,7 +229,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Max Income"
                         android:inputType="number"
-                        android:text="50000" />
+                        android:text="100000" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.RequestReceived;
+import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -49,24 +50,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             title = map.get("Title");
             type = map.get("Type");
             Id = map.get("Id");
-//            if (type.equals("secret")) {
-//                Intent intent = new Intent(this, Splash.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//            } else {
-//            Intent intent = new Intent(this, Splash.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-            handleNow(title, message);
-//            }
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-//                scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-//                handleNow(msg);
-            }
+            handleNow(title, message);
+
 
         }
 
@@ -84,13 +70,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        if (type.equalsIgnoreCase("adActivated")) {
 //            resultIntent = new Intent(this, MyAds.class);
 //        } else if (type.equalsIgnoreCase("marketing")) {
-//        if (type.equals("approved")) {
-//            resultIntent = new Intent(this, AdPage.class);
-//            resultIntent.putExtra("adId", Id);
-//
-//        } else {
+        if (type.equals("accepted")) {
+            resultIntent = new Intent(this, ViewFriendProfile.class);
+            resultIntent.putExtra("phone", Id);
+
+        } else  {
             resultIntent = new Intent(this, RequestReceived.class);
-//        }
+        }
 //        }
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

@@ -139,7 +139,7 @@ public class SearchActivity extends AppCompatActivity {
                 NotificationTitle,
                 NotificationMessage,
                 SharedPrefs.getUser().getPhone(),
-                "");
+                "request");
         mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                 .child("sent").child(user.getPhone()).setValue(user.getPhone());
         mDatabase.child("Requests").child(user.getPhone()).child("received")

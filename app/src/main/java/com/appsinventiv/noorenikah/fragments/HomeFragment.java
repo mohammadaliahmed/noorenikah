@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-
-
     private View rootView;
     RecyclerView recycler;
     DatabaseReference mDatabase;
@@ -94,11 +92,11 @@ public class HomeFragment extends Fragment {
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
-                SharedPrefs.getFcmKey(),
+                user.getFcmKey(),
                 NotificationTitle,
                 NotificationMessage,
                 SharedPrefs.getUser().getPhone(),
-                "");
+                "request");
         mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                 .child("sent").child(user.getPhone()).setValue(user.getPhone());
         mDatabase.child("Requests").child(user.getPhone()).child("received")

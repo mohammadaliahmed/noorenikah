@@ -38,6 +38,7 @@ public class NotificationAsync extends AsyncTask<String, String, String> {
         String NotificationTitle = params[2];
         String NotificationMessage = params[3];
         String UserId = params[4];
+        String NotificationType = params[5];
 
         try {
             url = new URL(API_URL_FCM);
@@ -61,7 +62,8 @@ public class NotificationAsync extends AsyncTask<String, String, String> {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Title", NotificationTitle);
             jsonObject.put("Message", NotificationMessage);
-            jsonObject.put("UserId", UserId);
+            jsonObject.put("Id", UserId);
+            jsonObject.put("Type", NotificationType);
 
             json.put("data", jsonObject);
             json.put("to", sendTo);

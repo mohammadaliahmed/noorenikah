@@ -46,6 +46,9 @@
         <activity android:name=".Activities.SearchActivity" />
         <activity android:name=".Activities.RequestReceived" />
         <activity android:name=".Activities.ViewRequestProfile" />
+        <activity android:name=".Activities.EditProfile" />
+        <activity android:name=".Activities.ViewFriendProfile" />
+        <activity android:name=".Activities.ListOfFriends" />
 
         <service android:name=".Utils.MyFirebaseMessagingService"
             android:exported="false">

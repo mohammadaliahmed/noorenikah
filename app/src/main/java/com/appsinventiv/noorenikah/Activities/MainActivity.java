@@ -14,6 +14,7 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.MenuFragment;
+import com.appsinventiv.noorenikah.fragments.RequestsFragment;
 import com.appsinventiv.noorenikah.fragments.SearchFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_notification:
-                    startActivity(new Intent(MainActivity.this, RequestReceived.class));
+                    fragment = new RequestsFragment();
+                    loadFragment(fragment);
                     return true;
 
 

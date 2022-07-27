@@ -21,9 +21,8 @@ import com.appsinventiv.noorenikah.R;
 
 public class SearchFragment extends Fragment {
     private View rootView;
-    private String selectedCast;
     private String selectedEducation;
-    EditText minAge, maxAge, minHeight, maxHeight, city, minIncome, maxIncome;
+    EditText minAge, maxAge, minHeight, maxHeight, city, minIncome, maxIncome,cast;
     Button search;
     private String selectedHomeType;
     RadioButton jobRadio, businessRadio;
@@ -42,7 +41,7 @@ public class SearchFragment extends Fragment {
         maxHeight = rootView.findViewById(R.id.maxHeight);
         city = rootView.findViewById(R.id.city);
         search = rootView.findViewById(R.id.search);
-        setCastSpinner();
+        cast = rootView.findViewById(R.id.cast);
         setEducationSpinner();
         setHomeSpinner();
         search.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +58,7 @@ public class SearchFragment extends Fragment {
                 i.putExtra("selectedHomeType", selectedHomeType);
                 i.putExtra("jobOrBusiness", jobOrBusiness);
                 i.putExtra("education", selectedEducation);
-                i.putExtra("cast", selectedCast);
+                i.putExtra("cast", cast.getText().toString());
                 startActivity(i);
             }
         });
@@ -121,25 +120,7 @@ public class SearchFragment extends Fragment {
         educationSpinner.setAdapter(aa);
     }
 
-    private void setCastSpinner() {
-        String[] castList = {"Select", "Sheikh", "Butt", "Arain"};
-        Spinner castSpinner = rootView.findViewById(R.id.castSpinner);
-        castSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedCast = castList[i];
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, castList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        castSpinner.setAdapter(aa);
-    }
 
     @Override
     public void onDestroyView() {

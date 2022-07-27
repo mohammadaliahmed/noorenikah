@@ -44,7 +44,6 @@
         <activity android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
         <activity android:name=".Activities.SearchActivity" />
-        <activity android:name=".Activities.RequestReceived" />
         <activity android:name=".Activities.ViewRequestProfile" />
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Activities.ViewFriendProfile" />

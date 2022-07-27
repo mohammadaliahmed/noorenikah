@@ -41,9 +41,9 @@ public class Splash extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
-        //alias:amrozanew
-        //key:amrozanew
-        //pass:amrozanew
+        //alias:noorenikah
+        //key:noorenikah
+        //pass:noorenikah
 
     }
 

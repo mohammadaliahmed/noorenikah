@@ -54,7 +54,7 @@ public class ListOfFriends extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("Friends").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("friends").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {

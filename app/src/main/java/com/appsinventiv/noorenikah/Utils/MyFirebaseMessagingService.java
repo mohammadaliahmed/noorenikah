@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.appsinventiv.noorenikah.Activities.MainActivity;
-import com.appsinventiv.noorenikah.Activities.RequestReceived;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -74,8 +73,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent = new Intent(this, ViewFriendProfile.class);
             resultIntent.putExtra("phone", Id);
 
-        } else  {
-            resultIntent = new Intent(this, RequestReceived.class);
+        } else if (type.equals("request")) {
+            Constants.REQUEST_RECEIVED = true;
+
+            resultIntent = new Intent(this, MainActivity.class);
+        } else {
+            resultIntent = new Intent(this, MainActivity.class);
+
         }
 //        }
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

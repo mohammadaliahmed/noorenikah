@@ -370,10 +370,15 @@
                                 android:layout_height="wrap_content"
                                 android:text="Select Cast" />
 
-                            <Spinner
-                                android:id="@+id/castSpinner"
+                            <EditText
+                                android:id="@+id/cast"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Cast"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 

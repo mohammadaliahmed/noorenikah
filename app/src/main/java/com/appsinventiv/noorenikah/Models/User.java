@@ -1,6 +1,7 @@
 package com.appsinventiv.noorenikah.Models;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 public class User implements Serializable {
@@ -11,7 +12,7 @@ public class User implements Serializable {
             maritalStatus, education, religion, cast, homeType,sect;
     int age,income,brothers,sisters;
     float height;
-
+    HashMap<String,String> friends;
 
     public User() {
     }
@@ -20,6 +21,14 @@ public class User implements Serializable {
         this.name = name;
         this.phone = phone;
         this.password = password;
+    }
+
+    public HashMap<String, String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(HashMap<String, String> friends) {
+        this.friends = friends;
     }
 
     public String getName() {

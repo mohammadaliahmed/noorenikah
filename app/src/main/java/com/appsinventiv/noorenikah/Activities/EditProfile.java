@@ -53,13 +53,13 @@ public class EditProfile extends AppCompatActivity {
     private String selectedMaritalStatus;
     private String selectedEducation;
     private String selectedReligion;
-    private String selectedCast;
+
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
     RadioButton male, female, jobRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
-            fatherName, motherName, brothers, sisters, name, phone;
+            fatherName, motherName, brothers, sisters, name, phone, cast;
     Button saveProfile;
     DatabaseReference mDatabase;
     private String genderSelected;
@@ -75,7 +75,6 @@ public class EditProfile extends AppCompatActivity {
     private Spinner educationSpinner;
     private Spinner religionSpinner;
     private Spinner sectSpinner;
-    private Spinner castSpinner;
     private Spinner homeSpinner;
 
     private void setUpFindViewByIds() {
@@ -94,6 +93,7 @@ public class EditProfile extends AppCompatActivity {
         sisters = findViewById(R.id.sisters);
         saveProfile = findViewById(R.id.saveProfile);
         male = findViewById(R.id.male);
+        cast = findViewById(R.id.cast);
         female = findViewById(R.id.female);
         jobRadio = findViewById(R.id.jobRadio);
         businessRadio = findViewById(R.id.businessRadio);
@@ -145,7 +145,6 @@ public class EditProfile extends AppCompatActivity {
         setMaritalSpinner();
         setEducationSpinner();
         setReligionSpinner();
-        setCastSpinner();
         setSectSpinner();
         setHomeSpinner();
 
@@ -173,7 +172,7 @@ public class EditProfile extends AppCompatActivity {
                 map.put("education", selectedEducation);
                 map.put("religion", selectedReligion);
                 map.put("sect", selectedSect);
-                map.put("cast", selectedCast);
+                map.put("cast", cast.getText().toString());
                 map.put("homeType", selectedHomeType);
                 wholeLayout.setVisibility(View.VISIBLE);
                 mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -230,7 +229,7 @@ public class EditProfile extends AppCompatActivity {
                     educationSpinner.setSelection(educationAdapter.getPosition(userModel.getEducation()));
                     religionSpinner.setSelection(religionAdapter.getPosition(userModel.getReligion()));
                     sectSpinner.setSelection(sectAdapter.getPosition(userModel.getSect()));
-                    castSpinner.setSelection(castAdapter.getPosition(userModel.getCast()));
+                    cast.setText(userModel.getCast());
                     homeSpinner.setSelection(homeAdapter.getPosition(userModel.getHomeType()));
                     Glide.with(EditProfile.this).load(userModel.getLivePicPath()).into(pickedPicture);
                     livePicPath = "" + userModel.getLivePicPath();
@@ -254,7 +253,6 @@ public class EditProfile extends AppCompatActivity {
                     selectedEducation = "" + userModel.getEducation();
                     selectedReligion = "" + userModel.getReligion();
                     selectedSect = "" + userModel.getSect();
-                    selectedCast = "" + userModel.getCast();
                     selectedHomeType = "" + userModel.getHomeType();
 
 
@@ -351,25 +349,6 @@ public class EditProfile extends AppCompatActivity {
         sectSpinner.setAdapter(sectAdapter);
     }
 
-    private void setCastSpinner() {
-        String[] castList = {"Cast", "Sheikh", "Butt", "Arain"};
-        castSpinner = findViewById(R.id.castSpinner);
-        castSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedCast = castList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        castAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, castList);
-        castAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        castSpinner.setAdapter(castAdapter);
-    }
 
     private void setHomeSpinner() {
         String[] homeTypeList = {"Home type", "Own", "Rental", "Flat", "Apartment"};

@@ -261,8 +261,9 @@
                     android:textColor="#000"
                     android:textSize="20sp" />
 
-                <Spinner
-                    android:id="@+id/castSpinner"
+                <EditText
+                    android:id="@+id/cast"
+                    android:hint="Enter Cast"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"

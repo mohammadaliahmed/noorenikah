@@ -3,18 +3,23 @@ package com.appsinventiv.noorenikah.Adapters;
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -52,13 +57,44 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             @Override
             public void onClick(View view) {
                 callbacks.onRequestClicked(user);
+                CommonUtils.showToast("Request sent");
+                holder.requestBtn.setText("Request Sent!");
             }
         });
-        Glide.with(context)
-                .load(user.getLivePicPath())
-                .apply(bitmapTransform(new BlurTransformation(50)))
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+                    Intent i = new Intent(context, ViewFriendProfile.class);
+                    i.putExtra("phone", user.getPhone());
+                    context.startActivity(i);
+                } else {
+                    CommonUtils.showToast("Profile is locked\nPlease send Request");
+                }
+            }
+        });
+        if(SharedPrefs.getUser().getFriends()!=null) {
+            if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+                holder.lockedInfo.setVisibility(View.GONE);
+                Glide.with(context)
+                        .load(user.getLivePicPath())
+                        .into(holder.image);
+            } else {
+                holder.lockedInfo.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(user.getLivePicPath())
+                        .apply(bitmapTransform(new BlurTransformation(50)))
 
-                .into(holder.image);
+                        .into(holder.image);
+            }
+        }else{
+            holder.lockedInfo.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .load(user.getLivePicPath())
+                    .apply(bitmapTransform(new BlurTransformation(50)))
+
+                    .into(holder.image);
+        }
         holder.name.setText(user.getName() + ", " + user.getAge());
         holder.details.setText("Education: " + user.getEducation() + "\n" + "City: " + user.getCity() + "\nCast: " + user.getCast());
     }
@@ -72,6 +108,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         Button requestBtn;
         TextView name, details;
         ImageView image;
+        LinearLayout lockedInfo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +116,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             details = itemView.findViewById(R.id.details);
             name = itemView.findViewById(R.id.name);
             image = itemView.findViewById(R.id.image);
+            lockedInfo = itemView.findViewById(R.id.lockedInfo);
 
         }
     }

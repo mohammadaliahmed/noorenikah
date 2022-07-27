@@ -62,13 +62,12 @@ public class CompleteProfileScreen extends AppCompatActivity {
     private String selectedMaritalStatus;
     private String selectedEducation;
     private String selectedReligion;
-    private String selectedCast;
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
     RadioButton male, female, jobRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
-            fatherName, motherName, brothers, sisters;
+            fatherName, motherName, brothers, sisters, cast;
     Button saveProfile;
     DatabaseReference mDatabase;
     private String genderSelected;
@@ -81,6 +80,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
         height = findViewById(R.id.height);
         income = findViewById(R.id.income);
         belonging = findViewById(R.id.belonging);
+        cast = findViewById(R.id.cast);
         houseSize = findViewById(R.id.houseSize);
         city = findViewById(R.id.city);
         houseAddress = findViewById(R.id.houseAddress);
@@ -133,59 +133,91 @@ public class CompleteProfileScreen extends AppCompatActivity {
         setMaritalSpinner();
         setEducationSpinner();
         setReligionSpinner();
-        setCastSpinner();
         setSectSpinner();
         setHomeSpinner();
 
         saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("livePicPath", livePicPath);
-                map.put("age", Integer.parseInt(age.getText().toString()));
-                map.put("height", Float.parseFloat(height.getText().toString()));
-                map.put("income", Integer.parseInt(income.getText().toString()));
-                map.put("belonging", belonging.getText().toString());
-                map.put("houseSize", houseSize.getText().toString());
-                map.put("city", city.getText().toString());
-                map.put("houseAddress", houseAddress.getText().toString());
-                map.put("nationality", nationality.getText().toString());
-                map.put("fatherName", fatherName.getText().toString());
-                map.put("motherName", motherName.getText().toString());
-                map.put("brothers", Integer.parseInt(brothers.getText().toString()));
-                map.put("sisters", Integer.parseInt(sisters.getText().toString()));
-                map.put("gender", genderSelected);
-                map.put("jobOrBusiness", jobOrBusiness);
-                map.put("maritalStatus", selectedMaritalStatus);
-                map.put("education", selectedEducation);
-                map.put("religion", selectedReligion);
-                map.put("sect", selectedSect);
-                map.put("cast", selectedCast);
-                map.put("homeType", selectedHomeType);
-                wholeLayout.setVisibility(View.VISIBLE);
-                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() != null) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    SharedPrefs.setUser(user);
-                                    startActivity(new Intent(CompleteProfileScreen.this, MainActivity.class));
-                                    finish();
+                if (age.getText().length() == 0) {
+                    age.setError("Enter age");
+                    age.requestFocus();
+
+                } else if (height.getText().length() == 0) {
+                    height.setError("Enter height");
+                    height.requestFocus();
+
+                } else if (income.getText().length() == 0) {
+                    income.setError("Enter income");
+                    income.requestFocus();
+                } else if (cast.getText().length() == 0) {
+                    cast.setError("Enter cast");
+                    cast.requestFocus();
+                } else if (city.getText().length() == 0) {
+                    city.setError("Enter city");
+                    city.requestFocus();
+                } else if (brothers.getText().length() == 0) {
+                    brothers.setError("Enter brothers");
+                    brothers.requestFocus();
+
+                } else if (sisters.getText().length() == 0) {
+                    sisters.setError("Enter sisters");
+                    sisters.requestFocus();
+
+                } else if (genderSelected == null) {
+
+                    CommonUtils.showToast("Please select gender");
+                } else if (livePicPath == null) {
+
+                    CommonUtils.showToast("Please upload picture");
+                } else {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("livePicPath", livePicPath);
+                    map.put("age", Integer.parseInt(age.getText().toString()));
+                    map.put("height", Float.parseFloat(height.getText().toString()));
+                    map.put("income", Integer.parseInt(income.getText().toString()));
+                    map.put("belonging", belonging.getText().toString());
+                    map.put("houseSize", houseSize.getText().toString());
+                    map.put("city", city.getText().toString());
+                    map.put("houseAddress", houseAddress.getText().toString());
+                    map.put("nationality", nationality.getText().toString());
+                    map.put("fatherName", fatherName.getText().toString());
+                    map.put("motherName", motherName.getText().toString());
+                    map.put("brothers", Integer.parseInt(brothers.getText().toString()));
+                    map.put("sisters", Integer.parseInt(sisters.getText().toString()));
+                    map.put("gender", genderSelected);
+                    map.put("jobOrBusiness", jobOrBusiness);
+                    map.put("maritalStatus", selectedMaritalStatus);
+                    map.put("education", selectedEducation);
+                    map.put("religion", selectedReligion);
+                    map.put("sect", selectedSect);
+                    map.put("cast", cast.getText().toString());
+                    map.put("homeType", selectedHomeType);
+                    wholeLayout.setVisibility(View.VISIBLE);
+                    mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.getValue() != null) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        SharedPrefs.setUser(user);
+                                        startActivity(new Intent(CompleteProfileScreen.this, MainActivity.class));
+                                        finish();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
 
-                    }
-                });
+                        }
+                    });
 
+                }
             }
         });
 
@@ -275,28 +307,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
         sectSpinner.setAdapter(aa);
     }
 
-    private void setCastSpinner() {
-        String[] castList = {"Cast", "Sheikh", "Butt", "Arain"};
-        Spinner castSpinner = findViewById(R.id.castSpinner);
-        castSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedCast = castList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, castList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        castSpinner.setAdapter(aa);
-    }
-
     private void setHomeSpinner() {
-        String[] homeTypeList = {"Home type", "Own", "Rental","Flat","Apartment"};
+        String[] homeTypeList = {"Home type", "Own", "Rental", "Flat", "Apartment"};
         Spinner homeSpinner = findViewById(R.id.homeSpinner);
         homeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

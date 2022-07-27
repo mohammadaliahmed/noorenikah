@@ -51,9 +51,9 @@ public class RequestsFragment extends Fragment {
                 mDatabase.child("Requests").child(user.getPhone())
                         .child("sent").child(SharedPrefs.getUser().getPhone()).removeValue();
 
-                mDatabase.child("Friends").child(SharedPrefs.getUser().getPhone())
+                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("friends")
                         .child(user.getPhone()).setValue(user.getPhone());
-                mDatabase.child("Friends").child(user.getPhone())
+                mDatabase.child("Users").child(user.getPhone()).child("friends")
                         .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
                 CommonUtils.showToast("Accepted");
                 sendNotification(user);
@@ -91,7 +91,7 @@ public class RequestsFragment extends Fragment {
                 user.getFcmKey(),
                 NotificationTitle,
                 NotificationMessage,
-                user.getPhone(),
+                SharedPrefs.getUser().getPhone(),
                 "accepted");
     }
 

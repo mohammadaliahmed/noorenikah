@@ -8,10 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -23,6 +25,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.Models.User;
@@ -30,6 +33,10 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.bumptech.glide.Glide;
+import com.fxn.pix.Options;
+import com.fxn.pix.Pix;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -42,10 +49,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,9 +64,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CompleteProfileScreen extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
+    private static final int REQUEST_CODE_CHOOSE = 23;
 
     RelativeLayout wholeLayout;
 
+    CheckBox consent;
     Button picPicture;
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
@@ -73,6 +85,9 @@ public class CompleteProfileScreen extends AppCompatActivity {
     private String genderSelected;
     private String jobOrBusiness;
     private String selectedSect;
+    private ArrayList<String> mSelected = new ArrayList<>();
+    private String imageUrl;
+    private boolean consentGiven;
 
     private void setUpFindViewByIds() {
         age = findViewById(R.id.age);
@@ -84,6 +99,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
         houseSize = findViewById(R.id.houseSize);
         city = findViewById(R.id.city);
         houseAddress = findViewById(R.id.houseAddress);
+        consent = findViewById(R.id.consent);
         nationality = findViewById(R.id.nationality);
         fatherName = findViewById(R.id.fatherName);
         motherName = findViewById(R.id.motherName);
@@ -135,6 +151,16 @@ public class CompleteProfileScreen extends AppCompatActivity {
         setReligionSpinner();
         setSectSpinner();
         setHomeSpinner();
+        consent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isChecked()) {
+                    consentGiven = true;
+                }
+            }
+
+
+        });
 
         saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +196,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
                 } else if (livePicPath == null) {
 
                     CommonUtils.showToast("Please upload picture");
+                } else if (!consentGiven) {
+                    CommonUtils.showToast("Please accept the consent form");
                 } else {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("livePicPath", livePicPath);
@@ -328,70 +356,141 @@ public class CompleteProfileScreen extends AppCompatActivity {
     }
 
     private void initMatisse() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+        Options options = Options.init()
+                .setRequestCode(REQUEST_CODE_CHOOSE)                                           //Request code for activity results
+                .setCount(1)
+                .setExcludeVideos(true)
+
+                .setScreenOrientation(Options.SCREEN_ORIENTATION_PORTRAIT)     //Orientaion
+                ;                                       //Custom Path For media Storage
+
+        Pix.start(this, options);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
 
     }
 
+    //    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == PICK_IMAGE) {
+//            //TODO: action
+//            Uri uri = data.getData();
+//            final InputStream imageStream;
+//            try {
+//                imageStream = getContentResolver().openInputStream(uri);
+//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                pickedPicture.setImageBitmap(selectedImage);
+//                uploadPicture();
+//
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+//    }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
-            //TODO: action
-            Uri uri = data.getData();
-            final InputStream imageStream;
-            try {
-                imageStream = getContentResolver().openInputStream(uri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                pickedPicture.setImageBitmap(selectedImage);
-                uploadPicture();
-
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-
+        if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
+            mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            CompressImage image = new CompressImage(CompleteProfileScreen.this);
+            imageUrl = image.compressImage("" + mSelected.get(0));
+            Glide.with(CompleteProfileScreen.this).load(mSelected.get(0)).into(pickedPicture);
+            uploadPicture();
         }
     }
 
     private void uploadPicture() {
+        try {
+            String imgName = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
-        Bitmap bitmap = ((BitmapDrawable) pickedPicture.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
-        byte[] dataa = baos.toByteArray();
+            Uri file = Uri.fromFile(new File(imageUrl));
 
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference mountainsRef = storageRef.child(System.currentTimeMillis() + ".jpg");
+            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        UploadTask uploadTask = mountainsRef.putBytes(dataa);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-//                CommonUtils.showToast(exception.getMessage());
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                CommonUtils.showToast("" + taskSnapshot.getMetadata());
-                Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
-                firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        livePicPath = "" + uri;
+            final StorageReference riversRef = mStorageRef.child("Photos").child(imgName);
 
-                    }
-                });
+            riversRef.putFile(file)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Get a URL to the uploaded content
 
-            }
-        });
+                        String downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                        riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
+                                firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        livePicPath = "" + uri;
+
+                                    }
+                                });
+
+
+                            }
+                        });
+
+
+                    })
+                    .addOnFailureListener(exception -> {
+                        // Handle unsuccessful uploads
+                        // ...
+                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
+
+                        CommonUtils.showToast("There was some error uploading pic");
+
+
+                    });
+        } catch (Exception e) {
+            mDatabase.child("Errors").child("mainError").child(mDatabase.push().getKey()).setValue(e.getMessage());
+        }
 
 
     }
+
+
+//    private void uploadPicture() {
+//
+//        Bitmap bitmap = ((BitmapDrawable) pickedPicture.getDrawable()).getBitmap();
+//
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+//        byte[] dataa = baos.toByteArray();
+//
+//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//        StorageReference mountainsRef = storageRef.child(System.currentTimeMillis() + ".jpg");
+//
+//        UploadTask uploadTask = mountainsRef.putBytes(dataa);
+//        uploadTask.addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle unsuccessful uploads
+////                CommonUtils.showToast(exception.getMessage());
+//            }
+//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+////                CommonUtils.showToast("" + taskSnapshot.getMetadata());
+//                Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
+//                firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        livePicPath = "" + uri;
+//
+//                    }
+//                });
+//
+//            }
+//        });
+//
+//
+//    }
 
 
 }

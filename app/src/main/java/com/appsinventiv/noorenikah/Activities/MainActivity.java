@@ -14,6 +14,7 @@ import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.appsinventiv.noorenikah.fragments.ChatFragment;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.MenuFragment;
 import com.appsinventiv.noorenikah.fragments.RequestsFragment;
@@ -89,6 +90,11 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_menu:
                     fragment = new MenuFragment();
+                    loadFragment(fragment);
+
+                    return true;
+                case R.id.navigation_chat:
+                    fragment = new ChatFragment();
                     loadFragment(fragment);
 
                     return true;

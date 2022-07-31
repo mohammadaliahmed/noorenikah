@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:padding="5dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+
+            android:src="@drawable/back" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/picture"
+            android:layout_width="40dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+           />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/recyclerView"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomArea"
+        android:layout_below="@id/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/bottomArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp">
+
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/send"
+            android:background="@drawable/edit_text_curved"
+            android:hint="Enter Message"
+            android:maxHeight="150dp"
+            android:minHeight="50dp"
+            android:padding="10dp"
+            android:scrollbars="vertical" />
+
+        <ImageView
+            android:id="@+id/send"
+            android:layout_width="50dp"
+
+            android:padding="5dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:src="@drawable/send_message" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

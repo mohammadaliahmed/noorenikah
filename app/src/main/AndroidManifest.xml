@@ -5,6 +5,7 @@
 
     <application
         android:allowBackup="true"
+        tools:replace="android:theme"
         android:name=".Utils.ApplicationClass"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,6 +49,8 @@
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Activities.ViewFriendProfile" />
         <activity android:name=".Activities.ListOfFriends" />
+        <activity android:name=".Activities.ChatScreen"
+            android:theme="@style/Theme.VerifyPe.NoActionBar"/>
 
         <service android:name=".Utils.MyFirebaseMessagingService"
             android:exported="false">

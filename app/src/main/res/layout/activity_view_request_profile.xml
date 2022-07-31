@@ -250,6 +250,13 @@
             android:padding="5dp"
             android:text="" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/chat"
+        android:layout_width="50dp"
+        android:src="@drawable/chat"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:layout_height="50dp"/>
 
 
 </LinearLayout>

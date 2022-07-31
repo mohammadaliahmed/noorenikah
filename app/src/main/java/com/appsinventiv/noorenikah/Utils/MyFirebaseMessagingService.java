@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 
 import android.util.Log;
 
+import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.R;
@@ -77,6 +78,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Constants.REQUEST_RECEIVED = true;
 
             resultIntent = new Intent(this, MainActivity.class);
+        } else if (type.equals("msg")) {
+
+            resultIntent = new Intent(this, ChatScreen.class);
+            resultIntent.putExtra("phone",Id);
         } else {
             resultIntent = new Intent(this, MainActivity.class);
 

@@ -710,20 +710,47 @@
 
                 android:text="Save Profile"
                 android:textColor="#fff" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <CheckBox
+                    android:id="@+id/consent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="Click here to accept"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="3"
+                    android:text="By clicking the checkbox you give consent to share your information to other users. They can search, contact and see your pictures. \n\nYou also accept that information you have provided is correct. If found false you will be permanently banned from Noor-E-Nikah app"
+                    android:textColor="#000" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/wholeLayout"
-        android:background="#fff"
-        android:layout_width="match_parent"
-        android:alpha="0.8"
-        android:layout_height="match_parent">
-        <ProgressBar
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:id="@+id/wholeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="#fff"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
 </RelativeLayout>

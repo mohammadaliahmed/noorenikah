@@ -39,6 +39,10 @@
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/home.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/navigation.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/pin_bg.xml" value="0.1735" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_contact_us.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_register.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_verify_phone.xml" value="0.22" />
       </map>
     </option>
   </component>

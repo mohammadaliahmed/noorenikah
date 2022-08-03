@@ -51,6 +51,7 @@
         <activity android:name=".Activities.ListOfFriends" />
         <activity android:name=".Activities.ChatScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
+        <activity android:name=".Activities.VerifyPhone" />
 
         <service android:name=".Utils.MyFirebaseMessagingService"
             android:exported="false">

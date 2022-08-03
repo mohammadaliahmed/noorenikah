@@ -2,6 +2,8 @@
   "project_info": {
     "project_number": "1062411159973",
     "project_id": "noorenikah",
+    "firebase_url": "https://noorenikah-default-rtdb.firebaseio.com/",
+
     "storage_bucket": "noorenikah.appspot.com"
   },
   "client": [

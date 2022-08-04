@@ -1,5 +1,6 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.goodiebag.pinview.Pinview;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +22,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +36,6 @@ public class VerifyPhone extends AppCompatActivity {
     Button verify;
     PhoneAuthProvider phoneAuth;
     Pinview pin;
-
     String phoneNumber;
     TextView number;
     TextView change, changen;
@@ -39,14 +43,18 @@ public class VerifyPhone extends AppCompatActivity {
     TextView sendAgain;
     private String smsCode;
     DatabaseReference mDatabase;
-    HashMap<String, User> userMap = new HashMap<>();
     private String mVerificationId;
+    private HashMap<String, User> usersMap = new HashMap<>();
 
     RelativeLayout wholeLayout;
+    String name, password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
+        getSupportActionBar().setElevation(0);
+        this.setTitle("Verify Phone");
 //        verify = findViewById(R.id.verify);
         pin = findViewById(R.id.pinview);
         number = findViewById(R.id.number);
@@ -57,6 +65,8 @@ public class VerifyPhone extends AppCompatActivity {
         wholeLayout = findViewById(R.id.wholeLayout);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         phoneNumber = getIntent().getStringExtra("number");
+        name = getIntent().getStringExtra("name");
+        password = getIntent().getStringExtra("password");
         number.setText(phoneNumber);
 
 
@@ -73,7 +83,7 @@ public class VerifyPhone extends AppCompatActivity {
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                checkUser(); test
+//                checkUser(); //test
 
                 if (!pin.getValue().equalsIgnoreCase("")) {
                     wholeLayout.setVisibility(View.VISIBLE);
@@ -126,48 +136,62 @@ public class VerifyPhone extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void checkUser() {
-//        SharedPrefs.setPhone(phoneNumber);
-//        if (userMap.containsKey(phoneNumber)) {
-//            SharedPrefs.setUserModel(userMap.get(phoneNumber));
-//            Intent i = new Intent(VerifyCode.this, MainActivity.class);
-//            startActivity(i);
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            CommonUtils.showToast("Logged in successfully");
-//        } else {
-//            Intent i = new Intent(VerifyCode.this, AccountVerified.class);
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(i);
-//        }
-//        finish();
+        String ph = phoneNumber.substring(phoneNumber.length() - 10);
+        if (usersMap.containsKey(ph)) {
+            SharedPrefs.setUser(usersMap.get(ph));
+            Intent i;
+
+            if(usersMap.get(ph).getLivePicPath()==null){
+                i= new Intent(VerifyPhone.this, CompleteProfileScreen.class);
+            }else{
+                 i = new Intent(VerifyPhone.this, MainActivity.class);
+
+            }
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            CommonUtils.showToast("Logged in successfully");
+            finish();
+        } else {
+            User user = new User(
+                    name,
+                    ph,
+                    password);
+            mDatabase.child("Users").child(ph).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    CommonUtils.showToast("Successfully registered");
+                    SharedPrefs.setUser(user);
+                    Intent i = new Intent(VerifyPhone.this, CompleteProfileScreen.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                    finish();
+                }
+            });
+        }
+
     }
 
     private void getUsersFromDB() {
-//        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.getValue() != null) {
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        try {
-//                            UserModel userModel = snapshot.getValue(UserModel.class);
-//                            if (userModel != null) {
-//                                userMap.put(snapshot.getKey(), userModel);
-//                            }
-//                        } catch (Exception e) {
-//
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User user = snapshot.getValue(User.class);
+                        usersMap.put(user.getPhone(), user);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void requestCode() {

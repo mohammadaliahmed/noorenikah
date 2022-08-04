@@ -80,8 +80,11 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     private void loginNow(String phone, String pass) {
+        phone = phone.substring(phone.length() - 10);
+
         if (usersMap.containsKey(phone)) {
             User user = usersMap.get(phone);
+
             if (user.getPassword().equals(pass)) {
                 SharedPrefs.setUser(user);
                 if (user.getLivePicPath() == null) {

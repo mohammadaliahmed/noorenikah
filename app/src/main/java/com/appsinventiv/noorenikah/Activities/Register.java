@@ -65,21 +65,19 @@ public class Register extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (phone.getText().length() == 0) {
-                    phone.setError("Cant be empty");
+
+
+                if (name.getText().length() == 0) {
+                    name.setError("Enter Name");
+                } else if (phone.getText().length() == 0) {
+                    phone.setError("Enter Phone");
                 } else if (phone.getText().length() < 10 || phone.getText().length() > 12) {
                     phone.setError("Enter valid phone number");
+                } else if (password.getText().length() == 0) {
+                    password.setError("Enter Password");
                 } else {
                     requestCode();
-
                 }
-//                if (name.getText().length() == 0) {
-//                    name.setError("Enter Name");
-//                } else if (phone.getText().length() == 0) {
-//                    phone.setError("Enter Phone");
-//                } else if (password.getText().length() == 0) {
-//                    password.setError("Enter Password");
-//                } else {
 //                    if (usersMap.containsKey(phone.getText().toString())) {
 //                        CommonUtils.showToast("Phone number taken");
 //                    } else {
@@ -130,6 +128,8 @@ public class Register extends AppCompatActivity {
 //        }
         Intent i = new Intent(Register.this, VerifyPhone.class);
         i.putExtra("number", foneCode + ph);
+        i.putExtra("name", name.getText().toString());
+        i.putExtra("password", password.getText().toString());
         startActivity(i);
 
 

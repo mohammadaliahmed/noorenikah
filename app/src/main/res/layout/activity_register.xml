@@ -102,7 +102,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Number"
+                android:text="Phone Number"
                 android:textColor="#000"
                 android:textSize="16sp" />
 

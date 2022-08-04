@@ -1,13 +1,9 @@
 package com.appsinventiv.noorenikah.Activities;
 
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class ViewFriendProfile extends AppCompatActivity {
 
@@ -32,7 +27,6 @@ public class ViewFriendProfile extends AppCompatActivity {
     private String phone;
     private DatabaseReference mDatabase;
     private User user;
-    ImageView chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +41,6 @@ public class ViewFriendProfile extends AppCompatActivity {
         phone = getIntent().getStringExtra("phone");
         age = findViewById(R.id.age);
         image = findViewById(R.id.image);
-        chat = findViewById(R.id.chat);
         name = findViewById(R.id.name);
         city = findViewById(R.id.city);
         maritalStatus = findViewById(R.id.maritalStatus);
@@ -56,15 +49,7 @@ public class ViewFriendProfile extends AppCompatActivity {
         jobOrBusiness = findViewById(R.id.jobOrBusiness);
 //        user = (User) getIntent().getSerializableExtra("user");
         getDataFromDB();
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i=new Intent(ViewFriendProfile.this,ChatScreen.class);
-                i.putExtra("phone",user.getPhone());
 
-                startActivity(i);
-            }
-        });
 
     }
 
@@ -96,21 +81,28 @@ public class ViewFriendProfile extends AppCompatActivity {
             }
         });
     }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_chat:
+                Intent i=new Intent(ViewFriendProfile.this,ChatScreen.class);
+                i.putExtra("phone",user.getPhone());
+
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-
-
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
 

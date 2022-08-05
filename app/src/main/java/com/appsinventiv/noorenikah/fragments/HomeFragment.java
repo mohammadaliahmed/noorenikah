@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendNotification(User user) {
-        if (SharedPrefs.getUser().isPaid()) {
+
             showInterstitial();
             NotificationAsync notificationAsync = new NotificationAsync(getContext());
             String NotificationTitle = "New request";
@@ -118,9 +118,7 @@ public class HomeFragment extends Fragment {
                     .child("sent").child(user.getPhone()).setValue(user.getPhone());
             mDatabase.child("Requests").child(user.getPhone()).child("received")
                     .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
-        }else{
-            startActivity(new Intent(getContext(), PaymentProof.class));
-        }
+
     }
 
     @Override

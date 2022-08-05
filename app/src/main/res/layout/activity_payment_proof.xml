@@ -1,84 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/pickedPicture"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:src="@drawable/gallery" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="Please Pay Rs 300/- \nVia EasyPaisa or JazzCash\n to unlock this feature"
+            android:textColor="#000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/pickedPicture"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:src="@drawable/gallery" />
+
+        <Button
+            android:id="@+id/pickPicture"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_bg"
+            android:inputType="text"
+            android:padding="5dp"
+            android:text="Pick image from Gallery as proof of payment"
+            android:textColor="#fff" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+
+                android:layout_margin="10dp"
+                android:src="@drawable/jazzcash" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="03323321181"
+                android:textColor="#000"
+                android:textIsSelectable="true"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/pickPicture"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/btn_bg"
-        android:inputType="text"
-        android:text="Pick From Gallery"
+        android:text="Submit"
         android:textColor="#fff" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/easypaisa" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="03323321181"
-            android:textColor="#000"
-            android:textIsSelectable="true"
-            android:textSize="22sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/jazzcash" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="03323321181"
-            android:textColor="#000"
-            android:textIsSelectable="true"
-            android:textSize="22sp" />
-
-    </LinearLayout>
-    <Button
+    <RelativeLayout
+        android:id="@+id/wholeLayout"
         android:layout_width="match_parent"
-        android:textColor="#fff"
-        android:text="Submit" 
-        android:background="@drawable/btn_bg"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:alpha="0.9"
+        android:background="#fff"
+        android:visibility="gone">
+
+        <ProgressBar
 
 
-</LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

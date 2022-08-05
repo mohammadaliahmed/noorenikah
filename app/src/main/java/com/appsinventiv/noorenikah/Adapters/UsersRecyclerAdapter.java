@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.PaymentProof;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
@@ -56,9 +57,14 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         holder.requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callbacks.onRequestClicked(user);
-                CommonUtils.showToast("Request sent");
-                holder.requestBtn.setText("Request Sent!");
+                if (SharedPrefs.getUser().isPaid()) {
+                    callbacks.onRequestClicked(user);
+                    CommonUtils.showToast("Request sent");
+                    holder.requestBtn.setText("Request Sent!");
+                } else {
+                    context.startActivity(new Intent(context, PaymentProof.class));
+
+                }
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +79,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                 }
             }
         });
-        if(SharedPrefs.getUser().getFriends()!=null) {
+        if (SharedPrefs.getUser().getFriends() != null) {
             if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
                 holder.lockedInfo.setVisibility(View.GONE);
                 Glide.with(context)
@@ -87,7 +93,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
 
                         .into(holder.image);
             }
-        }else{
+        } else {
             holder.lockedInfo.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(user.getLivePicPath())

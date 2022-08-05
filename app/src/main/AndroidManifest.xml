@@ -53,6 +53,7 @@
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
+        <activity android:name=".Activities.PaymentsHistory" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

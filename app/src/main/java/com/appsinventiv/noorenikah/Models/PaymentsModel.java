@@ -4,6 +4,7 @@ public class PaymentsModel {
     String id,name,phone,picUrl;
     long time;
     boolean approved;
+    boolean rejected;
 
     public PaymentsModel(String id, String name, String phone,String picUrl, long time) {
         this.id = id;
@@ -11,6 +12,14 @@ public class PaymentsModel {
         this.phone = phone;
         this.picUrl = picUrl;
         this.time = time;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
     }
 
     public boolean isApproved() {

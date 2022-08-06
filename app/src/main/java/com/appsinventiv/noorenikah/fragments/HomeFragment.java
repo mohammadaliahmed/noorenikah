@@ -1,6 +1,5 @@
 package com.appsinventiv.noorenikah.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.PaymentProof;
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
@@ -83,7 +81,9 @@ public class HomeFragment extends Fragment {
                         if (user != null && user.getName() != null) {
                             String myGender = SharedPrefs.getUser().getGender();
                             if (!myGender.equals(user.getGender())) {
-                                usersList.add(user);
+                                if(user.getEducation()!=null) {
+                                    usersList.add(user);
+                                }
                             }
                         }
                     }

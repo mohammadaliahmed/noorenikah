@@ -19,7 +19,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:text="Please Pay Rs 300/- \nVia EasyPaisa or JazzCash\n to unlock this feature"
+            android:text="Please pay Rs 300/- via JazzCash to Verify Your Account. For Further Assistance/ Help
+Whatsapp: 03142288492"
             android:textColor="#000"
             android:textSize="22sp"
             android:textStyle="bold" />

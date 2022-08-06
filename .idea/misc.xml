@@ -39,14 +39,23 @@
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/home.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/navigation.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/approved.xml" value="0.1795" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/pending.xml" value="0.1795" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/pin_bg.xml" value="0.1735" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/rejected.xml" value="0.1795" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_contact_us.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_payment_proof.xml" value="0.1675213675213675" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_payments_history.xml" value="0.15234375" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_register.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_verify_phone.xml" value="0.22" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_view_request_profile.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/content_home.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/fragment_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/left_chat_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/payment_history_item_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/request_item_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/menu/main_menu.xml" value="0.20416666666666666" />
       </map>
     </option>

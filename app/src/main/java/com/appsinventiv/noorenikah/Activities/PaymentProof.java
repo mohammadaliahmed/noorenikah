@@ -18,6 +18,7 @@ import com.appsinventiv.noorenikah.Models.PaymentsModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
+import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
@@ -25,8 +26,11 @@ import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -44,6 +48,7 @@ public class PaymentProof extends AppCompatActivity {
     private ArrayList<String> mSelected=new ArrayList<>();
     private String imageUrl;
     private DatabaseReference mDatabase;
+    private String adminFcmkey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class PaymentProof extends AppCompatActivity {
         pickPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                sendNotification();
+
                 Options options = Options.init()
                         .setRequestCode(REQUEST_CODE_CHOOSE)                                           //Request code for activity results
                         .setCount(1)
@@ -85,8 +92,39 @@ public class PaymentProof extends AppCompatActivity {
                 Pix.start(PaymentProof.this, options);
             }
         });
+        getAdminFcm();
 
     }
+
+    private void getAdminFcm() {
+        mDatabase.child("Admin").child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null){
+                     adminFcmkey=dataSnapshot.getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void sendNotification() {
+        NotificationAsync notificationAsync = new NotificationAsync(this);
+        String NotificationTitle = "New Payment Proof";
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                adminFcmkey,
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "payment");
+    }
+
+
     private void uploadImg() {
         wholeLayout.setVisibility(View.VISIBLE);
         try {
@@ -108,6 +146,7 @@ public class PaymentProof extends AppCompatActivity {
                                 firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
+                                        sendNotification();
                                         String livePicPath = "" + uri;
                                         String key=""+System.currentTimeMillis();
                                         PaymentsModel model=new PaymentsModel(
@@ -124,6 +163,7 @@ public class PaymentProof extends AppCompatActivity {
                                                         wholeLayout.setVisibility(View.GONE);
                                                         CommonUtils.showToast("Proof submitted. Please wait for approval");
                                                         startActivity(new Intent(PaymentProof.this,PaymentsHistory.class));
+
                                                         finish();
                                                     }
                                                 });

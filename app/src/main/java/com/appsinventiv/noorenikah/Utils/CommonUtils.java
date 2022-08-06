@@ -18,6 +18,7 @@ public class CommonUtils {
     private CommonUtils() {
         // This utility class is not publicly instantiable
     }
+
     public static void showToast(final String msg) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @SuppressLint("WrongConstant")
@@ -26,7 +27,8 @@ public class CommonUtils {
             }
         });
     }
-    private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
+
+    private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
 
 
     public static String getFormattedDate(long smsTimeInMilis) {
@@ -47,6 +49,14 @@ public class CommonUtils {
         } else {
             return DateFormat.format("dd MMM , h:mm aa", smsTime).toString();
         }
+    }
+
+    public static String getFormattedDateOnly(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("dd MMM , h:mm aa", smsTime).toString();
+
     }
 
 

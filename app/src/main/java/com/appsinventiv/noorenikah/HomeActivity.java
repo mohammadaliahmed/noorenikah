@@ -16,11 +16,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.SearchFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -28,6 +34,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Fragment fragment;
 
     private BottomNavigationView navigation;
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(fragment);
 
     }
+
 
     private NavigationBarView.OnItemSelectedListener mOnNavigationItemSelectedListener
             = new NavigationBarView.OnItemSelectedListener() {
@@ -128,7 +137,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_notifications) {
 
-            Toast.makeText(this, "notificatiobs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "notifications", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_language) {
 
 

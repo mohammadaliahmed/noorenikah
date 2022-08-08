@@ -108,6 +108,35 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+
+            android:layout_height="1dp"
+            android:background="#aaa" />
+        <RelativeLayout
+            android:id="@+id/invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Invite and earn"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/right_arrow" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

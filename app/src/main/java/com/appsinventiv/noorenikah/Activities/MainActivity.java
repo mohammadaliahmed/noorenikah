@@ -8,10 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.appsinventiv.noorenikah.ContactsFragment;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
@@ -36,11 +39,14 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
     private Fragment fragment;
     private BottomNavigationView navigation;
+    Button buy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        String myReferralCode = CommonUtils.getRandomCode(7);
+
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -53,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(fragment);
         updateFcmKey();
         getUserFromDb();
+        buy=findViewById(R.id.buy);
+        buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                intent.putExtra("price", "5.00");
+                startActivity(intent);
+            }
+        });
 
     }
 

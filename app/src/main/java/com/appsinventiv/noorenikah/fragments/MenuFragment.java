@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.appsinventiv.noorenikah.Activities.EditProfile;
+import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.ListOfFriends;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.Splash;
@@ -28,6 +29,7 @@ public class MenuFragment extends Fragment {
     TextView name;
     RelativeLayout editProfile, requestAccepted;
     RelativeLayout paymentsHistory;
+    RelativeLayout invite;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,11 +38,18 @@ public class MenuFragment extends Fragment {
         paymentsHistory = rootView.findViewById(R.id.paymentsHistory);
         editProfile = rootView.findViewById(R.id.editProfile);
         requestAccepted = rootView.findViewById(R.id.requestAccepted);
+        invite = rootView.findViewById(R.id.invite);
         logout = rootView.findViewById(R.id.logout);
         paymentsHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), PaymentsHistory.class));
+            }
+        });
+        invite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), InviteHistory.class));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {

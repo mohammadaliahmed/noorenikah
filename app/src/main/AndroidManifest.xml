@@ -41,7 +41,20 @@
         <activity android:name=".Activities.LoginScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
         <activity android:name=".Activities.Register"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"/>
+            android:exported="true"
+            android:theme="@style/Theme.VerifyPe.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://recipe-app.com/recipe" -->
+                <data
+                    android:host="noorenikah.com"
+                    android:pathPrefix="/refer"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
         <activity android:name=".Activities.SearchActivity" />
@@ -54,6 +67,9 @@
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
         <activity android:name=".Activities.PaymentsHistory" />
+        <activity android:name=".Activities.InviteHistory"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".Activities.PaymentActivity" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

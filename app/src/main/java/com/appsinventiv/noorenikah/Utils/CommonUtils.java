@@ -7,6 +7,7 @@ import android.text.format.DateFormat;
 import android.widget.Toast;
 
 
+import java.security.SecureRandom;
 import java.util.Calendar;
 
 /**
@@ -26,6 +27,15 @@ public class CommonUtils {
                 Toast.makeText(ApplicationClass.getInstance().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static String getRandomCode(int len) {
+        String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        SecureRandom rnd = new SecureRandom();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
     }
 
     private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";

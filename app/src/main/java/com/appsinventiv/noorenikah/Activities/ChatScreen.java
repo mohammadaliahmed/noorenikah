@@ -72,7 +72,7 @@ public class ChatScreen extends AppCompatActivity {
         KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
             public void onToggleSoftKeyboard(boolean isVisible) {
-                recyclerView.scrollToPosition(itemList.size() - 1);
+
 
             }
         });

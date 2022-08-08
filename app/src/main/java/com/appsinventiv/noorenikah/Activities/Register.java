@@ -23,37 +23,41 @@ import com.rilixtech.CountryCodePicker;
 import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
-    EditText phone, password, name;
+    EditText phone, password, name, referralCode;
     Button login, register;
 
     DatabaseReference mDatabase;
     private HashMap<String, User> usersMap = new HashMap<>();
     private CountryCodePicker ccp;
     private String foneCode;
-    TextView countryName;
+    private String referalIdFromLink;
+    private String referalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
         login = findViewById(R.id.login);
         register = findViewById(R.id.register);
+        referralCode = findViewById(R.id.referralCode);
         password = findViewById(R.id.password);
-        countryName = findViewById(R.id.countryName);
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
 
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         foneCode = "+" + ccp.getDefaultCountryCode();
-        countryName.setText("(" + ccp.getDefaultCountryName() + ")");
-        ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-            @Override
-            public void onCountrySelected(Country selectedCountry) {
-                foneCode = "+" + selectedCountry.getPhoneCode();
-                countryName.setText("(" + selectedCountry.getName() + ")");
-            }
-        });
+        onNewIntent(getIntent());
+
+//        countryName.setText("(" + ccp.getDefaultCountryName() + ")");
+//        ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+//            @Override
+//            public void onCountrySelected(Country selectedCountry) {
+//                foneCode = "+" + selectedCountry.getPhoneCode();
+//                countryName.setText("(" + selectedCountry.getName() + ")");
+//            }
+//        });
         ccp.registerPhoneNumberTextView(phone);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,10 +133,23 @@ public class Register extends AppCompatActivity {
         Intent i = new Intent(Register.this, VerifyPhone.class);
         i.putExtra("number", foneCode + ph);
         i.putExtra("name", name.getText().toString());
+        i.putExtra("referralCode", referralCode.getText().toString());
         i.putExtra("password", password.getText().toString());
         startActivity(i);
 
 
+    }
+
+    protected void onNewIntent(Intent intent) {
+
+        super.onNewIntent(intent);
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            referalIdFromLink = data.substring(data.lastIndexOf("/") + 1);
+            referalId = referalIdFromLink.replace("refer?id=","");
+            referralCode.setText(referalId);
+        }
     }
 
 

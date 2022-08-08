@@ -4,23 +4,42 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class User implements Serializable {
-    String name, phone, password;
+    String name,referralCode, phone, password;
     String fcmKey;
     String livePicPath,  belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
             maritalStatus, education, religion, cast, homeType,sect;
     int age,income,brothers,sisters;
     float height;
+    String myReferralCode;
     HashMap<String,String> friends;
     boolean paid;
 
     public User() {
     }
 
-    public User(String name, String phone, String password) {
+    public User(String name, String phone, String password, String referralCode, String myReferralCode) {
         this.name = name;
         this.phone = phone;
         this.password = password;
+        this.myReferralCode = myReferralCode;
+        this.referralCode = referralCode;
+    }
+
+    public String getMyReferralCode() {
+        return myReferralCode;
+    }
+
+    public void setMyReferralCode(String myReferralCode) {
+        this.myReferralCode = myReferralCode;
+    }
+
+    public String getReferralCode() {
+        return referralCode;
+    }
+
+    public void setReferralCode(String referralCode) {
+        this.referralCode = referralCode;
     }
 
     public boolean isPaid() {

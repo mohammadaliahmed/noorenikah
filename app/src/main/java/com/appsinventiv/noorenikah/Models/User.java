@@ -8,7 +8,8 @@ public class User implements Serializable {
     String fcmKey;
     String livePicPath,  belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
-            maritalStatus, education, religion, cast, homeType,sect;
+            maritalStatus, education, religion, cast, homeType,sect,companyName,fatherOccupation,
+            motherOccupation,about;
     int age,income,brothers,sisters;
     float height;
     String myReferralCode;
@@ -24,6 +25,38 @@ public class User implements Serializable {
         this.password = password;
         this.myReferralCode = myReferralCode;
         this.referralCode = referralCode;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getFatherOccupation() {
+        return fatherOccupation;
+    }
+
+    public void setFatherOccupation(String fatherOccupation) {
+        this.fatherOccupation = fatherOccupation;
+    }
+
+    public String getMotherOccupation() {
+        return motherOccupation;
+    }
+
+    public void setMotherOccupation(String motherOccupation) {
+        this.motherOccupation = motherOccupation;
     }
 
     public String getMyReferralCode() {

@@ -60,8 +60,6 @@ public class EditProfile extends AppCompatActivity {
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
     private String selectedEducation;
-    private String selectedReligion;
-
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
@@ -72,27 +70,31 @@ public class EditProfile extends AppCompatActivity {
     DatabaseReference mDatabase;
     private String genderSelected;
     private String jobOrBusiness;
-    private String selectedSect;
     private User userModel;
     private ArrayAdapter maritalAdapter;
     private ArrayAdapter educationAdapter;
-    private ArrayAdapter religionAdapter;
-    private ArrayAdapter sectAdapter;
-    private ArrayAdapter castAdapter;
     private ArrayAdapter homeAdapter;
     private Spinner educationSpinner;
     private Spinner religionSpinner;
     private Spinner sectSpinner;
     private Spinner homeSpinner;
-    private ArrayList<String> mSelected=new ArrayList<>();
+    private ArrayList<String> mSelected = new ArrayList<>();
     private String imageUrl;
-
+    EditText about;
+    EditText religion, sect;
+    EditText companyName, fatherOccupation, motherOccupation;
     private void setUpFindViewByIds() {
-        age = findViewById(R.id.age);
+        about = findViewById(R.id.about);
+        religion = findViewById(R.id.religion);
+        sect = findViewById(R.id.sect);
+        companyName = findViewById(R.id.companyName);
+        fatherOccupation = findViewById(R.id.fatherOccupation);
+        motherOccupation = findViewById(R.id.motherOccupation);
         wholeLayout = findViewById(R.id.wholeLayout);
         height = findViewById(R.id.height);
         income = findViewById(R.id.income);
         belonging = findViewById(R.id.belonging);
+        age = findViewById(R.id.age);
         houseSize = findViewById(R.id.houseSize);
         city = findViewById(R.id.city);
         houseAddress = findViewById(R.id.houseAddress);
@@ -154,8 +156,7 @@ public class EditProfile extends AppCompatActivity {
         setUpFindViewByIds();
         setMaritalSpinner();
         setEducationSpinner();
-        setReligionSpinner();
-        setSectSpinner();
+
         setHomeSpinner();
 
         saveProfile.setOnClickListener(new View.OnClickListener() {
@@ -180,8 +181,12 @@ public class EditProfile extends AppCompatActivity {
                 map.put("jobOrBusiness", jobOrBusiness);
                 map.put("maritalStatus", selectedMaritalStatus);
                 map.put("education", selectedEducation);
-                map.put("religion", selectedReligion);
-                map.put("sect", selectedSect);
+                map.put("fatherOccupation", fatherOccupation.getText().toString());
+                map.put("motherOccupation", motherOccupation.getText().toString());
+                map.put("about", about.getText().toString());
+                map.put("company", companyName.getText().toString());
+                map.put("religion", religion.getText().toString());
+                map.put("sect", sect.getText().toString());
                 map.put("cast", cast.getText().toString());
                 map.put("homeType", selectedHomeType);
                 wholeLayout.setVisibility(View.VISIBLE);
@@ -237,13 +242,16 @@ public class EditProfile extends AppCompatActivity {
 
                     maritalSpinner.setSelection(maritalAdapter.getPosition(userModel.getMaritalStatus()));
                     educationSpinner.setSelection(educationAdapter.getPosition(userModel.getEducation()));
-                    religionSpinner.setSelection(religionAdapter.getPosition(userModel.getReligion()));
-                    sectSpinner.setSelection(sectAdapter.getPosition(userModel.getSect()));
+                    religion.setText(userModel.getReligion());
+                    sect.setText(userModel.getSect());
+                    fatherOccupation.setText(userModel.getFatherOccupation());
+                    motherOccupation.setText(userModel.getMotherOccupation());
                     cast.setText(userModel.getCast());
                     homeSpinner.setSelection(homeAdapter.getPosition(userModel.getHomeType()));
                     Glide.with(EditProfile.this).load(userModel.getLivePicPath()).into(pickedPicture);
                     livePicPath = "" + userModel.getLivePicPath();
                     name.setText("" + userModel.getName());
+                    about.setText("" + userModel.getAbout());
                     phone.setText("" + userModel.getPhone());
                     age.setText("" + userModel.getAge());
                     height.setText("" + userModel.getHeight());
@@ -261,8 +269,6 @@ public class EditProfile extends AppCompatActivity {
                     jobOrBusiness = "" + userModel.getJobOrBusiness();
                     selectedMaritalStatus = "" + userModel.getMaritalStatus();
                     selectedEducation = "" + userModel.getEducation();
-                    selectedReligion = "" + userModel.getReligion();
-                    selectedSect = "" + userModel.getSect();
                     selectedHomeType = "" + userModel.getHomeType();
 
 
@@ -319,45 +325,7 @@ public class EditProfile extends AppCompatActivity {
         educationSpinner.setAdapter(educationAdapter);
     }
 
-    private void setReligionSpinner() {
-        String[] religionList = {"Religion", "Islam"};
-        religionSpinner = findViewById(R.id.religionSpinner);
-        religionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedReligion = religionList[i];
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        religionAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, religionList);
-        religionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        religionSpinner.setAdapter(religionAdapter);
-    }
-
-    private void setSectSpinner() {
-        String[] sectList = {"Sect", "Suni", "Shia"};
-        sectSpinner = findViewById(R.id.sectSpinner);
-        sectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedSect = sectList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        sectAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sectList);
-        sectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        sectSpinner.setAdapter(sectAdapter);
-    }
 
 
     private void setHomeSpinner() {
@@ -395,59 +363,20 @@ public class EditProfile extends AppCompatActivity {
 //        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
             mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
 
-//            try {
             CompressImage image = new CompressImage(EditProfile.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
             Glide.with(EditProfile.this).load(mSelected.get(0)).into(pickedPicture);
             uploadPicture();
-//            }catch (Exception e){
-//                mDatabase.child("Errors").child("imgError").child(mDatabase.push().getKey()).setValue(e.getMessage());
-//            }
+
         }
     }
-
-//    private void uploadPicture() {
-//
-//        Bitmap bitmap = ((BitmapDrawable) pickedPicture.getDrawable()).getBitmap();
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
-//        byte[] dataa = baos.toByteArray();
-//
-//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-//        StorageReference mountainsRef = storageRef.child(System.currentTimeMillis() + ".jpg");
-//
-//        UploadTask uploadTask = mountainsRef.putBytes(dataa);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle unsuccessful uploads
-////                CommonUtils.showToast(exception.getMessage());
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-////                CommonUtils.showToast("" + taskSnapshot.getMetadata());
-//                Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
-//                firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        livePicPath = "" + uri;
-//
-//                    }
-//                });
-//
-//            }
-//        });
-//
-//
-//    }
-//
 
     private void uploadPicture() {
         try {
@@ -497,9 +426,6 @@ public class EditProfile extends AppCompatActivity {
 
 
     }
-
-
-
 
 
     @Override

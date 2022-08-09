@@ -3,11 +3,13 @@ package com.appsinventiv.noorenikah.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,13 @@ import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +52,11 @@ public class SearchActivity extends AppCompatActivity {
     private List<User> usersList = new ArrayList<>();
     ProgressBar progress;
     TextView noData;
+
+    private AdView mAdView;
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    private AdRequest adRequest;
+    private InterstitialAd interstitialAda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +95,7 @@ public class SearchActivity extends AppCompatActivity {
                 sendNotification(user);
             }
         });
+        LoadInterstritial();
         recycler.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        if (user != null && user.getName() != null) {
+                        if (user != null && user.getName() != null && user.getGender() != null) {
                             String myGender = SharedPrefs.getUser().getGender();
                             if (!myGender.equals(user.getGender())) {
                                 if (
@@ -130,6 +145,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void sendNotification(User user) {
+        showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(this);
         String NotificationTitle = "New request";
         String NotificationMessage = "Click to view";
@@ -146,6 +162,67 @@ public class SearchActivity extends AppCompatActivity {
                 .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
     }
 
+    private void showInterstitial() {
+        // Show the ad if it's ready. Otherwise toast and restart the game.
+        if (interstitialAda != null) {
+            interstitialAda.show(this);
+        } else {
+//            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void LoadInterstritial() {
+        InterstitialAd.load(
+               this,
+                AD_UNIT_ID,
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        interstitialAda = interstitialAd;
+
+
+                        interstitialAd.setFullScreenContentCallback(
+                                new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        // Called when fullscreen content is dismissed.
+                                        // Make sure to set your reference to null so you don't
+                                        // show it a second time.
+                                        interstitialAda = null;
+                                        Log.d("TAG", "The ad was dismissed.");
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                        // Called when fullscreen content failed to show.
+                                        // Make sure to set your reference to null so you don't
+                                        // show it a second time.
+                                        interstitialAda = null;
+                                        Log.d("TAG", "The ad failed to show.");
+                                    }
+
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                        // Called when fullscreen content is shown.
+                                        Log.d("TAG", "The ad was shown.");
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        interstitialAda = null;
+
+                    }
+                });
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

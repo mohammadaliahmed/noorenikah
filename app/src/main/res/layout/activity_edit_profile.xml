@@ -77,6 +77,7 @@
                         android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -104,10 +105,10 @@
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/phone"
-                                android:focusable="false"
-
                                 android:layout_width="match_parent"
+
                                 android:layout_height="wrap_content"
+                                android:focusable="false"
                                 android:hint="Phone"
                                 android:inputType="phone" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -302,19 +303,38 @@
 
                         </RadioGroup>
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
                             android:layout_margin="10dp"
                             android:layout_weight="1">
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/income"
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Income"
-                                android:inputType="number" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/companyName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Company Name"
+                                    android:inputType="textCapWords" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/income"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Income"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
 
 
                     </LinearLayout>
@@ -362,11 +382,15 @@
                                 android:layout_height="wrap_content"
                                 android:text="Select Religion" />
 
-                            <Spinner
-                                android:id="@+id/religionSpinner"
+                            <EditText
+                                android:id="@+id/religion"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Religion"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:textSize="14sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -381,10 +405,15 @@
                                 android:layout_height="wrap_content"
                                 android:text="Select Sect" />
 
-                            <Spinner
-                                android:id="@+id/sectSpinner"
+                            <EditText
+                                android:id="@+id/sect"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Sect"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 
@@ -621,6 +650,61 @@
                         android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Father Occupation" />
+
+                            <EditText
+                                android:id="@+id/fatherOccupation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Father name"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mother Name" />
+
+                            <EditText
+                                android:id="@+id/motherOccupation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Mother Occupation"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -735,6 +819,42 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:text="About yourself"
+                        android:textColor="#000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/about"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/grey_border"
+                        android:gravity="top"
+                        android:hint="About yourself"
+                        android:lines="4"
+                        android:padding="5dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
 
             <Button
                 android:id="@+id/saveProfile"
@@ -748,18 +868,20 @@
                 android:textColor="#fff" />
         </LinearLayout>
     </ScrollView>
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/wholeLayout"
-        android:background="#fff"
-        android:layout_width="match_parent"
-        android:alpha="0.8"
-        android:layout_height="match_parent">
-        <ProgressBar
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:id="@+id/wholeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="#fff"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
 </RelativeLayout>

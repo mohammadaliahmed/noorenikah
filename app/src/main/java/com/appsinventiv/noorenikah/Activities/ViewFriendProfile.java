@@ -23,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ViewFriendProfile extends AppCompatActivity {
 
     CircleImageView image;
-    TextView name, age, city, maritalStatus, education, cast, jobOrBusiness;
+    TextView name, city, maritalStatus, education, cast, jobOrBusiness, about;
     private String phone;
     private DatabaseReference mDatabase;
     private User user;
@@ -39,9 +39,9 @@ public class ViewFriendProfile extends AppCompatActivity {
         }
         this.setTitle("View Profile");
         phone = getIntent().getStringExtra("phone");
-        age = findViewById(R.id.age);
         image = findViewById(R.id.image);
         name = findViewById(R.id.name);
+        about = findViewById(R.id.about);
         city = findViewById(R.id.city);
         maritalStatus = findViewById(R.id.maritalStatus);
         education = findViewById(R.id.education);
@@ -65,7 +65,6 @@ public class ViewFriendProfile extends AppCompatActivity {
                             .load(user.getLivePicPath())
                             .into(image);
 
-                    age.setText("" + user.getAge());
                     name.setText("" + user.getName());
                     city.setText("" + user.getCity());
                     maritalStatus.setText("" + user.getMaritalStatus());
@@ -81,6 +80,7 @@ public class ViewFriendProfile extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -89,8 +89,8 @@ public class ViewFriendProfile extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_chat:
-                Intent i=new Intent(ViewFriendProfile.this,ChatScreen.class);
-                i.putExtra("phone",user.getPhone());
+                Intent i = new Intent(ViewFriendProfile.this, ChatScreen.class);
+                i.putExtra("phone", user.getPhone());
 
                 startActivity(i);
                 return true;

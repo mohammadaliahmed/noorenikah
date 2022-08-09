@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
@@ -13,52 +14,61 @@
 
         <ImageView
             android:id="@+id/back"
-            android:padding="5dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
+
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp"
 
             android:src="@drawable/back" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/picture"
             android:layout_width="40dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-
             android:layout_height="40dp"
             android:layout_gravity="center"
+
             android:layout_marginLeft="10dp"
-           />
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:padding="10dp"
+            android:layout_gravity="center"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
 
-            android:layout_gravity="center"
             android:text=""
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
         android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomArea"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/adView" />
 
     <RelativeLayout
         android:id="@+id/bottomArea"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp">
@@ -82,12 +92,12 @@
             android:id="@+id/send"
             android:layout_width="50dp"
 
-            android:padding="5dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp"
             android:src="@drawable/send_message" />
 
     </RelativeLayout>

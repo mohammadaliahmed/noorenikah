@@ -22,7 +22,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 public class ViewRequestProfile extends AppCompatActivity {
 
     CircleImageView image;
-    TextView name,age,city,maritalStatus,education,cast,jobOrBusiness;
+    TextView name,city,maritalStatus,education,cast,jobOrBusiness,about;
     private User user;
 
     @Override
@@ -35,7 +35,7 @@ public class ViewRequestProfile extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         this.setTitle("View Profile");
-        age=findViewById(R.id.age);
+        about=findViewById(R.id.about);
         image=findViewById(R.id.image);
         name=findViewById(R.id.name);
         city=findViewById(R.id.city);
@@ -50,7 +50,6 @@ public class ViewRequestProfile extends AppCompatActivity {
                 .apply(bitmapTransform(new BlurTransformation(50)))
                 .into(image);
 
-        age.setText(""+user.getAge());
         name.setText(""+user.getName());
         city.setText(""+user.getCity());
         maritalStatus.setText(""+user.getMaritalStatus());

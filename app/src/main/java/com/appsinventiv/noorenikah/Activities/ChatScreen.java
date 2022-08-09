@@ -1,5 +1,6 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import com.appsinventiv.noorenikah.Utils.KeyboardUtils;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +51,7 @@ public class ChatScreen extends AppCompatActivity {
     ImageView back;
     private String otherUserPhone;
     boolean screenActive;
+    private AdRequest adRequest;
 
     @Override
     protected void onResume() {
@@ -65,6 +69,10 @@ public class ChatScreen extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
 
         }
+        adRequest = new AdRequest.Builder().build();
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         otherUserPhone = getIntent().getStringExtra("phone");
         adapter = new ChatAdapter(this, itemList);
@@ -77,9 +85,26 @@ public class ChatScreen extends AppCompatActivity {
         picture = findViewById(R.id.picture);
         send = findViewById(R.id.send);
         message = findViewById(R.id.message);
+        picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ChatScreen.this, ViewFriendProfile.class);
+                i.putExtra("phone", otherUserPhone);
+                startActivity(i);
+            }
+        });
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ChatScreen.this, ViewFriendProfile.class);
+                i.putExtra("phone", otherUserPhone);
+                startActivity(i);
+            }
+        });
         KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
             public void onToggleSoftKeyboard(boolean isVisible) {
+                recyclerView.scrollToPosition(itemList.size() - 1);
 
 
             }

@@ -73,7 +73,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
     private String selectedEducation;
-    private String selectedReligion;
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
@@ -84,10 +83,13 @@ public class CompleteProfileScreen extends AppCompatActivity {
     DatabaseReference mDatabase;
     private String genderSelected;
     private String jobOrBusiness;
-    private String selectedSect;
     private ArrayList<String> mSelected = new ArrayList<>();
     private String imageUrl;
     private boolean consentGiven;
+    EditText about;
+    EditText religion, sect;
+    EditText companyName, fatherOccupation, motherOccupation;
+
 
     private void setUpFindViewByIds() {
         age = findViewById(R.id.age);
@@ -138,6 +140,12 @@ public class CompleteProfileScreen extends AppCompatActivity {
         setContentView(R.layout.activity_complete_profile);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         pickedPicture = findViewById(R.id.pickedPicture);
+        companyName = findViewById(R.id.companyName);
+        about = findViewById(R.id.about);
+        motherOccupation = findViewById(R.id.motherOccupation);
+        fatherOccupation = findViewById(R.id.fatherOccupation);
+        religion = findViewById(R.id.religion);
+        sect = findViewById(R.id.sect);
         picPicture = findViewById(R.id.picPicture);
         picPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,8 +156,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
         setUpFindViewByIds();
         setMaritalSpinner();
         setEducationSpinner();
-        setReligionSpinner();
-        setSectSpinner();
         setHomeSpinner();
         consent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -190,6 +196,22 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     sisters.setError("Enter sisters");
                     sisters.requestFocus();
 
+                } else if (about.getText().length() == 0) {
+                    about.setError("Enter some lines about yourself");
+                    about.requestFocus();
+
+                } else if (religion.getText().length() == 0) {
+                    religion.setError("Enter religion");
+                    religion.requestFocus();
+
+                } else if (sect.getText().length() == 0) {
+                    sect.setError("Enter sect");
+                    sect.requestFocus();
+
+                }else if (companyName.getText().length() == 0) {
+                    companyName.setError("Enter company name");
+                    companyName.requestFocus();
+
                 } else if (genderSelected == null) {
 
                     CommonUtils.showToast("Please select gender");
@@ -217,8 +239,12 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     map.put("jobOrBusiness", jobOrBusiness);
                     map.put("maritalStatus", selectedMaritalStatus);
                     map.put("education", selectedEducation);
-                    map.put("religion", selectedReligion);
-                    map.put("sect", selectedSect);
+                    map.put("religion", religion.getText().toString());
+                    map.put("about", about.getText().toString());
+                    map.put("sect", sect.getText().toString());
+                    map.put("fatherOccupation", fatherOccupation.getText().toString());
+                    map.put("motherOccupation", motherOccupation.getText().toString());
+                    map.put("companyName", companyName.getText().toString());
                     map.put("cast", cast.getText().toString());
                     map.put("homeType", selectedHomeType);
                     wholeLayout.setVisibility(View.VISIBLE);
@@ -295,45 +321,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
         educationSpinner.setAdapter(aa);
     }
 
-    private void setReligionSpinner() {
-        String[] religionList = {"Religion", "Islam"};
-        Spinner religionSpinner = findViewById(R.id.religionSpinner);
-        religionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedReligion = religionList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, religionList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        religionSpinner.setAdapter(aa);
-    }
-
-    private void setSectSpinner() {
-        String[] sectList = {"Sect", "Suni", "Shia"};
-        Spinner sectSpinner = findViewById(R.id.sectSpinner);
-        sectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedSect = sectList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sectList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        sectSpinner.setAdapter(aa);
-    }
 
     private void setHomeSpinner() {
         String[] homeTypeList = {"Home type", "Own", "Rental", "Flat", "Apartment"};

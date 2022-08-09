@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseReference mDatabase;
     private Fragment fragment;
-    private BottomNavigationView navigation;
+    public static BottomNavigationView navigation;
     Button buy;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(fragment);
         updateFcmKey();
         getUserFromDb();
-        buy=findViewById(R.id.buy);
+        buy = findViewById(R.id.buy);
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public static void setChatCount() {
+        navigation.getOrCreateBadge(R.id.navigation_chat).setNumber(1);
     }
 
     private void getUserFromDb() {

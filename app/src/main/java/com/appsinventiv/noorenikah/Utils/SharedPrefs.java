@@ -3,8 +3,12 @@ package com.appsinventiv.noorenikah.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.HashMap;
 
 public class SharedPrefs {
     Context context;
@@ -13,20 +17,20 @@ public class SharedPrefs {
 
     }
 
-//    public static void setLikedMap(HashMap<Integer,AdDetails> itemList) {
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(itemList);
-//        preferenceSetter("likes", json);
-//    }
-//
-//    public static HashMap<Integer,AdDetails> getLikedMap() {
-//        Gson gson = new Gson();
-//        HashMap<Integer,AdDetails> playersList = (HashMap<Integer,AdDetails>) gson.fromJson(preferenceGetter("likes"),
-//                new TypeToken<HashMap<Integer,AdDetails>>() {
-//                }.getType());
-//        return playersList;
-//    }
+    public static void setReadMap( HashMap<String, String> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("unread", json);
+    }
+
+    public static HashMap<String, String> getReadMap() {
+        Gson gson = new Gson();
+        HashMap<String, String> playersList = (HashMap<String, String>) gson.fromJson(preferenceGetter("unread"),
+                new TypeToken<HashMap<String, String>>() {
+                }.getType());
+        return playersList;
+    }
 //
 //    public static void setAdsList(List<AdDetails> itemList) {
 //
@@ -44,12 +48,12 @@ public class SharedPrefs {
 //    }
 
 
-    public static String getadminFcmKey() {
-        return preferenceGetter("adminfcm");
+    public static String getLastMsg(String key) {
+        return preferenceGetter(key);
     }
 
-    public static void setadminFcmKey(String username) {
-        preferenceSetter("adminfcm", username);
+    public static void setLastMsg(String key,String value) {
+        preferenceSetter(key, value);
     }
 
     public static String getFcmKey() {

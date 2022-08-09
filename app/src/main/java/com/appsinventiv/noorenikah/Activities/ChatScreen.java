@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,6 +47,13 @@ public class ChatScreen extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView back;
     private String otherUserPhone;
+    boolean screenActive;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        screenActive = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,12 @@ public class ChatScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        screenActive = false;
+    }
+
     private void getOtherUserFromDb() {
         mDatabase.child("Users").child(otherUserPhone).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -118,23 +132,27 @@ public class ChatScreen extends AppCompatActivity {
     }
 
     private void getDataFromDb() {
+
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
                 .child(otherUserPhone).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {
                             itemList.clear();
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            if (screenActive) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                                ChatModel model = snapshot.getValue(ChatModel.class);
-                                if (model != null && model.getMessage() != null) {
-                                    itemList.add(model);
+                                    ChatModel model = snapshot.getValue(ChatModel.class);
+                                    if (model != null && model.getMessage() != null) {
+                                        itemList.add(model);
+                                    }
                                 }
+                                adapter.setItemList(itemList);
+                                recyclerView.scrollToPosition(itemList.size() - 1);
+                                mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
+                                        .child(otherUserPhone).child(itemList.get(itemList.size() - 1).getId()).child("read").setValue(true);
+
                             }
-                            adapter.setItemList(itemList);
-                            recyclerView.scrollToPosition(itemList.size() - 1);
-
-
                         }
                     }
 
@@ -159,7 +177,7 @@ public class ChatScreen extends AppCompatActivity {
                 otherUser.getName(),
                 otherUser.getPhone(),
                 otherUser.getLivePicPath(),
-
+                true,
                 System.currentTimeMillis());
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone()).child(otherUserPhone).child(key).setValue(
                 myModel
@@ -173,8 +191,7 @@ public class ChatScreen extends AppCompatActivity {
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getLivePicPath(),
-
-
+                false,
                 System.currentTimeMillis());
 
         mDatabase.child("Chats").child(otherUserPhone)

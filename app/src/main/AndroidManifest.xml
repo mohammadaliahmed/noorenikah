@@ -16,11 +16,6 @@
         android:theme="@style/Theme.VerifyPe"
         tools:targetApi="31">
         <activity
-            android:name="com.appsinventiv.noorenikah.HomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_home"
-            android:theme="@style/Theme.VerifyPe.NoActionBar" />
-        <activity
             android:name="com.appsinventiv.noorenikah.Activities.MainActivity"
             android:theme="@style/Theme.VerifyPe.NoActionBar"
             android:exported="true"/>

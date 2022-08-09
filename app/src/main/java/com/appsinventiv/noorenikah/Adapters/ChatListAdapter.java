@@ -4,6 +4,7 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -56,6 +59,18 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         Glide.with(context)
                 .load(model.getHisPic())
                 .into(holder.picture);
+            if (model.isRead()) {
+                holder.unreadDot.setVisibility(View.GONE);
+                holder.name.setTypeface(null,Typeface.NORMAL);
+                holder.message.setTypeface(null, Typeface.NORMAL);
+                holder.time.setTypeface(null, Typeface.NORMAL);
+            } else {
+                holder.unreadDot.setVisibility(View.VISIBLE);
+                holder.name.setTypeface(null, Typeface.BOLD);
+                holder.message.setTypeface(null, Typeface.BOLD);
+                holder.time.setTypeface(null, Typeface.BOLD);
+            }
+
         holder.name.setText(model.getHisName());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
         holder.message.setText(model.getName() + ": " + model.getMessage());
@@ -78,11 +93,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, message, time;
         CircleImageView picture;
+        ImageView unreadDot;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.message);
             time = itemView.findViewById(R.id.time);
+            unreadDot = itemView.findViewById(R.id.unreadDot);
             picture = itemView.findViewById(R.id.picture);
             name = itemView.findViewById(R.id.name);
         }

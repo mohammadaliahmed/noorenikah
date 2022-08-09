@@ -26,7 +26,6 @@ public class MenuFragment extends Fragment {
     private View rootView;
     Button logout;
 
-    TextView name;
     RelativeLayout editProfile, requestAccepted;
     RelativeLayout paymentsHistory;
     RelativeLayout invite;
@@ -34,7 +33,6 @@ public class MenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_menu, container, false);
-        name = rootView.findViewById(R.id.name);
         paymentsHistory = rootView.findViewById(R.id.paymentsHistory);
         editProfile = rootView.findViewById(R.id.editProfile);
         requestAccepted = rootView.findViewById(R.id.requestAccepted);
@@ -62,7 +60,6 @@ public class MenuFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        name.setText("Hi, " + SharedPrefs.getUser().getName());
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

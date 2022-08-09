@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,6 +43,7 @@ public class ChatFragment extends Fragment {
     private DatabaseReference mDatabase;
     ChatListAdapter adapter;
     private List<ChatModel> itemList=new ArrayList<>();
+    private HashMap<String,String> itemMapVal=new HashMap<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,13 +63,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
-                    for (DataSnapshot keys:dataSnapshot.getChildren()) {
-                        for (DataSnapshot msgs:keys.getChildren()){
+                    for (DataSnapshot phoneNumbers:dataSnapshot.getChildren()) {
+                        for (DataSnapshot msgs:phoneNumbers.getChildren()){
                             ChatModel model=msgs.getValue(ChatModel.class);
-                            itemMap.put(keys.getKey(),model);
+                            itemMap.put(phoneNumbers.getKey(),model);
+//                            itemMapVal.put(phoneNumbers.getKey(),phoneNumbers.getKey());
 
                         }
                     }
+//                    SharedPrefs.setReadMap(itemMapVal);
                     itemList=new ArrayList<>(itemMap.values());
                     Collections.sort(itemList, new Comparator<ChatModel>() {
                         @Override
@@ -79,6 +83,7 @@ public class ChatFragment extends Fragment {
                         }
                     });
                     adapter.setItemList(itemList);
+
                 }
             }
 
@@ -87,6 +92,12 @@ public class ChatFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       adapter.notifyDataSetChanged();
     }
 
     @Override

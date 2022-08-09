@@ -4,6 +4,7 @@ public class ChatModel {
     String id, message, senderId, sendTo, name, picUrl, myName, myPic, hisName, hisPic,
             myPhone, hisPhone;
     long time;
+    boolean read;
 
 
     public ChatModel() {
@@ -11,6 +12,7 @@ public class ChatModel {
 
     public ChatModel(String id, String message, String senderId, String sendTo, String name, String picUrl,
                      String myName, String myPic,String myPhone, String hisName,String hisPhone, String hisPic,
+                     boolean read,
                      long time) {
         this.id = id;
         this.message = message;
@@ -21,10 +23,19 @@ public class ChatModel {
         this.time = time;
         this.myName = myName;
         this.myPic = myPic;
+        this.read = read;
         this.hisName = hisName;
         this.hisPic = hisPic;
         this.hisPhone = hisPhone;
         this.myPhone = myPhone;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     public String getMyPhone() {

@@ -186,23 +186,18 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:text="Select Qualification:" />
-
-                        <Spinner
-                            android:id="@+id/educationSpinner"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/education"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp" />
-                    </LinearLayout>
+                            android:hint="Education"
+                            android:inputType="textCapWords" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                 </LinearLayout>
@@ -249,6 +244,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
                                 android:text="Select Occupation" />
+
+                            <RadioButton
+                                android:id="@+id/joblessRadio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Job less" />
 
                             <RadioButton
                                 android:id="@+id/jobRadio"
@@ -595,9 +596,10 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout

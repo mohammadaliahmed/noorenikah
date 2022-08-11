@@ -1,15 +1,20 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.appsinventiv.noorenikah.ContactsFragment;
 import com.appsinventiv.noorenikah.Models.User;
@@ -24,6 +29,7 @@ import com.appsinventiv.noorenikah.fragments.RequestsFragment;
 import com.appsinventiv.noorenikah.fragments.SearchFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     public static BottomNavigationView navigation;
     Button buy;
+    ImageView notifications;
 
 
     @Override
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        String myReferralCode = CommonUtils.getRandomCode(7);
-
+        notifications = findViewById(R.id.notifications);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -61,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
         updateFcmKey();
         getUserFromDb();
         buy = findViewById(R.id.buy);
+        notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NotificationHistory.class));
+            }
+        });
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,12 +82,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+//        showBadge(this,"6");
 
     }
 
-    public static void setChatCount() {
-        navigation.getOrCreateBadge(R.id.navigation_chat).setNumber(1);
+
+    public static void showBadge(Context context, String value) {
+        removeBadge();
+        BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_chat);
+        View badge = LayoutInflater.from(context).inflate(R.layout.layout_news_badge, navigation,
+                false);
+
+        TextView text = badge.findViewById(R.id.badge_text_view);
+        text.setText("•");
+
+        itemView.addView(badge);
+
     }
+
+    public static void removeBadge() {
+        BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_chat);
+        if (itemView.getChildCount() == 3) {
+            itemView.removeViewAt(2);
+        }
+    }
+
 
     private void getUserFromDb() {
         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {

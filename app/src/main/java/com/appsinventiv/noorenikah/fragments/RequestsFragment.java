@@ -17,6 +17,7 @@ import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Adapters.RequestsAdapter;
+import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -83,8 +84,9 @@ public class RequestsFragment extends Fragment {
     }
 
     private void sendNotification(User user) {
+
         NotificationAsync notificationAsync = new NotificationAsync(getActivity());
-        String NotificationTitle = "Request Accepted";
+        String NotificationTitle = "Request Accepted by: "+SharedPrefs.getUser().getName();
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
@@ -93,6 +95,11 @@ public class RequestsFragment extends Fragment {
                 NotificationMessage,
                 SharedPrefs.getUser().getPhone(),
                 "accepted");
+
+        String key=""+System.currentTimeMillis();
+        NotificationModel model=new NotificationModel(key,NotificationTitle,
+                NotificationMessage,"accepted",user.getLivePicPath(),SharedPrefs.getUser().getPhone(),System.currentTimeMillis());
+        mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
     }
 
     private void getDataFromDB() {

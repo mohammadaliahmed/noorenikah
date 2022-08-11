@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
+import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
@@ -80,12 +81,10 @@ public class HomeFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null && user.getName() != null) {
-                            String myGender = SharedPrefs.getUser().getGender();
-                            if (!myGender.equals(user.getGender())) {
-                                if(user.getEducation()!=null) {
-                                    usersList.add(user);
-                                }
+                            if (user.getEducation() != null) {
+                                usersList.add(user);
                             }
+
                         }
                     }
                     Collections.shuffle(usersList);
@@ -106,21 +105,26 @@ public class HomeFragment extends Fragment {
 
     private void sendNotification(User user) {
 
-            showInterstitial();
-            NotificationAsync notificationAsync = new NotificationAsync(getContext());
-            String NotificationTitle = "New request";
-            String NotificationMessage = "Click to view";
-            notificationAsync.execute(
-                    "ali",
-                    user.getFcmKey(),
-                    NotificationTitle,
-                    NotificationMessage,
-                    SharedPrefs.getUser().getPhone(),
-                    "request");
-            mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
-                    .child("sent").child(user.getPhone()).setValue(user.getPhone());
-            mDatabase.child("Requests").child(user.getPhone()).child("received")
-                    .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+        showInterstitial();
+        NotificationAsync notificationAsync = new NotificationAsync(getContext());
+        String NotificationTitle = "New request from: " + user.getName();
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                user.getFcmKey(),
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "request");
+        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
+                .child("sent").child(user.getPhone()).setValue(user.getPhone());
+        mDatabase.child("Requests").child(user.getPhone()).child("received")
+                .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+
+        String key = "" + System.currentTimeMillis();
+        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                NotificationMessage, "request", user.getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+        mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
 
     }
 

@@ -16,8 +16,11 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.goodiebag.pinview.Pinview;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
@@ -79,37 +82,37 @@ public class VerifyPhone extends AppCompatActivity {
             }
         });
 
-//        requestCode();
+        requestCode();
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUser(); //test
+//                checkUser(); //test
 
-//                if (!pin.getValue().equalsIgnoreCase("")) {
-//                    wholeLayout.setVisibility(View.VISIBLE);
-//                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
-//                    final FirebaseAuth auth = FirebaseAuth.getInstance();
-//                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-//                        @Override
-//                        public void onSuccess(AuthResult authResult) {
-////                        CommonUtils.showToast("" + authResult);
-//                            wholeLayout.setVisibility(View.GONE);
-//                            CommonUtils.showToast("Successfully verified");
-//                            checkUser();
-////                            SharedPrefs.setPhone(phoneNumber);
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-////                            CommonUtils.showToast(e.getMessage());
-//                            wholeLayout.setVisibility(View.GONE);
-//
-//                            CommonUtils.showToast("Invalid Pin");
-//                        }
-//                    });
-//                } else {
-//                    CommonUtils.showToast("Enter pin");
-//                }
+                if (!pin.getValue().equalsIgnoreCase("")) {
+                    wholeLayout.setVisibility(View.VISIBLE);
+                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
+                    final FirebaseAuth auth = FirebaseAuth.getInstance();
+                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+//                        CommonUtils.showToast("" + authResult);
+                            wholeLayout.setVisibility(View.GONE);
+                            CommonUtils.showToast("Successfully verified");
+                            checkUser();
+//                            SharedPrefs.setPhone(phoneNumber);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            CommonUtils.showToast(e.getMessage());
+                            wholeLayout.setVisibility(View.GONE);
+
+                            CommonUtils.showToast("Invalid Pin");
+                        }
+                    });
+                } else {
+                    CommonUtils.showToast("Enter pin");
+                }
 
 
 //

@@ -65,6 +65,7 @@
         <activity android:name=".Activities.InviteHistory"
             android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".Activities.PaymentActivity" />
+        <activity android:name=".Activities.NotificationHistory" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

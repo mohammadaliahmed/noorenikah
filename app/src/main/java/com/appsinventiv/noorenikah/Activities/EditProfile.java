@@ -59,11 +59,10 @@ public class EditProfile extends AppCompatActivity {
     Button picPicture;
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
-    private String selectedEducation;
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
-    RadioButton male, female, jobRadio, businessRadio;
+    RadioButton male, female, jobRadio, joblessRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
             fatherName, motherName, brothers, sisters, name, phone, cast;
     Button saveProfile;
@@ -72,22 +71,21 @@ public class EditProfile extends AppCompatActivity {
     private String jobOrBusiness;
     private User userModel;
     private ArrayAdapter maritalAdapter;
-    private ArrayAdapter educationAdapter;
     private ArrayAdapter homeAdapter;
-    private Spinner educationSpinner;
-    private Spinner religionSpinner;
-    private Spinner sectSpinner;
+
     private Spinner homeSpinner;
     private ArrayList<String> mSelected = new ArrayList<>();
     private String imageUrl;
     EditText about;
     EditText religion, sect;
-    EditText companyName, fatherOccupation, motherOccupation;
+    EditText companyName, fatherOccupation, motherOccupation,education;
+
     private void setUpFindViewByIds() {
         about = findViewById(R.id.about);
         religion = findViewById(R.id.religion);
         sect = findViewById(R.id.sect);
         companyName = findViewById(R.id.companyName);
+        education = findViewById(R.id.education);
         fatherOccupation = findViewById(R.id.fatherOccupation);
         motherOccupation = findViewById(R.id.motherOccupation);
         wholeLayout = findViewById(R.id.wholeLayout);
@@ -95,6 +93,7 @@ public class EditProfile extends AppCompatActivity {
         income = findViewById(R.id.income);
         belonging = findViewById(R.id.belonging);
         age = findViewById(R.id.age);
+        jobRadio = findViewById(R.id.jobRadio);
         houseSize = findViewById(R.id.houseSize);
         city = findViewById(R.id.city);
         houseAddress = findViewById(R.id.houseAddress);
@@ -112,6 +111,11 @@ public class EditProfile extends AppCompatActivity {
         jobRadio.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
                 jobOrBusiness = "job";
+            }
+        });
+        jobRadio.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isChecked()) {
+                jobOrBusiness = "jobless";
             }
         });
         businessRadio.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -155,7 +159,6 @@ public class EditProfile extends AppCompatActivity {
         });
         setUpFindViewByIds();
         setMaritalSpinner();
-        setEducationSpinner();
 
         setHomeSpinner();
 
@@ -180,7 +183,7 @@ public class EditProfile extends AppCompatActivity {
                 map.put("gender", genderSelected);
                 map.put("jobOrBusiness", jobOrBusiness);
                 map.put("maritalStatus", selectedMaritalStatus);
-                map.put("education", selectedEducation);
+                map.put("education", education.getText().toString());
                 map.put("fatherOccupation", fatherOccupation.getText().toString());
                 map.put("motherOccupation", motherOccupation.getText().toString());
                 map.put("about", about.getText().toString());
@@ -235,13 +238,14 @@ public class EditProfile extends AppCompatActivity {
                     }
                     if (userModel.getJobOrBusiness().equalsIgnoreCase("job")) {
                         jobRadio.setChecked(true);
+                    } else if (userModel.getJobOrBusiness().equalsIgnoreCase("jobless")) {
+                        joblessRadio.setChecked(true);
                     } else {
                         businessRadio.setChecked(true);
                     }
 
 
                     maritalSpinner.setSelection(maritalAdapter.getPosition(userModel.getMaritalStatus()));
-                    educationSpinner.setSelection(educationAdapter.getPosition(userModel.getEducation()));
                     religion.setText(userModel.getReligion());
                     sect.setText(userModel.getSect());
                     fatherOccupation.setText(userModel.getFatherOccupation());
@@ -268,7 +272,7 @@ public class EditProfile extends AppCompatActivity {
                     genderSelected = "" + userModel.getGender();
                     jobOrBusiness = "" + userModel.getJobOrBusiness();
                     selectedMaritalStatus = "" + userModel.getMaritalStatus();
-                    selectedEducation = "" + userModel.getEducation();
+                    education .setText(userModel.getEducation());
                     selectedHomeType = "" + userModel.getHomeType();
 
 
@@ -303,28 +307,6 @@ public class EditProfile extends AppCompatActivity {
         //Setting the ArrayAdapter data on the Spinner
         maritalSpinner.setAdapter(maritalAdapter);
     }
-
-    private void setEducationSpinner() {
-        String[] educationList = {"Qualification Level", "FA", "BA",
-                "MA", "MPhil", "Phd"};
-        educationSpinner = findViewById(R.id.educationSpinner);
-        educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedEducation = educationList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        educationAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, educationList);
-        educationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        educationSpinner.setAdapter(educationAdapter);
-    }
-
 
 
 

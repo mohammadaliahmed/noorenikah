@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
+import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
@@ -63,6 +64,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         this.setTitle("Search results");
+         adRequest = new AdRequest.Builder().build();
 
         minHeight = getIntent().getFloatExtra("minHeight", 4.0f);
         maxHeight = getIntent().getFloatExtra("maxHeight", 7.0f);
@@ -106,23 +108,21 @@ public class SearchActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null && user.getName() != null && user.getGender() != null) {
-                            String myGender = SharedPrefs.getUser().getGender();
-                            if (!myGender.equals(user.getGender())) {
-                                if (
-                                        user.getCity().equalsIgnoreCase(city)
-                                                && user.getEducation().equalsIgnoreCase(education)
-                                                && user.getHomeType().equalsIgnoreCase(selectedHomeType)
-                                                && user.getJobOrBusiness().equalsIgnoreCase(jobOrBusiness)
-                                                && user.getCast().equalsIgnoreCase(cast)
-                                                && user.getHeight() > minHeight
-                                                && user.getHeight() < maxHeight
-                                                && user.getAge() > minAge
-                                                && user.getAge() < maxAge
-                                                && user.getIncome() > minIncome
-                                                && user.getIncome() < maxIncome
-                                )
-                                    usersList.add(user);
-                            }
+                            if (
+                                    user.getCity().equalsIgnoreCase(city)
+                                            && user.getEducation().equalsIgnoreCase(education)
+                                            && user.getHomeType().equalsIgnoreCase(selectedHomeType)
+                                            && user.getJobOrBusiness().equalsIgnoreCase(jobOrBusiness)
+                                            && user.getCast().equalsIgnoreCase(cast)
+                                            && user.getHeight() > minHeight
+                                            && user.getHeight() < maxHeight
+                                            && user.getAge() > minAge
+                                            && user.getAge() < maxAge
+                                            && user.getIncome() > minIncome
+                                            && user.getIncome() < maxIncome
+                            )
+                                usersList.add(user);
+
                         }
                     }
                     if (usersList.size() > 0) {
@@ -147,7 +147,7 @@ public class SearchActivity extends AppCompatActivity {
     private void sendNotification(User user) {
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(this);
-        String NotificationTitle = "New request";
+        String NotificationTitle = "New request from: " + user.getName();
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
@@ -160,6 +160,13 @@ public class SearchActivity extends AppCompatActivity {
                 .child("sent").child(user.getPhone()).setValue(user.getPhone());
         mDatabase.child("Requests").child(user.getPhone()).child("received")
                 .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+
+        String key = "" + System.currentTimeMillis();
+        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                NotificationMessage, "request", user.getLivePicPath(), SharedPrefs.getUser().getPhone(),
+                System.currentTimeMillis());
+        mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
+
     }
 
     private void showInterstitial() {
@@ -174,7 +181,7 @@ public class SearchActivity extends AppCompatActivity {
 
     public void LoadInterstritial() {
         InterstitialAd.load(
-               this,
+                this,
                 AD_UNIT_ID,
                 adRequest,
                 new InterstitialAdLoadCallback() {

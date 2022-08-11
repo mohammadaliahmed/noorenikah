@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
+import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.User;
@@ -33,6 +34,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
     Context context;
     List<ChatModel> itemList;
+    int countUnreadChats = 0;
 
     public ChatListAdapter(Context context, List<ChatModel> itemList) {
         this.context = context;
@@ -59,17 +61,24 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         Glide.with(context)
                 .load(model.getHisPic())
                 .into(holder.picture);
-            if (model.isRead()) {
-                holder.unreadDot.setVisibility(View.GONE);
-                holder.name.setTypeface(null,Typeface.NORMAL);
-                holder.message.setTypeface(null, Typeface.NORMAL);
-                holder.time.setTypeface(null, Typeface.NORMAL);
-            } else {
-                holder.unreadDot.setVisibility(View.VISIBLE);
-                holder.name.setTypeface(null, Typeface.BOLD);
-                holder.message.setTypeface(null, Typeface.BOLD);
-                holder.time.setTypeface(null, Typeface.BOLD);
-            }
+        if (model.isRead()) {
+            holder.unreadDot.setVisibility(View.GONE);
+            holder.name.setTypeface(null, Typeface.NORMAL);
+            holder.message.setTypeface(null, Typeface.NORMAL);
+            holder.time.setTypeface(null, Typeface.NORMAL);
+        } else {
+            holder.unreadDot.setVisibility(View.VISIBLE);
+            holder.name.setTypeface(null, Typeface.BOLD);
+            holder.message.setTypeface(null, Typeface.BOLD);
+            holder.time.setTypeface(null, Typeface.BOLD);
+            countUnreadChats++;
+        }
+        if(countUnreadChats>0) {
+            MainActivity.showBadge(context, "" + countUnreadChats);
+        }else{
+            MainActivity.removeBadge();
+
+        }
 
         holder.name.setText(model.getHisName());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
@@ -89,6 +98,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     public int getItemCount() {
         return itemList.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, message, time;

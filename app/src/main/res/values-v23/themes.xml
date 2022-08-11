@@ -13,7 +13,7 @@
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
     </style>
-    <style name="AppThemeMainActivity" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppThemeMainActivity" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

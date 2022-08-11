@@ -224,23 +224,18 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:text="Select Qualification:" />
-
-                        <Spinner
-                            android:id="@+id/educationSpinner"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/education"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp" />
-                    </LinearLayout>
+                            android:hint="Education"
+                            android:inputType="textCapWords" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                 </LinearLayout>
@@ -289,10 +284,17 @@
                                 android:text="Select Occupation" />
 
                             <RadioButton
+                                android:id="@+id/joblessRadio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Jobless" />
+
+                            <RadioButton
                                 android:id="@+id/jobRadio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Job" />
+
 
                             <RadioButton
                                 android:id="@+id/businessRadio"
@@ -306,9 +308,9 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_margin="10dp"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
@@ -633,7 +635,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
@@ -650,6 +652,7 @@
                         android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -819,6 +822,7 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -843,13 +847,13 @@
 
                     <EditText
                         android:id="@+id/about"
-                        android:inputType="textMultiLine|textCapSentences"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:background="@drawable/grey_border"
                         android:gravity="top"
                         android:hint="About yourself"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:lines="4"
                         android:padding="5dp" />
                 </LinearLayout>

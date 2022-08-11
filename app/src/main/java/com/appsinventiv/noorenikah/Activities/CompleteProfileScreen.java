@@ -72,13 +72,12 @@ public class CompleteProfileScreen extends AppCompatActivity {
     Button picPicture;
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
-    private String selectedEducation;
     private String selectedHomeType;
     CircleImageView pickedPicture;
     private String livePicPath;
-    RadioButton male, female, jobRadio, businessRadio;
+    RadioButton male, female, jobRadio, joblessRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
-            fatherName, motherName, brothers, sisters, cast;
+            fatherName, motherName, brothers, sisters, cast,education;
     Button saveProfile;
     DatabaseReference mDatabase;
     private String genderSelected;
@@ -99,7 +98,9 @@ public class CompleteProfileScreen extends AppCompatActivity {
         belonging = findViewById(R.id.belonging);
         cast = findViewById(R.id.cast);
         houseSize = findViewById(R.id.houseSize);
+        joblessRadio = findViewById(R.id.joblessRadio);
         city = findViewById(R.id.city);
+        education = findViewById(R.id.education);
         houseAddress = findViewById(R.id.houseAddress);
         consent = findViewById(R.id.consent);
         nationality = findViewById(R.id.nationality);
@@ -115,6 +116,11 @@ public class CompleteProfileScreen extends AppCompatActivity {
         jobRadio.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
                 jobOrBusiness = "job";
+            }
+        });
+        joblessRadio.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isChecked()) {
+                jobOrBusiness = "jobless";
             }
         });
         businessRadio.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -155,7 +161,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
         });
         setUpFindViewByIds();
         setMaritalSpinner();
-        setEducationSpinner();
+//        setEducationSpinner();
         setHomeSpinner();
         consent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -179,28 +185,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     height.setError("Enter height");
                     height.requestFocus();
 
-                } else if (income.getText().length() == 0) {
-                    income.setError("Enter income");
-                    income.requestFocus();
-                } else if (cast.getText().length() == 0) {
-                    cast.setError("Enter cast");
-                    cast.requestFocus();
-                } else if (city.getText().length() == 0) {
-                    city.setError("Enter city");
-                    city.requestFocus();
-                } else if (brothers.getText().length() == 0) {
-                    brothers.setError("Enter brothers");
-                    brothers.requestFocus();
-
-                } else if (sisters.getText().length() == 0) {
-                    sisters.setError("Enter sisters");
-                    sisters.requestFocus();
-
-                } else if (about.getText().length() == 0) {
-                    about.setError("Enter some lines about yourself");
-                    about.requestFocus();
-
-                } else if (religion.getText().length() == 0) {
+                }
+                else if (religion.getText().length() == 0) {
                     religion.setError("Enter religion");
                     religion.requestFocus();
 
@@ -208,11 +194,28 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     sect.setError("Enter sect");
                     sect.requestFocus();
 
-                }else if (companyName.getText().length() == 0) {
-                    companyName.setError("Enter company name");
-                    companyName.requestFocus();
+                }
 
-                } else if (genderSelected == null) {
+                else if (income.getText().length() == 0) {
+                    income.setText("0");
+                } else if (cast.getText().length() == 0) {
+                    cast.setError("Enter cast");
+                    cast.requestFocus();
+                } else if (city.getText().length() == 0) {
+                    city.setError("Enter city");
+                    city.requestFocus();
+                } else if (brothers.getText().length() == 0) {
+                    brothers.setText("0");
+
+                } else if (sisters.getText().length() == 0) {
+                    sisters.setError("0");
+                    sisters.requestFocus();
+
+                } else if (about.getText().length() == 0) {
+                    about.setError("Enter some lines about yourself");
+                    about.requestFocus();
+
+                }else if (genderSelected == null) {
 
                     CommonUtils.showToast("Please select gender");
                 } else if (livePicPath == null) {
@@ -238,7 +241,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     map.put("gender", genderSelected);
                     map.put("jobOrBusiness", jobOrBusiness);
                     map.put("maritalStatus", selectedMaritalStatus);
-                    map.put("education", selectedEducation);
+                    map.put("education", education.getText().toString());
                     map.put("religion", religion.getText().toString());
                     map.put("about", about.getText().toString());
                     map.put("sect", sect.getText().toString());
@@ -300,26 +303,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
         maritalSpinner.setAdapter(aa);
     }
 
-    private void setEducationSpinner() {
-        String[] educationList = {"Qualification Level", "FA", "BA",
-                "MA", "MPhil", "Phd"};
-        Spinner educationSpinner = findViewById(R.id.educationSpinner);
-        educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedEducation = educationList[i];
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, educationList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        educationSpinner.setAdapter(aa);
-    }
 
 
     private void setHomeSpinner() {

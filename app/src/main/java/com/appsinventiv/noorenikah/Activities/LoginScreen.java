@@ -93,6 +93,7 @@ public class LoginScreen extends AppCompatActivity {
                 } else {
                     startActivity(new Intent(LoginScreen.this, MainActivity.class));
                 }
+                CommonUtils.showToast("Login Successfull");
                 finish();
 
             } else {

@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,7 +41,6 @@ public class HomeFragment extends Fragment {
     private List<User> usersList = new ArrayList<>();
     UsersRecyclerAdapter adapter;
     private AdView mAdView;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
 
@@ -137,7 +135,7 @@ public class HomeFragment extends Fragment {
     public void LoadInterstritial() {
         InterstitialAd.load(
                 getContext(),
-                AD_UNIT_ID,
+                getResources().getString(R.string.interstital_ad_unit_id),
                 adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
@@ -191,7 +189,7 @@ public class HomeFragment extends Fragment {
         if (interstitialAda != null) {
             interstitialAda.show(getActivity());
         } else {
-            Toast.makeText(getContext(), "Ad did not load", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Ad did not load", Toast.LENGTH_SHORT).show();
 
         }
     }

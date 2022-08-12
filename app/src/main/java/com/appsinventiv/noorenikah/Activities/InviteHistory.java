@@ -33,6 +33,12 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +47,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class InviteHistory extends AppCompatActivity {
@@ -62,6 +67,7 @@ public class InviteHistory extends AppCompatActivity {
     PayoutsHistoryAdapter adapter;
     EditText name;
 
+    private RewardedAd mRewardedAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,50 @@ public class InviteHistory extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
             this.setTitle("Invite");
         }
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        RewardedAd.load(this, getResources().getString(R.string.reward_ad_unit_id),
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                    }
+                });
+//        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+//            @Override
+//            public void onAdClicked() {
+//                // Called when a click is recorded for an ad.
+//            }
+//
+//            @Override
+//            public void onAdDismissedFullScreenContent() {
+//                // Called when ad is dismissed.
+//                // Set the ad reference to null so you don't show the ad a second time.
+//                mRewardedAd = null;
+//            }
+//
+//            @Override
+//            public void onAdFailedToShowFullScreenContent(AdError adError) {
+//                // Called when ad fails to show.
+//                mRewardedAd = null;
+//            }
+//
+//            @Override
+//            public void onAdImpression() {
+//                // Called when an impression is recorded for an ad.
+//            }
+//
+//            @Override
+//            public void onAdShowedFullScreenContent() {
+//                // Called when ad is shown.
+//            }
+//        });
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
 
         phone = findViewById(R.id.phone);
@@ -110,6 +160,7 @@ public class InviteHistory extends AppCompatActivity {
         invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showReward();
                 showAlert();
             }
         });
@@ -135,6 +186,20 @@ public class InviteHistory extends AppCompatActivity {
 
     }
 
+    public void showReward(){
+        if (mRewardedAd != null) {
+            mRewardedAd.show(this, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    // Handle the reward.
+                    int rewardAmount = rewardItem.getAmount();
+                    String rewardType = rewardItem.getType();
+                }
+            });
+        } else {
+        }
+    }
+
     private void showPayoutAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Request Payout");
@@ -144,6 +209,7 @@ public class InviteHistory extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                showReward();
                 submitForPayout();
             }
         });

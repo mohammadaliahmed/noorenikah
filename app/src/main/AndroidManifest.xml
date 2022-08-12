@@ -31,8 +31,6 @@
         </activity>
         <activity android:name="com.appsinventiv.noorenikah.VerifyScreen" />
         <activity android:name="com.appsinventiv.noorenikah.ReportScreen" />
-        <activity android:name="com.appsinventiv.noorenikah.LatestFrauds" />
-        <activity android:name="com.appsinventiv.noorenikah.ContactUs" />
         <activity android:name=".Activities.LoginScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar"/>
         <activity android:name=".Activities.Register"
@@ -67,9 +65,13 @@
         <activity android:name=".Activities.PaymentActivity" />
         <activity android:name=".Activities.NotificationHistory" />
 
+<!--        <meta-data-->
+<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+<!--            android:value="ca-app-pub-5349923547931941~1242986914" />-->
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5349923547931941~1242986914" />
+            android:value="ca-app-pub-8337731531668373~1592325564" />
 
         <service android:name=".Utils.MyFirebaseMessagingService"
             android:exported="false">

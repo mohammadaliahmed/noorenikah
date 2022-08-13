@@ -293,6 +293,7 @@
                                     android:id="@+id/income"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:text="0"
                                     android:hint="Income"
                                     android:inputType="number" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -350,7 +351,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Cast"
+                                android:hint="Religion"
                                 android:inputType="textCapWords"
                                 android:lines="1"
                                 android:textSize="14sp" />
@@ -374,7 +375,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Cast"
+                                android:hint="Sect"
                                 android:inputType="textCapWords"
                                 android:lines="1"
                                 android:textSize="14sp" />
@@ -751,6 +752,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:hint="Brothers "
+                                android:text="0"
                                 android:inputType="number"
                                 android:lines="1"
                                 android:textSize="14sp" />
@@ -775,6 +777,7 @@
                                 android:layout_weight="1"
                                 android:hint="No. of Sisters"
                                 android:inputType="number"
+                                android:text="0"
                                 android:lines="1"
                                 android:textSize="14sp" />
                         </LinearLayout>

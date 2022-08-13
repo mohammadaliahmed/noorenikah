@@ -1,12 +1,8 @@
 package com.appsinventiv.noorenikah.Activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +27,6 @@ import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -41,12 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -89,6 +80,7 @@ public class EditProfile extends AppCompatActivity {
         fatherOccupation = findViewById(R.id.fatherOccupation);
         motherOccupation = findViewById(R.id.motherOccupation);
         wholeLayout = findViewById(R.id.wholeLayout);
+        joblessRadio = findViewById(R.id.joblessRadio);
         height = findViewById(R.id.height);
         income = findViewById(R.id.income);
         belonging = findViewById(R.id.belonging);

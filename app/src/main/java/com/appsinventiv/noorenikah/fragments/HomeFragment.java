@@ -78,7 +78,8 @@ public class HomeFragment extends Fragment {
                     usersList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        if (user != null && user.getName() != null) {
+                        if (user != null && user.getName() != null &&
+                                !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                             if (user.getEducation() != null) {
                                 usersList.add(user);
                             }

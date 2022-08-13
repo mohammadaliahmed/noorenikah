@@ -1,14 +1,8 @@
 package com.appsinventiv.noorenikah.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,10 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +27,6 @@ import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -47,17 +36,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -77,7 +59,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
     private String livePicPath;
     RadioButton male, female, jobRadio, joblessRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
-            fatherName, motherName, brothers, sisters, cast,education;
+            fatherName, motherName, brothers, sisters, cast, education;
     Button saveProfile;
     DatabaseReference mDatabase;
     private String genderSelected;
@@ -177,7 +159,10 @@ public class CompleteProfileScreen extends AppCompatActivity {
         saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (age.getText().length() == 0) {
+                if (genderSelected == null) {
+
+                    CommonUtils.showToast("Please select gender");
+                } else if (age.getText().length() == 0) {
                     age.setError("Enter age");
                     age.requestFocus();
 
@@ -185,8 +170,17 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     height.setError("Enter height");
                     height.requestFocus();
 
-                }
-                else if (religion.getText().length() == 0) {
+                } else if (selectedMaritalStatus == null) {
+
+                    CommonUtils.showToast("Please select marital status");
+                } else if (education.getText().length() == 0) {
+                    education.setError("Enter education");
+                    education.requestFocus();
+
+                } else if (jobOrBusiness == null) {
+
+                    CommonUtils.showToast("Please select job status");
+                } else if (religion.getText().length() == 0) {
                     religion.setError("Enter religion");
                     religion.requestFocus();
 
@@ -194,30 +188,16 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     sect.setError("Enter sect");
                     sect.requestFocus();
 
-                }
-
-                else if (income.getText().length() == 0) {
-                    income.setText("0");
                 } else if (cast.getText().length() == 0) {
                     cast.setError("Enter cast");
                     cast.requestFocus();
                 } else if (city.getText().length() == 0) {
                     city.setError("Enter city");
                     city.requestFocus();
-                } else if (brothers.getText().length() == 0) {
-                    brothers.setText("0");
-
-                } else if (sisters.getText().length() == 0) {
-                    sisters.setError("0");
-                    sisters.requestFocus();
-
-                } else if (about.getText().length() == 0) {
+                }  else if (about.getText().length() == 0) {
                     about.setError("Enter some lines about yourself");
                     about.requestFocus();
 
-                }else if (genderSelected == null) {
-
-                    CommonUtils.showToast("Please select gender");
                 } else if (livePicPath == null) {
 
                     CommonUtils.showToast("Please upload picture");
@@ -283,7 +263,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
 
     private void setMaritalSpinner() {
-        String[] maritalStatuses = {"Marital Status", "Single", "Windowed",
+        String[] maritalStatuses = { "Single","Married", "Windowed","Separated",
                 "Divorced"};
         maritalSpinner = findViewById(R.id.maritalSpinner);
         maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -302,8 +282,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
         //Setting the ArrayAdapter data on the Spinner
         maritalSpinner.setAdapter(aa);
     }
-
-
 
 
     private void setHomeSpinner() {

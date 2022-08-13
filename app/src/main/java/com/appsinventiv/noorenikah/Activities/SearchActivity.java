@@ -104,7 +104,8 @@ public class SearchActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        if (user != null && user.getName() != null && user.getGender() != null) {
+                        if (user != null && user.getName() != null && user.getGender() != null &&
+                        !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                             if (
                                     user.getCity().equalsIgnoreCase(city)
                                             && user.getEducation().equalsIgnoreCase(education)

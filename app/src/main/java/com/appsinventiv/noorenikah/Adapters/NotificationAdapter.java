@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Activities.PaymentActivity;
+import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.R;
@@ -64,13 +66,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             public void onClick(View view) {
                 if (item.getType().equalsIgnoreCase("request")) {
                     Constants.REQUEST_RECEIVED = true;
-                    context.startActivity(new Intent(context,MainActivity.class));
+                    context.startActivity(new Intent(context, MainActivity.class));
                 } else if (item.getType().equalsIgnoreCase("accepted")) {
                     Intent i = new Intent(context, ViewFriendProfile.class);
                     i.putExtra("phone", item.getHisId());
                     context.startActivity(i);
-                }else if (item.getType().equalsIgnoreCase("payout")) {
+                } else if (item.getType().equalsIgnoreCase("payout")) {
                     Intent i = new Intent(context, InviteHistory.class);
+                    context.startActivity(i);
+                } else if (item.getType().equalsIgnoreCase("payment")) {
+                    Intent i = new Intent(context, PaymentsHistory.class);
+                    context.startActivity(i);
+                }else if (item.getType().equalsIgnoreCase("profile")) {
+                    Intent i = new Intent(context, MainActivity.class);
                     context.startActivity(i);
                 }
             }

@@ -68,6 +68,7 @@ public class InviteHistory extends AppCompatActivity {
     EditText name;
 
     private RewardedAd mRewardedAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +187,7 @@ public class InviteHistory extends AppCompatActivity {
 
     }
 
-    public void showReward(){
+    public void showReward() {
         if (mRewardedAd != null) {
             mRewardedAd.show(this, new OnUserEarnedRewardListener() {
                 @Override
@@ -290,7 +291,7 @@ public class InviteHistory extends AppCompatActivity {
         sendNotitifcation();
         String key = "" + System.currentTimeMillis();
         RequestPayoutModel model = new RequestPayoutModel(
-                key, phone.getText().toString(), payoutOption, name.getText().toString(),
+                key, phone.getText().toString().substring(1), payoutOption, name.getText().toString(),
                 totalEarning, System.currentTimeMillis()
         );
         mDatabase.child("RequestPayout").child(SharedPrefs.getUser().getPhone()).child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {

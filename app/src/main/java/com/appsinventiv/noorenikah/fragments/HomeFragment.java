@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     private AdView mAdView;
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
+    private HashMap<String,String> requestSentMap=new HashMap<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -88,7 +90,8 @@ public class HomeFragment extends Fragment {
                     }
                     Collections.shuffle(usersList);
 
-                    adapter.setUserList(usersList);
+//                    adapter.setUserList(usersList);
+                    getRequestSent();
                 }
             }
 
@@ -100,6 +103,27 @@ public class HomeFragment extends Fragment {
         LoadInterstritial();
 
         return rootView;
+    }
+
+    private void getRequestSent() {
+        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
+                .child("sent").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            String key=snapshot.getValue(String.class);
+                            requestSentMap.put(key,key);
+                        }
+                        List<String> requestedList=new ArrayList<>(requestSentMap.values());
+                        adapter.setRequestedList(requestedList);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void sendNotification(User user) {

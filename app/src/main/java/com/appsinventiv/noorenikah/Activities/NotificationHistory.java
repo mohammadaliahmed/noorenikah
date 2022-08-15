@@ -1,9 +1,7 @@
 package com.appsinventiv.noorenikah.Activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationHistory extends AppCompatActivity {
@@ -67,6 +65,8 @@ public class NotificationHistory extends AppCompatActivity {
                         itemList.add(model);
                     }
                 }
+                Collections.reverse(itemList);
+
                 adapter.setItemList(itemList);
 
             }

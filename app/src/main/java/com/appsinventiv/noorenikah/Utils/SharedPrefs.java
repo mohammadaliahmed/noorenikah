@@ -3,7 +3,6 @@ package com.appsinventiv.noorenikah.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -136,5 +135,6 @@ public class SharedPrefs {
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
         editor.apply();
+
     }
 }

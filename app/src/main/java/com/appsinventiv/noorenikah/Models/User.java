@@ -15,6 +15,7 @@ public class User implements Serializable {
     String myReferralCode;
     HashMap<String,String> friends;
     boolean paid;
+    boolean rejected;
 
     public User() {
     }
@@ -25,6 +26,14 @@ public class User implements Serializable {
         this.password = password;
         this.myReferralCode = myReferralCode;
         this.referralCode = referralCode;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
     }
 
     public String getCompanyName() {

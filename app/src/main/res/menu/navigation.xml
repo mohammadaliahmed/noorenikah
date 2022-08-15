@@ -6,10 +6,11 @@
         android:icon="@drawable/ic_home_black"
         android:title="Home" />
 
+
     <item
-        android:id="@+id/navigation_search"
-        android:icon="@drawable/magnifier"
-        android:title="Search" />
+        android:id="@+id/navigation_invite"
+        android:icon="@drawable/invite"
+        android:title="Invite" />
     <item
         android:id="@+id/navigation_notification"
         android:icon="@drawable/ic_notification"

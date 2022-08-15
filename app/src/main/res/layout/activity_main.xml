@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -43,16 +43,28 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/notifications"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/notifications"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@id/search"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="5dp"
             android:src="@drawable/notification" />
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            android:src="@drawable/searccc" />
     </RelativeLayout>
 
 
@@ -68,10 +80,10 @@
     <Button
         android:id="@+id/buy"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="buy" />
+        android:text="buy"
+        android:visibility="gone" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/customBottomBar"

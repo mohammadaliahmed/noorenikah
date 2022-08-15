@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -55,6 +56,7 @@ public class SearchActivity extends AppCompatActivity {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
+    private HashMap<String,String> requestSentMap=new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +127,14 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     if (usersList.size() > 0) {
                         adapter.setUserList(usersList);
+                        getRequestSent();
+
                     } else {
                         adapter.setUserList(new ArrayList<>());
                         noData.setVisibility(View.VISIBLE);
 
                     }
+
                 }
             }
 
@@ -140,6 +145,27 @@ public class SearchActivity extends AppCompatActivity {
         });
 
 
+    }
+    private void getRequestSent() {
+        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
+                .child("sent").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            String key=snapshot.getValue(String.class);
+                            requestSentMap.put(key,key);
+                        }
+                        List<String> requestedList=new ArrayList<>(requestSentMap.values());
+                        adapter.setRequestedList(requestedList);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void sendNotification(User user) {

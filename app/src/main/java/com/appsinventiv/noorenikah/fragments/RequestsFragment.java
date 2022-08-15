@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Adapters.RequestsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
@@ -40,10 +38,14 @@ public class RequestsFragment extends Fragment {
     private DatabaseReference mDatabase;
     private List<User> userList = new ArrayList<>();
     RequestsAdapter adapter;
+    TextView noRequests;
+    ProgressBar progress;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_request_received, container, false);
+        progress=rootView.findViewById(R.id.progress);
+        noRequests=rootView.findViewById(R.id.noRequests);
         adapter = new RequestsAdapter(getActivity(), userList, new RequestsAdapter.RequestsAdapterCallbacks() {
             @Override
             public void onAcceptClicked(User user) {
@@ -108,13 +110,18 @@ public class RequestsFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList = new ArrayList<>();
+                        progress.setVisibility(View.GONE);
+
                         if (dataSnapshot.getValue() != null) {
+
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 String userId = snapshot.getValue(String.class);
                                 getUserData(userId);
                             }
                         } else {
-                            adapter.setUserList(userList);
+//                            adapter.setUserList(userList);
+                            noRequests.setVisibility(View.VISIBLE);
+
                         }
                     }
 

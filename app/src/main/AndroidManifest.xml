@@ -64,8 +64,9 @@
             android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".Activities.PaymentActivity" />
         <activity android:name=".Activities.NotificationHistory" />
+        <activity android:name=".Activities.SearchScreen" />
 
-<!--        <meta-data-->
+        <!--        <meta-data-->
 <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
 <!--            android:value="ca-app-pub-5349923547931941~1242986914" />-->
 

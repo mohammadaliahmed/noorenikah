@@ -31,6 +31,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     Context context;
     List<User> userList;
     UsersAdapterCallbacks callbacks;
+    List<String> requestedList;
 
     public UsersRecyclerAdapter(Context context, List<User> userList, UsersAdapterCallbacks callbacks) {
         this.context = context;
@@ -40,6 +41,11 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+        notifyDataSetChanged();
+    }
+
+    public void setRequestedList(List<String> requestedList) {
+        this.requestedList = requestedList;
         notifyDataSetChanged();
     }
 
@@ -54,6 +60,19 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = userList.get(position);
+        if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone()) ) {
+
+            holder.requestBtn.setText("Request  Sent!");
+            holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_red_outline));
+            holder.requestBtn.setEnabled(false);
+        } else {
+            holder.requestBtn.setText("Send request");
+            holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
+            holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_bg));
+            holder.requestBtn.setEnabled(true);
+
+        }
         holder.requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +80,8 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                     callbacks.onRequestClicked(user);
                     CommonUtils.showToast("Request sent");
                     holder.requestBtn.setText("Request Sent!");
+                    holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorAccent));
+                    holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_red_outline));
                 } else {
                     context.startActivity(new Intent(context, PaymentProof.class));
 

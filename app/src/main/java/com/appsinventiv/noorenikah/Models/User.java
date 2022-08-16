@@ -13,7 +13,7 @@ public class User implements Serializable {
     int age,income,brothers,sisters;
     float height;
     String myReferralCode;
-    HashMap<String,String> friends;
+    HashMap<String,String> friends,blockedMe,iBlocked;
     boolean paid;
     boolean rejected;
 
@@ -30,6 +30,25 @@ public class User implements Serializable {
 
     public boolean isRejected() {
         return rejected;
+    }
+
+    public HashMap<String, String> getBlockedMe() {
+        if(blockedMe==null) return new HashMap<>();
+
+        return blockedMe;
+    }
+
+    public void setBlockedMe(HashMap<String, String> blockedMe) {
+        this.blockedMe = blockedMe;
+    }
+
+    public HashMap<String, String> getiBlocked() {
+        if(iBlocked==null) return new HashMap<>();
+        return iBlocked;
+    }
+
+    public void setiBlocked(HashMap<String, String> iBlocked) {
+        this.iBlocked = iBlocked;
     }
 
     public void setRejected(boolean rejected) {

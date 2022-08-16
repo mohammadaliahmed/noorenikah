@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#fff">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
             android:id="@+id/back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
+            android:layout_centerVertical="true"
 
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -28,17 +28,30 @@
             android:id="@+id/picture"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+
+            android:layout_toRightOf="@id/back"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground" />
+
+        <ImageView
+            android:id="@+id/dropdown_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            android:src="@drawable/three_dots" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_gravity="center"
+            android:layout_toRightOf="@id/picture"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="10dp"
@@ -47,7 +60,7 @@
             android:textColor="#000"
             android:textSize="18sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -56,7 +69,7 @@
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
+        ads:adUnitId="@string/banner_ad_unit_id" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -65,13 +78,28 @@
         android:layout_above="@+id/bottomArea"
         android:layout_below="@id/adView" />
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/blocked"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:padding="5dp"
+        android:background="@drawable/rejected"
+        android:text="You have blocked this contact" />
+
     <RelativeLayout
         android:id="@+id/bottomArea"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
+
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/message"

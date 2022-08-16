@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.PaymentProof;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Adapters.RequestsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
@@ -49,20 +50,25 @@ public class RequestsFragment extends Fragment {
         adapter = new RequestsAdapter(getActivity(), userList, new RequestsAdapter.RequestsAdapterCallbacks() {
             @Override
             public void onAcceptClicked(User user) {
-                mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
-                        .child("received").child(user.getPhone()).removeValue();
-                mDatabase.child("Requests").child(user.getPhone())
-                        .child("sent").child(SharedPrefs.getUser().getPhone()).removeValue();
+                if(SharedPrefs.getUser().isPaid()) {
+                    mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
+                            .child("received").child(user.getPhone()).removeValue();
+                    mDatabase.child("Requests").child(user.getPhone())
+                            .child("sent").child(SharedPrefs.getUser().getPhone()).removeValue();
 
-                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("friends")
-                        .child(user.getPhone()).setValue(user.getPhone());
-                mDatabase.child("Users").child(user.getPhone()).child("friends")
-                        .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
-                CommonUtils.showToast("Accepted");
-                sendNotification(user);
-                Intent i=new Intent(getActivity(), ViewFriendProfile.class);
-                i.putExtra("phone",user.getPhone());
-                startActivity(i);
+                    mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("friends")
+                            .child(user.getPhone()).setValue(user.getPhone());
+                    mDatabase.child("Users").child(user.getPhone()).child("friends")
+                            .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+                    CommonUtils.showToast("Accepted");
+                    sendNotification(user);
+                    Intent i = new Intent(getActivity(), ViewFriendProfile.class);
+                    i.putExtra("phone", user.getPhone());
+                    startActivity(i);
+                }else{
+                    Intent i = new Intent(getActivity(), PaymentProof.class);
+                    startActivity(i);
+                }
 
             }
 

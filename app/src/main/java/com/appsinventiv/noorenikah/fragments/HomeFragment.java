@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment {
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
     private HashMap<String,String> requestSentMap=new HashMap<>();
+    ProgressBar progress;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,6 +54,7 @@ public class HomeFragment extends Fragment {
         adRequest = new AdRequest.Builder().build();
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         mAdView = rootView.findViewById(R.id.adView);
+        progress = rootView.findViewById(R.id.progress);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         recycler = rootView.findViewById(R.id.recycler);
@@ -89,8 +92,9 @@ public class HomeFragment extends Fragment {
                         }
                     }
                     Collections.shuffle(usersList);
+                    progress.setVisibility(View.GONE);
 
-//                    adapter.setUserList(usersList);
+                    adapter.setUserList(usersList);
                     getRequestSent();
                 }
             }
@@ -116,6 +120,7 @@ public class HomeFragment extends Fragment {
                         }
                         List<String> requestedList=new ArrayList<>(requestSentMap.values());
                         adapter.setRequestedList(requestedList);
+                        progress.setVisibility(View.GONE);
 
                     }
 

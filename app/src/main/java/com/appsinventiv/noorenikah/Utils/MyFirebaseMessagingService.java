@@ -7,10 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-
-import android.util.Log;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
@@ -86,6 +85,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("payout")) {
 
             resultIntent = new Intent(this, InviteHistory.class);
+        } else if (type.equals("profile")) {
+
+            resultIntent = new Intent(this, MainActivity.class);
         } else {
             resultIntent = new Intent(this, MainActivity.class);
 

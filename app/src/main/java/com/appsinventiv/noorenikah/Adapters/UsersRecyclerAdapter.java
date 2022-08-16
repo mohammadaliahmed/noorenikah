@@ -63,8 +63,8 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone()) ) {
 
             holder.requestBtn.setText("Request  Sent!");
-            holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorAccent));
-            holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_red_outline));
+            holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
+            holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
             holder.requestBtn.setEnabled(false);
         } else {
             holder.requestBtn.setText("Send request");
@@ -80,8 +80,8 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                     callbacks.onRequestClicked(user);
                     CommonUtils.showToast("Request sent");
                     holder.requestBtn.setText("Request Sent!");
-                    holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorAccent));
-                    holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_red_outline));
+                    holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
+                    holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
                 } else {
                     context.startActivity(new Intent(context, PaymentProof.class));
 

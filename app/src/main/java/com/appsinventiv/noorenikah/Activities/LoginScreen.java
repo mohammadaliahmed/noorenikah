@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
@@ -29,12 +33,18 @@ public class LoginScreen extends AppCompatActivity {
     DatabaseReference mDatabase;
     private HashMap<String, User> usersMap = new HashMap<>();
 
+    TextView textt;
+    CheckBox checkit;
+    boolean checked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         login = findViewById(R.id.login);
+        textt = findViewById(R.id.textt);
+        checkit = findViewById(R.id.checkit);
+
         register = findViewById(R.id.register);
         password = findViewById(R.id.password);
         phone = findViewById(R.id.phone);
@@ -53,6 +63,8 @@ public class LoginScreen extends AppCompatActivity {
                     phone.setError("Enter Phone");
                 } else if (password.getText().length() == 0) {
                     password.setError("Enter Password");
+                } else if (!checked) {
+                    CommonUtils.showToast("Please accept terms and conditions");
                 } else {
                     loginNow(phone.getText().toString(), password.getText().toString());
                 }
@@ -76,6 +88,17 @@ public class LoginScreen extends AppCompatActivity {
 
             }
         });
+        AlertsUtils.customTextView(LoginScreen.this, textt);
+
+        checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    checked = true;
+                }
+            }
+        });
+
 
     }
 
@@ -86,19 +109,23 @@ public class LoginScreen extends AppCompatActivity {
             User user = usersMap.get(phone);
 
             if (user.getPassword().equals(pass)) {
-                SharedPrefs.setUser(user);
-                if (user.getLivePicPath() == null) {
-                    startActivity(new Intent(LoginScreen.this, CompleteProfileScreen.class));
+                if (!user.isRejected()) {
+                    SharedPrefs.setUser(user);
+                    if (user.getLivePicPath() == null) {
+                        startActivity(new Intent(LoginScreen.this, CompleteProfileScreen.class));
 
+                    } else {
+                        startActivity(new Intent(LoginScreen.this, MainActivity.class));
+                    }
+                    CommonUtils.showToast("Login Successful");
+                    finish();
                 } else {
-                    startActivity(new Intent(LoginScreen.this, MainActivity.class));
+                    CommonUtils.showToast("Your account is disabled. You cannot login");
                 }
-                CommonUtils.showToast("Login Successfull");
-                finish();
-
             } else {
                 CommonUtils.showToast("Wrong Password");
             }
+
         } else {
             CommonUtils.showToast("Account does not exist. Please signup");
 

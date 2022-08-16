@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +17,7 @@ import com.appsinventiv.noorenikah.Activities.ListOfFriends;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 
 public class MenuFragment extends Fragment {
@@ -26,7 +26,7 @@ public class MenuFragment extends Fragment {
     private View rootView;
     Button logout;
 
-    RelativeLayout editProfile, requestAccepted;
+    RelativeLayout editProfile, requestAccepted, privacy, terms;
     RelativeLayout paymentsHistory;
     RelativeLayout invite;
 
@@ -37,7 +37,21 @@ public class MenuFragment extends Fragment {
         editProfile = rootView.findViewById(R.id.editProfile);
         requestAccepted = rootView.findViewById(R.id.requestAccepted);
         invite = rootView.findViewById(R.id.invite);
+        privacy = rootView.findViewById(R.id.privacy);
+        terms = rootView.findViewById(R.id.terms);
         logout = rootView.findViewById(R.id.logout);
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertsUtils.showTermsAlert(getContext());
+            }
+        });
+        privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertsUtils.showPrivacyAlert(getContext());
+            }
+        });
         paymentsHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        showBadge(this,"6");
-        loadRewardAd();
+//        loadRewardAd();
     }
 
     private void loadRewardAd() {

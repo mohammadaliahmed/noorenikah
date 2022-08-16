@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,26 +14,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.AlertsUtils;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
 import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
     EditText phone, password, name, referralCode;
-    Button login, register;
-
+    Button register;
+    TextView login;
     DatabaseReference mDatabase;
     private HashMap<String, User> usersMap = new HashMap<>();
     private CountryCodePicker ccp;
     private String foneCode;
     private String referalIdFromLink;
     private String referalId;
+    TextView textt;
+    CheckBox checkit;
+    boolean checked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +45,28 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         login = findViewById(R.id.login);
+        textt = findViewById(R.id.textt);
         register = findViewById(R.id.register);
         referralCode = findViewById(R.id.referralCode);
         password = findViewById(R.id.password);
+        checkit = findViewById(R.id.checkit);
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
-
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         foneCode = "+" + ccp.getDefaultCountryCode();
         onNewIntent(getIntent());
+        AlertsUtils.customTextView(Register.this,textt);
 
-//        countryName.setText("(" + ccp.getDefaultCountryName() + ")");
-//        ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-//            @Override
-//            public void onCountrySelected(Country selectedCountry) {
-//                foneCode = "+" + selectedCountry.getPhoneCode();
-//                countryName.setText("(" + selectedCountry.getName() + ")");
-//            }
-//        });
+        checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    checked = true;
+                }
+            }
+        });
+
         ccp.registerPhoneNumberTextView(phone);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,29 +88,12 @@ public class Register extends AppCompatActivity {
                     phone.setError("Enter valid phone number");
                 } else if (password.getText().length() == 0) {
                     password.setError("Enter Password");
+                } else if (!checked) {
+                    CommonUtils.showToast("Please accept terms and conditions");
                 } else {
                     requestCode();
                 }
-//                    if (usersMap.containsKey(phone.getText().toString())) {
-//                        CommonUtils.showToast("Phone number taken");
-//                    } else {
-//                        User user = new User(
-//                                name.getText().toString(),
-//                                phone.getText().toString(),
-//                                password.getText().toString());
-//                        mDatabase.child("Users").child(phone.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void unused) {
-//                                CommonUtils.showToast("Successfully registered");
-//                                SharedPrefs.setUser(user);
-//                                startActivity(new Intent(Register.this,CompleteProfileScreen.class));
-//                                finish();
-//                            }
-//                        });
-//
-//                    }
-//
-//                }
+
             }
         });
 
@@ -147,10 +139,11 @@ public class Register extends AppCompatActivity {
         String data = intent.getDataString();
         if (Intent.ACTION_VIEW.equals(action) && data != null) {
             referalIdFromLink = data.substring(data.lastIndexOf("/") + 1);
-            referalId = referalIdFromLink.replace("refer?id=","");
+            referalId = referalIdFromLink.replace("refer?id=", "");
             referralCode.setText(referalId);
         }
     }
+
 
 
 }

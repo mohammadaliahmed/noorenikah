@@ -158,10 +158,16 @@ public class ChatScreen extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (message.getText().length() == 0) {
-                    message.setError("Cant send empty message");
+                if (SharedPrefs.getUser().isPaid()) {
+
+                    if (message.getText().length() == 0) {
+                        message.setError("Cant send empty message");
+                    } else {
+                        sendMessageToDb();
+                    }
                 } else {
-                    sendMessageToDb();
+                    CommonUtils.showToast("Please pay first to send message\nThank you");
+                    startActivity(new Intent(ChatScreen.this, PaymentProof.class));
                 }
             }
         });
@@ -336,7 +342,7 @@ public class ChatScreen extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                               mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
+                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
                         .child(otherUserPhone).setValue(otherUserPhone);
                 mDatabase.child("Users").child(otherUserPhone).child("blockedMe")
                         .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());

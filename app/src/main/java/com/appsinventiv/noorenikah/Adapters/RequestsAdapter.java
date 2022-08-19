@@ -14,9 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.PaymentProof;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -62,7 +65,12 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callbacks.onAcceptClicked(user);
+                if(SharedPrefs.getUser().isPaid()) {
+                    callbacks.onAcceptClicked(user);
+                }else{
+                    CommonUtils.showToast("Please pay first to accept requests and view profile\nThank you");
+                    context.startActivity(new Intent(context, PaymentProof.class));
+                }
             }
         });
         holder.reject.setOnClickListener(new View.OnClickListener() {

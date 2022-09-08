@@ -244,7 +244,11 @@ public class EditProfile extends AppCompatActivity {
                     motherOccupation.setText(userModel.getMotherOccupation());
                     cast.setText(userModel.getCast());
                     homeSpinner.setSelection(homeAdapter.getPosition(userModel.getHomeType()));
-                    Glide.with(EditProfile.this).load(userModel.getLivePicPath()).into(pickedPicture);
+                    try {
+                        Glide.with(EditProfile.this).load(userModel.getLivePicPath()).into(pickedPicture);
+                    }catch (Exception e){
+                        
+                    }
                     livePicPath = "" + userModel.getLivePicPath();
                     name.setText("" + userModel.getName());
                     about.setText("" + userModel.getAbout());

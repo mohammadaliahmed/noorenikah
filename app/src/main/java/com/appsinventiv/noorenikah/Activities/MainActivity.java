@@ -201,27 +201,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getUserFromDb() {
-        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
-                        SharedPrefs.setUser(user);
-                        if(user.isRejected()){
-                            SharedPrefs.logout();
-                            Intent i = new Intent(MainActivity.this, Splash.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                            finish();
+        if (SharedPrefs.getUser().getPhone() != null) {
+            mDatabase.child("Users").child(SharedPrefs.getUser().getPhone())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            SharedPrefs.setUser(user);
+                            if (user.isRejected()) {
+                                SharedPrefs.logout();
+                                Intent i = new Intent(MainActivity.this, Splash.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                                finish();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                        }
+                    });
+        }
     }
 
 
@@ -276,10 +278,13 @@ public class MainActivity extends AppCompatActivity {
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
-                    String token = task.getResult();
-                    SharedPrefs.setFcmKey(token);
-                    mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("fcmKey").setValue(token);
+                    try {
+                        String token = task.getResult();
+                        SharedPrefs.setFcmKey(token);
+                        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("fcmKey").setValue(token);
+                    } catch (Exception e) {
 
+                    }
                 }
             });
         }

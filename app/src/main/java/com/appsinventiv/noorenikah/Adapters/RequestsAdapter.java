@@ -65,12 +65,12 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SharedPrefs.getUser().isPaid()) {
+//                if(SharedPrefs.getUser().isPaid()) {
                     callbacks.onAcceptClicked(user);
-                }else{
-                    CommonUtils.showToast("Please pay first to accept requests and view profile\nThank you");
-                    context.startActivity(new Intent(context, PaymentProof.class));
-                }
+//                }else{
+//                    CommonUtils.showToast("Please pay first to accept requests and view profile\nThank you");
+//                    context.startActivity(new Intent(context, PaymentProof.class));
+//                }
             }
         });
         holder.reject.setOnClickListener(new View.OnClickListener() {

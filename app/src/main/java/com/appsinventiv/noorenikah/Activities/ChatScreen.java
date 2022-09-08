@@ -158,17 +158,14 @@ public class ChatScreen extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SharedPrefs.getUser().isPaid()) {
+
 
                     if (message.getText().length() == 0) {
                         message.setError("Cant send empty message");
                     } else {
                         sendMessageToDb();
                     }
-                } else {
-                    CommonUtils.showToast("Please pay first to send message\nThank you");
-                    startActivity(new Intent(ChatScreen.this, PaymentProof.class));
-                }
+
             }
         });
         getOtherUserFromDb();
@@ -177,11 +174,12 @@ public class ChatScreen extends AppCompatActivity {
     }
 
     private void checkForBlockages() {
-        if (SharedPrefs.getUser().getBlockedMe().containsKey(otherUserPhone)) {
+
+        if (SharedPrefs.getUser().getBlockedMe() != null && SharedPrefs.getUser().getBlockedMe().containsKey(otherUserPhone)) {
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("This user has blocked you");
-        } else if (SharedPrefs.getUser().getiBlocked().containsKey(otherUserPhone)) {
+        } else if (SharedPrefs.getUser().getiBlocked() != null && SharedPrefs.getUser().getiBlocked().containsKey(otherUserPhone)) {
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("You have blocked this user");

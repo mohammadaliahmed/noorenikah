@@ -87,6 +87,7 @@
         <RelativeLayout
             android:id="@+id/paymentsHistory"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
 
@@ -135,11 +136,7 @@
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
 
-            android:layout_height="1dp"
-            android:background="#aaa" />
 
         <RelativeLayout
             android:id="@+id/terms"

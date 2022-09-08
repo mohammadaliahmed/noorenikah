@@ -14,7 +14,7 @@ public class User implements Serializable {
     float height;
     String myReferralCode;
     HashMap<String,String> friends,blockedMe,iBlocked;
-    boolean paid;
+    boolean paid=false;
     boolean rejected;
 
     public User() {

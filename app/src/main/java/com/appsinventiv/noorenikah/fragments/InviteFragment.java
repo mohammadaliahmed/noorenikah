@@ -32,6 +32,7 @@ import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
 import com.appsinventiv.noorenikah.Models.RequestPayoutModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.android.gms.ads.AdRequest;
@@ -224,7 +225,7 @@ public class InviteFragment extends Fragment {
                     }
                     totalInstalls.setText("" + countInstalls);
                     totalInstallsPaid.setText("" + countPaidInstalls);
-                    totalEarning = (countPaidInstalls * 200);
+                    totalEarning = (countPaidInstalls * Constants.PAYOUT_AMOUNT);
                     totalEarningTv.setText("" + totalEarning);
 
                 }

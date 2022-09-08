@@ -50,7 +50,7 @@ public class RequestsFragment extends Fragment {
         adapter = new RequestsAdapter(getActivity(), userList, new RequestsAdapter.RequestsAdapterCallbacks() {
             @Override
             public void onAcceptClicked(User user) {
-                if(SharedPrefs.getUser().isPaid()) {
+//                if(SharedPrefs.getUser().isPaid()) {
                     mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                             .child("received").child(user.getPhone()).removeValue();
                     mDatabase.child("Requests").child(user.getPhone())
@@ -65,10 +65,10 @@ public class RequestsFragment extends Fragment {
                     Intent i = new Intent(getActivity(), ViewFriendProfile.class);
                     i.putExtra("phone", user.getPhone());
                     startActivity(i);
-                }else{
-                    Intent i = new Intent(getActivity(), PaymentProof.class);
-                    startActivity(i);
-                }
+//                }else{
+//                    Intent i = new Intent(getActivity(), PaymentProof.class);
+//                    startActivity(i);
+//                }
 
             }
 

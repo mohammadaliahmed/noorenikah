@@ -107,6 +107,7 @@ public class VerifyPhone extends AppCompatActivity {
 //                            CommonUtils.showToast(e.getMessage());
                             wholeLayout.setVisibility(View.GONE);
 
+
                             CommonUtils.showToast("Invalid Pin");
                         }
                     });
@@ -164,7 +165,7 @@ public class VerifyPhone extends AppCompatActivity {
                     ph,
                     password, referralCode, myReferralCode);
             if (referralCode.length() > 0) {
-                ReferralCodePaidModel codePaid=new ReferralCodePaidModel(ph,referralCode,false);
+                ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode, false);
                 mDatabase.child("ReferralCodesHistory")
                         .child(referralCode)
                         .child(ph)

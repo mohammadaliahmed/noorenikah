@@ -60,7 +60,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = userList.get(position);
-        if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone()) ) {
+        if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone())) {
 
             holder.requestBtn.setText("Request  Sent!");
             holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
@@ -76,25 +76,26 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
         holder.requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SharedPrefs.getUser().isPaid()) {
-                    callbacks.onRequestClicked(user);
-                    CommonUtils.showToast("Request sent");
-                    holder.requestBtn.setText("Request Sent!");
-                    holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-                    holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
-                } else {
-                    context.startActivity(new Intent(context, PaymentProof.class));
 
-                }
+                callbacks.onRequestClicked(user);
+                CommonUtils.showToast("Request sent");
+                holder.requestBtn.setText("Request Sent!");
+                holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
+                holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
+
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
-                    Intent i = new Intent(context, ViewFriendProfile.class);
-                    i.putExtra("phone", user.getPhone());
-                    context.startActivity(i);
+                if (SharedPrefs.getUser().getFriends() != null) {
+                    if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+                        Intent i = new Intent(context, ViewFriendProfile.class);
+                        i.putExtra("phone", user.getPhone());
+                        context.startActivity(i);
+                    } else {
+                        CommonUtils.showToast("Profile is locked\nPlease send Request");
+                    }
                 } else {
                     CommonUtils.showToast("Profile is locked\nPlease send Request");
                 }

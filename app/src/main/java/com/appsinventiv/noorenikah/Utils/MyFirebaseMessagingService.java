@@ -88,6 +88,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("profile")) {
 
             resultIntent = new Intent(this, MainActivity.class);
+        } else if (type.equals("marketing")) {
+
+            resultIntent = new Intent(this, MainActivity.class);
         } else {
             resultIntent = new Intent(this, MainActivity.class);
 

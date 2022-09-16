@@ -1,8 +1,12 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,6 +105,35 @@ public class MainActivity extends AppCompatActivity {
 
 //        showBadge(this,"6");
         loadRewardAd();
+        if (Constants.MARKETING_MSG) {
+            showNotificationAlertAlert();
+        }
+    }
+
+    private void showNotificationAlertAlert() {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_notification, null);
+        dialog.setContentView(layout);
+        TextView title = layout.findViewById(R.id.title);
+        TextView message = layout.findViewById(R.id.message);
+        Button close = layout.findViewById(R.id.close);
+
+        title.setText(Constants.MARKETING_MSG_TITLE);
+        message.setText(Constants.MARKETING_MSG_MESSAGE);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Constants.MARKETING_MSG_TITLE = "";
+                Constants.MARKETING_MSG_MESSAGE = "";
+                Constants.MARKETING_MSG = false;
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 
     private void loadRewardAd() {
@@ -283,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPrefs.setFcmKey(token);
                         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("fcmKey").setValue(token);
                     } catch (Exception e) {
-
+                        Log.d("fcmKey",e.getMessage());
                     }
                 }
             });

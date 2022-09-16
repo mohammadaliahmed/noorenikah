@@ -82,7 +82,7 @@ public class VerifyPhone extends AppCompatActivity {
             }
         });
 
-        requestCode();
+        requestCode(); //request code
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

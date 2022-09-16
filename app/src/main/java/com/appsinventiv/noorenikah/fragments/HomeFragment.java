@@ -9,15 +9,15 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
+import com.appsinventiv.noorenikah.Adapters.ViewPagerAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.appsinventiv.noorenikah.Utils.VerticalViewPager;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -41,13 +41,16 @@ public class HomeFragment extends Fragment {
     RecyclerView recycler;
     DatabaseReference mDatabase;
     private List<User> usersList = new ArrayList<>();
-    UsersRecyclerAdapter adapter;
+//    UsersRecyclerAdapter adapter;
     private AdView mAdView;
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
     private HashMap<String,String> requestSentMap=new HashMap<>();
     ProgressBar progress;
 
+
+    VerticalViewPager viewpager;
+    private ViewPagerAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,9 +60,29 @@ public class HomeFragment extends Fragment {
         progress = rootView.findViewById(R.id.progress);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        recycler = rootView.findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        adapter = new UsersRecyclerAdapter(getContext(), usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
+        viewpager=rootView.findViewById(R.id.viewpager);
+
+
+
+//        recycler = rootView.findViewById(R.id.recycler);
+//        recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+//        adapter = new UsersRecyclerAdapter(getContext(), usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
+//            @Override
+//            public void onLikeClicked(User user) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onRequestClicked(User user) {
+//                sendNotification(user);
+//
+//            }
+//        });
+//        recycler.setAdapter(adapter);
+
+
+        adapter=new ViewPagerAdapter(getContext(), usersList, new ViewPagerAdapter.UsersAdapterCallbacks() {
             @Override
             public void onLikeClicked(User user) {
 
@@ -67,13 +90,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onRequestClicked(User user) {
-                sendNotification(user);
 
             }
         });
-        recycler.setAdapter(adapter);
-
-
+        viewpager.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
 
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -91,6 +111,7 @@ public class HomeFragment extends Fragment {
 
                         }
                     }
+
                     Collections.shuffle(usersList);
                     progress.setVisibility(View.GONE);
 

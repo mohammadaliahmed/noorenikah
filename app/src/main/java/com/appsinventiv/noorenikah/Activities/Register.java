@@ -84,7 +84,7 @@ public class Register extends AppCompatActivity {
                     name.setError("Enter Name");
                 } else if (phone.getText().length() == 0) {
                     phone.setError("Enter Phone");
-                } else if (phone.getText().length() < 10 || phone.getText().length() > 12) {
+                } else if (phone.getText().length() < 8 || phone.getText().length() > 14) {
                     phone.setError("Enter valid phone number");
                 } else if (password.getText().length() == 0) {
                     password.setError("Enter Password");

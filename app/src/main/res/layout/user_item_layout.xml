@@ -1,102 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
-    android:layout_margin="20dp"
-    app:cardCornerRadius="20dp">
+    android:layout_height="match_parent"
+    android:layout_margin="0dp">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp">
 
-        <ImageView
-            android:id="@+id/image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/gradient" />
-
-        <LinearLayout
-            android:id="@+id/lockedInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/lock" />
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/gradient_bottom" />
+
+            <LinearLayout
+                android:id="@+id/lockedInfo"
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:text="Photo Locked"
-                android:textColor="#fff"
-                android:textSize="25sp"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
 
-                android:textStyle="bold" />
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/lock" />
 
-            <Button
-                android:id="@+id/requestBtn"
-                android:layout_width="200dp"
-                android:textSize="18sp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_bg"
-                android:inputType="text"
-                android:text="Send Request"
-                android:textColor="#fff" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:text="Photo Locked"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/requestBtn"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/btn_bg"
+                    android:inputType="text"
+                    android:text="Send Request"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="15dp"
                 android:text=""
                 android:textColor="#fff"
                 android:textSize="25sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:layout_alignParentRight="true"
+                android:layout_margin="15dp"
+                android:src="@drawable/ic_chat_white" />
+
             <View
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:background="#959595"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:layout_above="@+id/bottom"
+                android:background="#fff" />
 
-            <TextView
-                android:id="@+id/details"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/bottom"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:text=""
-                android:textColor="#fff"
-                android:textSize="16sp" />
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_like_empty" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/comment" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/share" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/love_meter" />
+
+            </LinearLayout>
 
 
-        </LinearLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 
-    </RelativeLayout>
-
-
-</androidx.cardview.widget.CardView>
+</RelativeLayout>

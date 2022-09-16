@@ -89,7 +89,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             resultIntent = new Intent(this, MainActivity.class);
         } else if (type.equals("marketing")) {
-
+            Constants.MARKETING_MSG=true;
+            Constants.MARKETING_MSG_TITLE=notificationTitle;
+            Constants.MARKETING_MSG_MESSAGE=messageBody;
             resultIntent = new Intent(this, MainActivity.class);
         } else {
             resultIntent = new Intent(this, MainActivity.class);

@@ -10,11 +10,13 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.appsinventiv.noorenikah.Adapters.ViewPagerAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.VerticalViewPager;
@@ -28,7 +30,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -41,16 +42,22 @@ public class HomeFragment extends Fragment {
     RecyclerView recycler;
     DatabaseReference mDatabase;
     private List<User> usersList = new ArrayList<>();
-//    UsersRecyclerAdapter adapter;
+    HashMap<String,User> userMap=new HashMap<>();
+
+    //    UsersRecyclerAdapter adapter;
     private AdView mAdView;
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
-    private HashMap<String,String> requestSentMap=new HashMap<>();
+    private HashMap<String, String> requestSentMap = new HashMap<>();
     ProgressBar progress;
 
 
     VerticalViewPager viewpager;
     private ViewPagerAdapter adapter;
+    int currentPage = 0;
+    private ArrayList<String> requestedList=new ArrayList<>();
+    int dataLimit=10;
+    List<String> seenList=new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,30 +66,11 @@ public class HomeFragment extends Fragment {
         mAdView = rootView.findViewById(R.id.adView);
         progress = rootView.findViewById(R.id.progress);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        viewpager=rootView.findViewById(R.id.viewpager);
+//        mAdView.loadAd(adRequest);
+        viewpager = rootView.findViewById(R.id.viewpager);
 
 
-
-//        recycler = rootView.findViewById(R.id.recycler);
-//        recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-//        adapter = new UsersRecyclerAdapter(getContext(), usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
-//            @Override
-//            public void onLikeClicked(User user) {
-//
-//
-//            }
-//
-//            @Override
-//            public void onRequestClicked(User user) {
-//                sendNotification(user);
-//
-//            }
-//        });
-//        recycler.setAdapter(adapter);
-
-
-        adapter=new ViewPagerAdapter(getContext(), usersList, new ViewPagerAdapter.UsersAdapterCallbacks() {
+        adapter = new ViewPagerAdapter(getContext(), new ArrayList<>(), new ViewPagerAdapter.UsersAdapterCallbacks() {
             @Override
             public void onLikeClicked(User user) {
 
@@ -90,44 +78,108 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onRequestClicked(User user) {
+                sendNotification(user);
+            }
 
+            @Override
+            public void onShown(User user) {
+                seenList.add(user.getPhone());
             }
         });
         viewpager.setAdapter(adapter);
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
-
-        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    usersList.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        if (user != null && user.getName() != null &&
-                                !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-                            if (user.getEducation() != null) {
-                                usersList.add(user);
-                            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                        }
-                    }
+            }
 
-                    Collections.shuffle(usersList);
-                    progress.setVisibility(View.GONE);
-
-                    adapter.setUserList(usersList);
-                    getRequestSent();
+            @Override
+            public void onPageSelected(int position) {
+                currentPage = position;
+//                seenList.add(new ArrayList<>(userMap.values()).get(position).getPhone());
+                if(currentPage==userMap.size()-2){
+                    dataLimit+=10;
+                    getMoreData();
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
+        mDatabase = Constants.M_DATABASE;
+
+        mDatabase.child("Users")
+                .limitToLast(dataLimit)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            userMap.clear();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                User user = snapshot.getValue(User.class);
+                                if (user != null && user.getName() != null &&
+                                        !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                                    if (user.getEducation() != null) {
+                                        userMap.put(user.getPhone(),user);
+                                    }
+
+                                }
+                            }
+                            usersList=new ArrayList<>(userMap.values());
+
+                            Collections.shuffle(usersList);
+                            progress.setVisibility(View.GONE);
+
+                            adapter.setUserList(usersList);
+                            getRequestSent();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
         LoadInterstritial();
 
         return rootView;
+    }
+
+    private void getMoreData() {
+        mDatabase.child("Users")
+                .limitToLast(dataLimit)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User user = snapshot.getValue(User.class);
+                            if (user != null && user.getName() != null &&
+                                    !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                                if (user.getEducation() != null) {
+                                    userMap.put(user.getPhone(),user);
+                                }
+                            }
+                        }
+//                        Collections.shuffle(new ArrayList<>());
+                        progress.setVisibility(View.GONE);
+
+                        for(String item:seenList){
+                            userMap.remove(item);
+                        }
+                        usersList=new ArrayList<>(userMap.values());
+                        Collections.shuffle(usersList);
+                        adapter.setData(usersList,requestedList);
+//                        CommonUtils.showToast("data is here");
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void getRequestSent() {
@@ -135,11 +187,11 @@ public class HomeFragment extends Fragment {
                 .child("sent").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                            String key=snapshot.getValue(String.class);
-                            requestSentMap.put(key,key);
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String key = snapshot.getValue(String.class);
+                            requestSentMap.put(key, key);
                         }
-                        List<String> requestedList=new ArrayList<>(requestSentMap.values());
+                        requestedList = new ArrayList<>(requestSentMap.values());
                         adapter.setRequestedList(requestedList);
                         progress.setVisibility(View.GONE);
 

@@ -40,7 +40,14 @@ public class ViewPagerAdapter extends PagerAdapter {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+
     public void setUserList(List<User> userList) {
+        this.userList = userList;
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<User> userList,List<String> requestedList) {
+        this.requestedList = requestedList;
         this.userList = userList;
         notifyDataSetChanged();
     }
@@ -70,6 +77,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView image = itemView.findViewById(R.id.image);
         LinearLayout lockedInfo = itemView.findViewById(R.id.lockedInfo);
         User user = userList.get(position);
+        callbacks.onShown(user);
         if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone())) {
 
             requestBtn.setText("Request  Sent!");
@@ -133,7 +141,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
                     .into(image);
         }
-        name.setText(user.getName() );
+        name.setText(user.getName());
 //        details.setText("Education: " + user.getEducation() + "\n" + "City: " + user.getCity() + "\nCast: " + user.getCast());
 
         container.addView(itemView);
@@ -149,5 +157,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         public void onLikeClicked(User user);
 
         public void onRequestClicked(User user);
+
+        public void onShown(User user);
     }
 }

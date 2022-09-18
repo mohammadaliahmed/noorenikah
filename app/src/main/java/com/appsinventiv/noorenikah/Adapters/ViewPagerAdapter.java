@@ -46,7 +46,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         notifyDataSetChanged();
     }
 
-    public void setData(List<User> userList,List<String> requestedList) {
+    public void setData(List<User> userList, List<String> requestedList) {
         this.requestedList = requestedList;
         this.userList = userList;
         notifyDataSetChanged();
@@ -142,7 +142,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .into(image);
         }
         name.setText(user.getName());
-//        details.setText("Education: " + user.getEducation() + "\n" + "City: " + user.getCity() + "\nCast: " + user.getCast());
+        details.setText("Education: " + user.getEducation() + "\nCast: " + user.getCast() + "\n" + "City: " + user.getCity());
 
         container.addView(itemView);
         return itemView;

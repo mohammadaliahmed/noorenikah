@@ -84,12 +84,16 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         holder.name.setText(model.getHisName());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
         String msg="";
-        if(model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)){
-            msg="\uD83C\uDFB5 Audio";
-        }else if(model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)){
-            msg="\uD83D\uDCF7 Image";
+        if(model.getType()!=null) {
+            if (model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)) {
+                msg = "\uD83C\uDFB5 Audio";
+            } else if (model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)) {
+                msg = "\uD83D\uDCF7 Image";
+            } else {
+                msg = model.getMessage();
+            }
         }else{
-            msg=model.getMessage();
+            msg = model.getMessage();
         }
         holder.message.setText(model.getName() + ": " +msg);
 

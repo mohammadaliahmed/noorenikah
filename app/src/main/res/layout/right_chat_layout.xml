@@ -1,44 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_margin="10dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/picture"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+    <LinearLayout
+        android:id="@+id/pictureArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/profile" />
+        android:layout_marginLeft="5dp"
+
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/picture"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:textSize="11sp" />
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/picture"
+        android:layout_toLeftOf="@id/pictureArea"
         android:background="@drawable/right_msg_bg"
         android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/message"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:maxWidth="200dp"
-            android:layout_height="wrap_content"
-            android:text="sfdfsd"
+            android:text=""
             android:textColor="#000"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:gravity="right"
+        <RelativeLayout
+            android:id="@+id/audio"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/message"
-            android:text="sfdfsd"
-            android:textSize="11sp" />
+            android:visibility="visible">
+
+
+            <ImageView
+                android:id="@+id/playPause"
+                android:layout_width="30dp"
+                android:padding="2dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/play_btn_red"
+                android:visibility="visible" />
+
+            <SeekBar
+                android:id="@+id/seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="12dp"
+                android:maxHeight="1.5dp"
+                android:progressDrawable="@drawable/progress"
+                android:thumb="@drawable/seekbar_thumb_right" />
+
+            <TextView
+                android:id="@+id/audioTime"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seek"
+                android:layout_marginLeft="40dp"
+                android:text="0.5"
+                android:textColor="@color/colorAccent"
+                android:textSize="10sp" />
+        </RelativeLayout>
 
 
     </RelativeLayout>
+
 
 </RelativeLayout>

@@ -100,9 +100,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        }
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
-                0 /* Request code */, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
+//                0 /* Request code */, resultIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity
+                    (this, 0, resultIntent, PendingIntent.FLAG_MUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getActivity
+                    (this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
+        }
 
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
@@ -110,7 +121,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentIntent(resultPendingIntent);
+                .setContentIntent(pendingIntent);
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 

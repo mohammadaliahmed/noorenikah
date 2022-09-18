@@ -109,7 +109,13 @@ public class HomeFragment extends Fragment {
             }
         });
         mDatabase = Constants.M_DATABASE;
+        getFristDataFromDB();
+        LoadInterstritial();
 
+        return rootView;
+    }
+
+    private void getFristDataFromDB() {
         mDatabase.child("Users")
                 .limitToLast(dataLimit)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -142,9 +148,6 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-        LoadInterstritial();
-
-        return rootView;
     }
 
     private void getMoreData() {

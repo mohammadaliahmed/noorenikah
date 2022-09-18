@@ -59,7 +59,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
                 .apply(bitmapTransform(new BlurTransformation(20)))
 
                 .into(holder.image);
-        holder.name.setText(user.getName() + ", " + user.getAge());
+        holder.name.setText(user.getName());
         holder.details.setText("Education: " + user.getEducation() + "\n" + "City: " + user.getCity() + "\nCast: " + user.getCast());
 
         holder.accept.setOnClickListener(new View.OnClickListener() {

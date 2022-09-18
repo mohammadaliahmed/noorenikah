@@ -10,5 +10,6 @@
     <color name="default_grey">#595959</color>
 
     <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#aaa</color>
 
 </resources>

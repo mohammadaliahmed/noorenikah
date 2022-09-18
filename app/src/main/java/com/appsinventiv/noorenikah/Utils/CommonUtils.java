@@ -68,6 +68,13 @@ public class CommonUtils {
         return DateFormat.format("dd MMM , h:mm aa", smsTime).toString();
 
     }
+    public static String getDuration(long seconds) {
+        seconds = (seconds / 1000);
+        long s = seconds % 60;
+        long m = (seconds / 60) % 60;
+        long h = (seconds / (60 * 60)) % 24;
+        return String.format("%2d:%02d", m, s);
+    }
 
 
 }

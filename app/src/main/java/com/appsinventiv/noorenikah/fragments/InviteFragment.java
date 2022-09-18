@@ -209,33 +209,35 @@ public class InviteFragment extends Fragment {
     }
 
     private void getMyReferalData() {
-        mDatabase.child("ReferralCodesHistory").child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+        if(SharedPrefs.getUser().getMyReferralCode()!=null){
+            mDatabase.child("ReferralCodesHistory").child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                        ReferralCodePaidModel referralCodePaidModel = snapshot.getValue(ReferralCodePaidModel.class);
-                        if (referralCodePaidModel != null) {
-                            countInstalls++;
-                            if (referralCodePaidModel.isPaid()) {
-                                countPaidInstalls++;
+                            ReferralCodePaidModel referralCodePaidModel = snapshot.getValue(ReferralCodePaidModel.class);
+                            if (referralCodePaidModel != null) {
+                                countInstalls++;
+                                if (referralCodePaidModel.isPaid()) {
+                                    countPaidInstalls++;
+                                }
                             }
                         }
+                        totalInstalls.setText("" + countInstalls);
+                        totalInstallsPaid.setText("" + countPaidInstalls);
+                        totalEarning = (countPaidInstalls * Constants.PAYOUT_AMOUNT);
+                        totalEarningTv.setText("" + totalEarning);
+
                     }
-                    totalInstalls.setText("" + countInstalls);
-                    totalInstallsPaid.setText("" + countPaidInstalls);
-                    totalEarning = (countPaidInstalls * Constants.PAYOUT_AMOUNT);
-                    totalEarningTv.setText("" + totalEarning);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
     }
 
     private void getAdminFcm() {

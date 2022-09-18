@@ -22,6 +22,7 @@ import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
@@ -82,7 +83,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         holder.name.setText(model.getHisName());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
-        holder.message.setText(model.getName() + ": " + model.getMessage());
+        String msg="";
+        if(model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)){
+            msg="\uD83C\uDFB5 Audio";
+        }else if(model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)){
+            msg="\uD83D\uDCF7 Image";
+        }else{
+            msg=model.getMessage();
+        }
+        holder.message.setText(model.getName() + ": " +msg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

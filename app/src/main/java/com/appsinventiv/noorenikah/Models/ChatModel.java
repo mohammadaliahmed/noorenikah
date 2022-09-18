@@ -5,15 +5,19 @@ public class ChatModel {
             myPhone, hisPhone;
     long time;
     boolean read;
+    String type, imageUrl,videoUrl,audioUrl;
+    long mediaTime;
 
 
     public ChatModel() {
     }
 
+
+
     public ChatModel(String id, String message, String senderId, String sendTo, String name, String picUrl,
-                     String myName, String myPic,String myPhone, String hisName,String hisPhone, String hisPic,
+                     String myName, String myPic, String myPhone, String hisName, String hisPhone, String hisPic,
                      boolean read,
-                     long time) {
+                     long time, String type, String imageUrl, String videoUrl, String audioUrl,long mediaTime) {
         this.id = id;
         this.message = message;
         this.senderId = senderId;
@@ -21,13 +25,58 @@ public class ChatModel {
         this.name = name;
         this.picUrl = picUrl;
         this.time = time;
+        this.type = type;
         this.myName = myName;
         this.myPic = myPic;
         this.read = read;
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
+        this.audioUrl = audioUrl;
         this.hisName = hisName;
         this.hisPic = hisPic;
         this.hisPhone = hisPhone;
+        this.mediaTime = mediaTime;
         this.myPhone = myPhone;
+    }
+
+    public long getMediaTime() {
+        return mediaTime;
+    }
+
+    public void setMediaTime(long mediaTime) {
+        this.mediaTime = mediaTime;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isRead() {

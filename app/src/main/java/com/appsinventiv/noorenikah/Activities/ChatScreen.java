@@ -441,6 +441,10 @@ public class ChatScreen extends AppCompatActivity {
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone()).child(otherUserPhone).child(key).setValue(
                 myModel
         );
+        if(type.equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)){
+            itemList.remove(itemList.size()-1);
+        }
+
         ChatModel hisModel = new ChatModel(key, msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getLivePicPath(),
@@ -559,6 +563,23 @@ public class ChatScreen extends AppCompatActivity {
 
             CompressImage image = new CompressImage(ChatScreen.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
+            ChatModel myModel = new ChatModel(""+System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
+                    SharedPrefs.getUser().getName(),
+                    SharedPrefs.getUser().getLivePicPath(),
+                    SharedPrefs.getUser().getName(),
+                    SharedPrefs.getUser().getPhone(),
+                    SharedPrefs.getUser().getLivePicPath(),
+                    otherUser.getName(),
+                    otherUser.getPhone(),
+                    otherUser.getLivePicPath(),
+                    true,
+                    System.currentTimeMillis(), Constants.MESSAGE_TYPE_IMAGE,
+                    imageUrl, livePicPath, livePicPath,
+                    recordingTime
+            );
+            itemList.add(myModel);
+            adapter.setItemList(itemList);
+            recyclerView.scrollToPosition(itemList.size() - 1);
             uploadPicture();
 
         }
@@ -577,8 +598,6 @@ public class ChatScreen extends AppCompatActivity {
             riversRef.putFile(file)
                     .addOnSuccessListener(taskSnapshot -> {
                         // Get a URL to the uploaded content
-
-                        String downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
                         riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
                             public void onComplete(@NonNull Task<Uri> task) {
@@ -587,7 +606,7 @@ public class ChatScreen extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         livePicPath = "" + uri;
-                                        sendMessageToDb("image");
+                                        sendMessageToDb(Constants.MESSAGE_TYPE_IMAGE);
 
 
                                     }
@@ -708,6 +727,7 @@ public class ChatScreen extends AppCompatActivity {
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
+
             uploadAudioToServer(mFileName + recordingLocalUrl + ".mp3");
         } catch (Exception e) {
 //            CommonUtils.showToast("gere");
@@ -755,14 +775,12 @@ public class ChatScreen extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
 
-                        CommonUtils.showToast("There was some error uploading pic");
 
 
                     });
         } catch (Exception e) {
-            mDatabase.child("Errors").child("mainError").child(mDatabase.push().getKey()).setValue(e.getMessage());
+//            mDatabase.child("Errors").child("mainError").child(mDatabase.push().getKey()).setValue(e.getMessage());
         }
 
 

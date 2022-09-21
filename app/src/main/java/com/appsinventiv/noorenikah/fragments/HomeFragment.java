@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
         mAdView = rootView.findViewById(R.id.adView);
         progress = rootView.findViewById(R.id.progress);
         AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);
         viewpager = rootView.findViewById(R.id.viewpager);
 
 

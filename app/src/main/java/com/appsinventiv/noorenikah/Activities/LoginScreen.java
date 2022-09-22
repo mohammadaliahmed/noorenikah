@@ -77,7 +77,12 @@ public class LoginScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        usersMap.put(user.getPhone(), user);
+                        if (user.getMobileNumber() != null) {
+                            usersMap.put(user.getMobileNumber(), user);
+
+                        } else {
+                            usersMap.put(user.getPhone(), user);
+                        }
 
                     }
                 }

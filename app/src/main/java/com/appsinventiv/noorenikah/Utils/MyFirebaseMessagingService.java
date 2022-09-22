@@ -1,5 +1,7 @@
 package com.appsinventiv.noorenikah.Utils;
 
+import static java.lang.System.exit;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -88,10 +91,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("profile")) {
 
             resultIntent = new Intent(this, MainActivity.class);
+        } else if (type.equals("signout")) {
+            SharedPrefs.logout();
+            resultIntent = new Intent(this, Splash.class);
+
         } else if (type.equals("marketing")) {
-            Constants.MARKETING_MSG=true;
-            Constants.MARKETING_MSG_TITLE=notificationTitle;
-            Constants.MARKETING_MSG_MESSAGE=messageBody;
+            Constants.MARKETING_MSG = true;
+            Constants.MARKETING_MSG_TITLE = notificationTitle;
+            Constants.MARKETING_MSG_MESSAGE = messageBody;
             resultIntent = new Intent(this, MainActivity.class);
         } else {
             resultIntent = new Intent(this, MainActivity.class);
@@ -108,9 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             pendingIntent = PendingIntent.getActivity
                     (this, 0, resultIntent, PendingIntent.FLAG_MUTABLE);
-        }
-        else
-        {
+        } else {
             pendingIntent = PendingIntent.getActivity
                     (this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
         }

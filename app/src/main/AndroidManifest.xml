@@ -2,32 +2,33 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.appsinventiv.noorenikah">
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
-        tools:replace="android:theme"
         android:name=".Utils.ApplicationClass"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VerifyPe"
+        tools:replace="android:theme"
         tools:targetApi="31">
         <activity
             android:name="com.appsinventiv.noorenikah.Activities.MainActivity"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"
-            android:exported="true"/>
+            android:exported="true"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity
-            android:theme="@style/Theme.VerifyPe.NoActionBar"
             android:name="com.appsinventiv.noorenikah.Activities.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.VerifyPe.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,9 +37,11 @@
         </activity>
         <activity android:name="com.appsinventiv.noorenikah.VerifyScreen" />
         <activity android:name="com.appsinventiv.noorenikah.ReportScreen" />
-        <activity android:name=".Activities.LoginScreen"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"/>
-        <activity android:name=".Activities.Register"
+        <activity
+            android:name=".Activities.LoginScreen"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
+        <activity
+            android:name=".Activities.Register"
             android:exported="true"
             android:theme="@style/Theme.VerifyPe.NoActionBar">
             <intent-filter>
@@ -53,42 +56,50 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.CompleteProfileScreen"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"/>
+        <activity
+            android:name=".Activities.CompleteProfileScreen"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity android:name=".Activities.SearchActivity" />
         <activity android:name=".Activities.ViewRequestProfile" />
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Activities.ViewFriendProfile" />
         <activity android:name=".Activities.ListOfFriends" />
-        <activity android:name=".Activities.ChatScreen"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity
+            android:name=".Activities.ChatScreen"
+            android:exported="true"
+            android:theme="@style/Theme.VerifyPe.NoActionBar">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
         <activity android:name=".Activities.PaymentsHistory" />
-        <activity android:name=".Activities.InviteHistory"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".Activities.InviteHistory"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Activities.PaymentActivity" />
         <activity android:name=".Activities.NotificationHistory" />
         <activity android:name=".Activities.SearchScreen" />
-        <activity android:name=".Activities.ViewPictures"
-            android:theme="@style/Theme.VerifyPe.NoActionBar"/>
+        <activity
+            android:name=".Activities.ViewPictures"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
+        <activity
+            android:name=".Activities.ViewSelectedPicture"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
 
         <!--        <meta-data-->
-<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-<!--            android:value="ca-app-pub-5349923547931941~1242986914" />-->
+        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+        <!--            android:value="ca-app-pub-5349923547931941~1242986914" />-->
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-8337731531668373~1592325564" />
 
-        <service android:name=".Utils.MyFirebaseMessagingService"
+        <service
+            android:name=".Utils.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

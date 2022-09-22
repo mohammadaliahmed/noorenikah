@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView search;
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
+    boolean firstTimeShow=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                         mRewardedAd = rewardedAd;
                         setCallbacksOfRewardAd();
+//                        if(!firstTimeShow){
+//
+//                            showReward();
+//                            firstTimeShow=true;
+//                        }
                     }
                 });
 

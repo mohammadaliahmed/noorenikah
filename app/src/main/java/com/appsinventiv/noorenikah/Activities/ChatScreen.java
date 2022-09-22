@@ -441,7 +441,7 @@ public class ChatScreen extends AppCompatActivity {
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone()).child(otherUserPhone).child(key).setValue(
                 myModel
         );
-        if(type.equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)){
+        if(type.equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE) ||type.equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)){
             itemList.remove(itemList.size()-1);
         }
 
@@ -560,28 +560,36 @@ public class ChatScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
             ArrayList<String> mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-
             CompressImage image = new CompressImage(ChatScreen.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
-            ChatModel myModel = new ChatModel(""+System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
-                    SharedPrefs.getUser().getName(),
-                    SharedPrefs.getUser().getLivePicPath(),
-                    SharedPrefs.getUser().getName(),
-                    SharedPrefs.getUser().getPhone(),
-                    SharedPrefs.getUser().getLivePicPath(),
-                    otherUser.getName(),
-                    otherUser.getPhone(),
-                    otherUser.getLivePicPath(),
-                    true,
-                    System.currentTimeMillis(), Constants.MESSAGE_TYPE_IMAGE,
-                    imageUrl, livePicPath, livePicPath,
-                    recordingTime
-            );
-            itemList.add(myModel);
-            adapter.setItemList(itemList);
-            recyclerView.scrollToPosition(itemList.size() - 1);
-            uploadPicture();
-
+            Intent intent = new Intent(ChatScreen.this, ViewSelectedPicture.class);
+            intent.putExtra("url",imageUrl);
+            startActivityForResult(intent, 1);
+        }
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data != null) {
+                String send = data.getStringExtra("send");
+                if(send.equalsIgnoreCase("send")){
+                    ChatModel myModel = new ChatModel("" + System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
+                            SharedPrefs.getUser().getName(),
+                            SharedPrefs.getUser().getLivePicPath(),
+                            SharedPrefs.getUser().getName(),
+                            SharedPrefs.getUser().getPhone(),
+                            SharedPrefs.getUser().getLivePicPath(),
+                            otherUser.getName(),
+                            otherUser.getPhone(),
+                            otherUser.getLivePicPath(),
+                            true,
+                            System.currentTimeMillis(), Constants.MESSAGE_TYPE_IMAGE,
+                            imageUrl, livePicPath, livePicPath,
+                            recordingTime
+                    );
+                    itemList.add(myModel);
+                    adapter.setItemList(itemList);
+                    recyclerView.scrollToPosition(itemList.size() - 1);
+                    uploadPicture();
+                }
+            }
         }
     }
 
@@ -622,9 +630,7 @@ public class ChatScreen extends AppCompatActivity {
                         // Handle unsuccessful uploads
                         // ...
                         mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
-
                         CommonUtils.showToast("There was some error uploading pic");
-
 
                     });
         } catch (Exception e) {
@@ -727,8 +733,26 @@ public class ChatScreen extends AppCompatActivity {
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
+            String fileNam = mFileName + recordingLocalUrl + ".mp3";
 
-            uploadAudioToServer(mFileName + recordingLocalUrl + ".mp3");
+            ChatModel myModel = new ChatModel(""+System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
+                    SharedPrefs.getUser().getName(),
+                    SharedPrefs.getUser().getLivePicPath(),
+                    SharedPrefs.getUser().getName(),
+                    SharedPrefs.getUser().getPhone(),
+                    SharedPrefs.getUser().getLivePicPath(),
+                    otherUser.getName(),
+                    otherUser.getPhone(),
+                    otherUser.getLivePicPath(),
+                    true,
+                    System.currentTimeMillis(), Constants.MESSAGE_TYPE_AUDIO,
+                    "", livePicPath, fileNam,
+                    recordingTime
+            );
+            itemList.add(myModel);
+            adapter.setItemList(itemList);
+            recyclerView.scrollToPosition(itemList.size() - 1);
+            uploadAudioToServer(fileNam);
         } catch (Exception e) {
 //            CommonUtils.showToast("gere");
 

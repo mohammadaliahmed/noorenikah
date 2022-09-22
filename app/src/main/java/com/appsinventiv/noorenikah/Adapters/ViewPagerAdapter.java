@@ -3,6 +3,7 @@ package com.appsinventiv.noorenikah.Adapters;
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.appsinventiv.noorenikah.Activities.ChatScreen;
+import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -74,10 +79,71 @@ public class ViewPagerAdapter extends PagerAdapter {
         Button requestBtn = itemView.findViewById(R.id.requestBtn);
         TextView name = itemView.findViewById(R.id.name);
         TextView details = itemView.findViewById(R.id.details);
+        ImageView share = itemView.findViewById(R.id.share);
+        ImageView chat = itemView.findViewById(R.id.chat);
         ImageView image = itemView.findViewById(R.id.image);
+        ImageView likeUnlike = itemView.findViewById(R.id.likeUnlike);
         LinearLayout lockedInfo = itemView.findViewById(R.id.lockedInfo);
         User user = userList.get(position);
         callbacks.onShown(user);
+        HashMap<String, String> map = SharedPrefs.getLikedMap();
+        if (map != null) {
+            if (map.containsKey(user.getPhone())) {
+                user.setLiked(true);
+            } else {
+                user.setLiked(false);
+            }
+        }
+        if (user.isLiked()) {
+            likeUnlike.setImageResource(R.drawable.ic_like_filled);
+        } else {
+            likeUnlike.setImageResource(R.drawable.ic_like_empty);
+
+        }
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ChatScreen.class);
+                i.putExtra("phone", user.getPhone());
+                context.startActivity(i);
+            }
+        });
+        likeUnlike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user.isLiked()) {
+                    HashMap<String, String> map = SharedPrefs.getLikedMap();
+                    if (map != null) {
+                        if (map.containsKey(user.getPhone())) {
+                            map.remove(user.getPhone());
+                            user.setLiked(false);
+                            SharedPrefs.setLikedMap(map);
+                        }
+                    }
+                    likeUnlike.setImageResource(R.drawable.ic_like_empty);
+                } else {
+                    likeUnlike.setImageResource(R.drawable.ic_like_filled);
+                    HashMap<String, String> map = SharedPrefs.getLikedMap();
+                    if (map != null) {
+                        map.put(user.getPhone(), user.getPhone());
+                        SharedPrefs.setLikedMap(map);
+                    } else {
+                        map = new HashMap<>();
+                        map.put(user.getPhone(), user.getPhone());
+                        SharedPrefs.setLikedMap(map);
+                    }
+                    user.setLiked(true);
+
+
+                }
+            }
+        });
         if (requestedList != null && requestedList.size() > 0 && requestedList.contains(user.getPhone())) {
 
             requestBtn.setText("Request  Sent!");
@@ -103,22 +169,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
             }
         });
-//        itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (SharedPrefs.getUser().getFriends() != null) {
-//                    if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
-//                        Intent i = new Intent(context, ViewFriendProfile.class);
-//                        i.putExtra("phone", user.getPhone());
-//                        context.startActivity(i);
-//                    } else {
-//                        CommonUtils.showToast("Profile is locked\nPlease send Request");
-//                    }
-//                } else {
-//                    CommonUtils.showToast("Profile is locked\nPlease send Request");
-//                }
-//            }
-//        });
+
         if (SharedPrefs.getUser().getFriends() != null) {
             if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
                 lockedInfo.setVisibility(View.GONE);
@@ -142,7 +193,10 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .into(image);
         }
         name.setText(user.getName());
-        details.setText("Education: " + user.getEducation() + "\nCast: " + user.getCast() + "\n" + "City: " + user.getCity());
+        details.setText("Education: " + user.getEducation() +
+                "\nMarital Status: " + user.getMaritalStatus() +
+                "\nCast: " + user.getCast() +
+                "\n" + "City: " + user.getCity());
 
         container.addView(itemView);
         return itemView;

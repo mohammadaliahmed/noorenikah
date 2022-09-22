@@ -16,7 +16,7 @@ public class SharedPrefs {
 
     }
 
-    public static void setReadMap( HashMap<String, String> itemList) {
+    public static void setReadMap(HashMap<String, String> itemList) {
 
         Gson gson = new Gson();
         String json = gson.toJson(itemList);
@@ -26,6 +26,21 @@ public class SharedPrefs {
     public static HashMap<String, String> getReadMap() {
         Gson gson = new Gson();
         HashMap<String, String> playersList = (HashMap<String, String>) gson.fromJson(preferenceGetter("unread"),
+                new TypeToken<HashMap<String, String>>() {
+                }.getType());
+        return playersList;
+    }
+
+    public static void setLikedMap(HashMap<String, String> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("liked", json);
+    }
+
+    public static HashMap<String, String> getLikedMap() {
+        Gson gson = new Gson();
+        HashMap<String, String> playersList = (HashMap<String, String>) gson.fromJson(preferenceGetter("liked"),
                 new TypeToken<HashMap<String, String>>() {
                 }.getType());
         return playersList;
@@ -51,7 +66,7 @@ public class SharedPrefs {
         return preferenceGetter(key);
     }
 
-    public static void setLastMsg(String key,String value) {
+    public static void setLastMsg(String key, String value) {
         preferenceSetter(key, value);
     }
 

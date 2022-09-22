@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class User implements Serializable {
-    String name,referralCode, phone, password;
+    String name,referralCode, phone, password,mobileNumber;
     String fcmKey;
     String livePicPath,  belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
@@ -16,16 +16,26 @@ public class User implements Serializable {
     HashMap<String,String> friends,blockedMe,iBlocked;
     boolean paid=false;
     boolean rejected;
+    boolean liked=false;
 
     public User() {
     }
 
-    public User(String name, String phone, String password, String referralCode, String myReferralCode) {
+    public User(String name, String phone, String password, String mobileNumber,String referralCode, String myReferralCode) {
         this.name = name;
         this.phone = phone;
+        this.mobileNumber = mobileNumber;
         this.password = password;
         this.myReferralCode = myReferralCode;
         this.referralCode = referralCode;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public boolean isRejected() {
@@ -36,6 +46,14 @@ public class User implements Serializable {
         if(blockedMe==null) return new HashMap<>();
 
         return blockedMe;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public void setBlockedMe(HashMap<String, String> blockedMe) {

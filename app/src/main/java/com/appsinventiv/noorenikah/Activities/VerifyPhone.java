@@ -82,38 +82,38 @@ public class VerifyPhone extends AppCompatActivity {
             }
         });
 
-        requestCode(); //request code
+//        requestCode(); //request code
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                checkUser(); //test
+                checkUser(); //test
 
-                if (!pin.getValue().equalsIgnoreCase("")) {
-                    wholeLayout.setVisibility(View.VISIBLE);
-                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
-                    final FirebaseAuth auth = FirebaseAuth.getInstance();
-                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-//                        CommonUtils.showToast("" + authResult);
-                            wholeLayout.setVisibility(View.GONE);
-                            CommonUtils.showToast("Successfully verified");
-                            checkUser();
-//                            SharedPrefs.setPhone(phoneNumber);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            CommonUtils.showToast(e.getMessage());
-                            wholeLayout.setVisibility(View.GONE);
-
-
-                            CommonUtils.showToast("Invalid Pin");
-                        }
-                    });
-                } else {
-                    CommonUtils.showToast("Enter pin");
-                }
+//                if (!pin.getValue().equalsIgnoreCase("")) {
+//                    wholeLayout.setVisibility(View.VISIBLE);
+//                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
+//                    final FirebaseAuth auth = FirebaseAuth.getInstance();
+//                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+//                        @Override
+//                        public void onSuccess(AuthResult authResult) {
+////                        CommonUtils.showToast("" + authResult);
+//                            wholeLayout.setVisibility(View.GONE);
+//                            CommonUtils.showToast("Successfully verified");
+//                            checkUser();
+////                            SharedPrefs.setPhone(phoneNumber);
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+////                            CommonUtils.showToast(e.getMessage());
+//                            wholeLayout.setVisibility(View.GONE);
+//
+//
+//                            CommonUtils.showToast("Invalid Pin");
+//                        }
+//                    });
+//                } else {
+//                    CommonUtils.showToast("Enter pin");
+//                }
 
 
 //
@@ -160,10 +160,11 @@ public class VerifyPhone extends AppCompatActivity {
             finish();
         } else {
             myReferralCode = CommonUtils.getRandomCode(7);
+            String key=""+System.currentTimeMillis();
             User user = new User(
                     name,
-                    ph,
-                    password, referralCode, myReferralCode);
+                    key,
+                    password,ph, referralCode, myReferralCode);
             if (referralCode.length() > 0) {
                 ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode, false);
                 mDatabase.child("ReferralCodesHistory")
@@ -171,7 +172,7 @@ public class VerifyPhone extends AppCompatActivity {
                         .child(ph)
                         .setValue(codePaid);
             }
-            mDatabase.child("Users").child(ph).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mDatabase.child("Users").child(key).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     CommonUtils.showToast("Successfully registered");
@@ -193,7 +194,12 @@ public class VerifyPhone extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        usersMap.put(user.getPhone(), user);
+                        if(user.getMobileNumber()!=null){
+                            usersMap.put(user.getMobileNumber(), user);
+
+                        }else {
+                            usersMap.put(user.getPhone(), user);
+                        }
 
                     }
                 }

@@ -29,6 +29,21 @@ public class CommonUtils {
         });
     }
 
+    public static String  getUserShareId(String phone){
+        String abc = "Z,Y,X,W,V,U,T,S,R,Q,P,O,N,M,L,K,J,I,H,G,F,E,D,C,B,A";
+        String[] abcArr=abc.split(",");
+        String[] foneArr = phone.split("");
+        String newProfileId="";
+        for (int i = 0; i < foneArr.length; i++) {
+            newProfileId=newProfileId+foneArr[i]+abcArr[i];
+        }
+        return newProfileId;
+    }
+
+    public static String cleanUserId(String id){
+        return id.replaceAll("[^\\d.]", "");
+    }
+
     public static String getRandomCode(int len) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         SecureRandom rnd = new SecureRandom();

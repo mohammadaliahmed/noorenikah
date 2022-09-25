@@ -80,7 +80,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ChatModel model = itemList.get(position);
-        Glide.with(context).load(model.getPicUrl()).into(holder.picture);
+        Glide.with(context).load(model.getPicUrl())
+                .placeholder(R.drawable.picked).into(holder.picture);
         holder.message.setText(model.getMessage());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
 

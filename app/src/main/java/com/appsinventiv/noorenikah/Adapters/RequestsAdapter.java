@@ -56,6 +56,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
 
         Glide.with(context)
                 .load(user.getLivePicPath())
+                .placeholder(R.drawable.picked)
                 .apply(bitmapTransform(new BlurTransformation(20)))
 
                 .into(holder.image);

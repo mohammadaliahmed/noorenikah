@@ -378,7 +378,8 @@ public class ChatScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     otherUser = dataSnapshot.getValue(User.class);
                     name.setText(otherUser.getName());
-                    Glide.with(ChatScreen.this).load(otherUser.getLivePicPath()).into(picture);
+                    Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
+                            .placeholder(R.drawable.picked).into(picture);
                 }
             }
 
@@ -614,6 +615,8 @@ public class ChatScreen extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         livePicPath = "" + uri;
+                                        File file = new File(imageUrl);
+                                        file.delete();
                                         sendMessageToDb(Constants.MESSAGE_TYPE_IMAGE);
 
 
@@ -785,6 +788,8 @@ public class ChatScreen extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         livePicPath = "" + uri;
+                                        File file = new File(audioFile);
+                                        file.delete();
                                         sendMessageToDb(Constants.MESSAGE_TYPE_AUDIO);
 
                                     }

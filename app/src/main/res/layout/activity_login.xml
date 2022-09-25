@@ -75,10 +75,11 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:background="@drawable/btn_bg"
             android:text="Login"
             android:textColor="#fff" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,11 +103,18 @@
                 android:layout_margin="10dp" />
         </LinearLayout>
 
-        <TextView
+        <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="30dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
             android:text="Dont have an account?"
             android:textColor="#000" />
 

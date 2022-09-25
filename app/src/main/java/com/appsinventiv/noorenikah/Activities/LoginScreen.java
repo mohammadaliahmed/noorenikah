@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,11 +32,11 @@ public class LoginScreen extends AppCompatActivity {
     Button login, register;
 
     DatabaseReference mDatabase;
-    private HashMap<String, User> usersMap = new HashMap<>();
 
     TextView textt;
     CheckBox checkit;
     boolean checked = false;
+    ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class LoginScreen extends AppCompatActivity {
         checkit = findViewById(R.id.checkit);
 
         register = findViewById(R.id.register);
+        progress = findViewById(R.id.progress);
         password = findViewById(R.id.password);
         phone = findViewById(R.id.phone);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
@@ -71,28 +73,28 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        if (user.getMobileNumber() != null) {
-                            usersMap.put(user.getMobileNumber(), user);
-
-                        } else {
-                            usersMap.put(user.getPhone(), user);
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.getValue() != null) {
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        User user = snapshot.getValue(User.class);
+//                        if (user.getPhone() != null) {
+//                            usersMap.put(user.getPhone(), user);
+//
+//                        } else {
+//                            usersMap.put(user.getPhone(), user);
+//                        }
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
         AlertsUtils.customTextView(LoginScreen.this, textt);
 
         checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -108,34 +110,44 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     private void loginNow(String phone, String pass) {
+        progress.setVisibility(View.VISIBLE);
         phone = phone.substring(phone.length() - 10);
+        mDatabase.child("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progress.setVisibility(View.INVISIBLE);
+                if (dataSnapshot.getValue() != null) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null && user.getPhone() != null) {
+                        if (user.getPassword().equals(pass)) {
+                            if (!user.isRejected()) {
+                                SharedPrefs.setUser(user);
+                                if (user.getLivePicPath() == null) {
+                                    startActivity(new Intent(LoginScreen.this, CompleteProfileScreen.class));
 
-        if (usersMap.containsKey(phone)) {
-            User user = usersMap.get(phone);
-
-            if (user.getPassword().equals(pass)) {
-                if (!user.isRejected()) {
-                    SharedPrefs.setUser(user);
-                    if (user.getLivePicPath() == null) {
-                        startActivity(new Intent(LoginScreen.this, CompleteProfileScreen.class));
-
-                    } else {
-                        startActivity(new Intent(LoginScreen.this, MainActivity.class));
+                                } else {
+                                    startActivity(new Intent(LoginScreen.this, MainActivity.class));
+                                }
+                                CommonUtils.showToast("Login Successful");
+                                finish();
+                            } else {
+                                CommonUtils.showToast("Your account is disabled. You cannot login");
+                            }
+                        } else {
+                            CommonUtils.showToast("Wrong Password");
+                        }
                     }
-                    CommonUtils.showToast("Login Successful");
-                    finish();
                 } else {
-                    CommonUtils.showToast("Your account is disabled. You cannot login");
+                    CommonUtils.showToast("Account does not exist\n Please register");
                 }
-            } else {
-                CommonUtils.showToast("Wrong Password");
             }
 
-        } else {
-            CommonUtils.showToast("Account does not exist. Please signup");
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        }
+            }
+        });
+
     }
-
 
 }

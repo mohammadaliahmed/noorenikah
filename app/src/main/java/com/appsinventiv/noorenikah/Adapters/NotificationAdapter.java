@@ -56,6 +56,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         Glide.with(context)
                 .load(item.getPicUrl())
+                .placeholder(R.drawable.picked)
                 .into(holder.image);
         holder.title.setText(item.getTitle());
         holder.msg.setText(item.getMessage());

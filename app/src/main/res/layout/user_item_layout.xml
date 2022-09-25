@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:background="#F8F8F8">
 
+    <ImageView
+        android:id="@+id/promotionBanner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginBottom="5dp"
+                        android:maxLines="3"
                         android:text=""
                         android:textColor="#000" />
                 </LinearLayout>
@@ -66,7 +72,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="300dp">
 
                 <ImageView
                     android:id="@+id/image"
@@ -75,8 +81,10 @@
                     android:scaleType="centerCrop" />
 
                 <ImageView
+                    android:id="@+id/verified"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:visibility="gone"
                     android:layout_alignParentRight="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"

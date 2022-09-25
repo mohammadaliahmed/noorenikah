@@ -20,6 +20,19 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/verified"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Please verify your phone number"
+            android:textColor="#fff" />
+
         <RelativeLayout
             android:id="@+id/editProfile"
             android:layout_width="match_parent"
@@ -87,12 +100,12 @@
         <RelativeLayout
             android:id="@+id/paymentsHistory"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-
             android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+
+            android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -135,7 +148,6 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
-
 
 
         <RelativeLayout

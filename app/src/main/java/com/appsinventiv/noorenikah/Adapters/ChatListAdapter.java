@@ -61,6 +61,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         Glide.with(context)
                 .load(model.getHisPic())
+                .placeholder(R.drawable.picked)
                 .into(holder.picture);
         if (model.isRead()) {
             holder.unreadDot.setVisibility(View.GONE);

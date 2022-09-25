@@ -3,6 +3,7 @@ package com.appsinventiv.noorenikah.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +31,26 @@ public class SharedPrefs {
                 }.getType());
         return playersList;
     }
+
+
+    public static void setPromotionalBanner(PromotionBanner banner) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(banner);
+        preferenceSetter("setPromotionalBanner", json);
+    }
+
+    public static PromotionBanner getPromotionalBanner() {
+        Gson gson = new Gson();
+        return gson.fromJson(preferenceGetter("setPromotionalBanner"),PromotionBanner.class);
+
+    }
+
+
+
+
+
+
 
     public static void setLikedMap(HashMap<String, String> itemList) {
 
@@ -78,12 +99,21 @@ public class SharedPrefs {
         preferenceSetter("getFcmKey", username);
     }
 
+
     public static String getLat() {
         return preferenceGetter("getLat");
     }
 
     public static void setLat(String username) {
         preferenceSetter("getLat", username);
+    }
+
+    public static String getPhone() {
+        return preferenceGetter("setPhone");
+    }
+
+    public static void setPhone(String username) {
+        preferenceSetter("setPhone", username);
     }
 
     public static String getLon() {

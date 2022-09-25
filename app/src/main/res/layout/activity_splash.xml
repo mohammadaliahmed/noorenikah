@@ -5,17 +5,33 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+    <LinearLayout
+        android:id="@+id/animArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_centerInParent="true"
-        android:src="@drawable/couple" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/male"
+            android:layout_width="120dp"
+            android:layout_height="200dp"
+            android:src="@drawable/male" />
+
+        <ImageView
+            android:id="@+id/female"
+            android:layout_width="120dp"
+            android:layout_height="200dp"
+            android:src="@drawable/female" />
+    </LinearLayout>
+
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_logo"
+        android:layout_below="@+id/animArea"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"

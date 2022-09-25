@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,12 +39,9 @@ public class VerifyPhone extends AppCompatActivity {
     Button verify;
     PhoneAuthProvider phoneAuth;
     Pinview pin;
-    String phoneNumber;
     TextView number;
-    TextView change, changen;
     Button validate;
     TextView sendAgain;
-    private String smsCode;
     DatabaseReference mDatabase;
     private String mVerificationId;
     private HashMap<String, User> usersMap = new HashMap<>();
@@ -50,6 +49,10 @@ public class VerifyPhone extends AppCompatActivity {
     RelativeLayout wholeLayout;
     String name, password, referralCode;
     private String myReferralCode;
+    EditText phone;
+    Button send;
+    TextView codeSentText;
+    LinearLayout sentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,79 +62,76 @@ public class VerifyPhone extends AppCompatActivity {
         this.setTitle("Verify Phone");
 //        verify = findViewById(R.id.verify);
         pin = findViewById(R.id.pinview);
+        phone = findViewById(R.id.phone);
         number = findViewById(R.id.number);
-        change = findViewById(R.id.change);
+        codeSentText = findViewById(R.id.codeSentText);
+        sentLayout = findViewById(R.id.sentLayout);
         sendAgain = findViewById(R.id.sendAgain);
-        changen = findViewById(R.id.changen);
+        send = findViewById(R.id.send);
         validate = findViewById(R.id.validate);
         wholeLayout = findViewById(R.id.wholeLayout);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
-        phoneNumber = getIntent().getStringExtra("number");
         name = getIntent().getStringExtra("name");
         password = getIntent().getStringExtra("password");
         referralCode = getIntent().getStringExtra("referralCode");
-        number.setText(phoneNumber);
+
+        phone.setText(SharedPrefs.getPhone());
 
 
-        getUsersFromDB();
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestCode();
+                sentLayout.setVisibility(View.VISIBLE);
+                codeSentText.setVisibility(View.VISIBLE);
+                number.setText(phone.getText().toString());
+
+            }
+        });
+
 
         sendAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+               requestCode();
             }
         });
 
-//        requestCode(); //request code
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUser(); //test
+//                checkUser(); //test
 
-//                if (!pin.getValue().equalsIgnoreCase("")) {
-//                    wholeLayout.setVisibility(View.VISIBLE);
-//                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
-//                    final FirebaseAuth auth = FirebaseAuth.getInstance();
-//                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-//                        @Override
-//                        public void onSuccess(AuthResult authResult) {
-////                        CommonUtils.showToast("" + authResult);
-//                            wholeLayout.setVisibility(View.GONE);
-//                            CommonUtils.showToast("Successfully verified");
-//                            checkUser();
-////                            SharedPrefs.setPhone(phoneNumber);
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-////                            CommonUtils.showToast(e.getMessage());
-//                            wholeLayout.setVisibility(View.GONE);
-//
-//
-//                            CommonUtils.showToast("Invalid Pin");
-//                        }
-//                    });
-//                } else {
-//                    CommonUtils.showToast("Enter pin");
-//                }
+                if (!pin.getValue().equalsIgnoreCase("")) {
+                    wholeLayout.setVisibility(View.VISIBLE);
+                    PhoneAuthCredential provider = PhoneAuthProvider.getCredential(mVerificationId, pin.getValue());
+                    final FirebaseAuth auth = FirebaseAuth.getInstance();
+                    auth.signInWithCredential(provider).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            wholeLayout.setVisibility(View.GONE);
+                            CommonUtils.showToast("Successfully verified");
+                            checkUser();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            wholeLayout.setVisibility(View.GONE);
+
+
+                            CommonUtils.showToast("Invalid Pin");
+                        }
+                    });
+                } else {
+                    CommonUtils.showToast("Enter pin");
+                }
 
 
 //
             }
         });
 
-        change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        changen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
         pin.setPinViewEventListener(new Pinview.PinViewEventListener() {
             @Override
             public void onDataEntered(Pinview pinview, boolean fromUser) {
@@ -143,88 +143,33 @@ public class VerifyPhone extends AppCompatActivity {
     }
 
     private void checkUser() {
-        String ph = phoneNumber.substring(phoneNumber.length() - 10);
-        if (usersMap.containsKey(ph)) {
-            SharedPrefs.setUser(usersMap.get(ph));
-            Intent i;
-
-            if (usersMap.get(ph).getLivePicPath() == null) {
-                i = new Intent(VerifyPhone.this, CompleteProfileScreen.class);
-            } else {
-                i = new Intent(VerifyPhone.this, MainActivity.class);
-
-            }
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            CommonUtils.showToast("Logged in successfully");
-            finish();
-        } else {
-            myReferralCode = CommonUtils.getRandomCode(7);
-            String key=""+System.currentTimeMillis();
-            User user = new User(
-                    name,
-                    key,
-                    password,ph, referralCode, myReferralCode);
-            if (referralCode.length() > 0) {
-                ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode, false);
-                mDatabase.child("ReferralCodesHistory")
-                        .child(referralCode)
-                        .child(ph)
-                        .setValue(codePaid);
-            }
-            mDatabase.child("Users").child(key).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    CommonUtils.showToast("Successfully registered");
-                    SharedPrefs.setUser(user);
-                    Intent i = new Intent(VerifyPhone.this, CompleteProfileScreen.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                    finish();
-                }
-            });
-        }
-
-    }
-
-    private void getUsersFromDB() {
-        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(SharedPrefs.getUser().getPhone()).child("phoneVerified").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        if(user.getMobileNumber()!=null){
-                            usersMap.put(user.getMobileNumber(), user);
-
-                        }else {
-                            usersMap.put(user.getPhone(), user);
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onSuccess(Void unused) {
+                Intent i = new Intent(VerifyPhone.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                CommonUtils.showToast("Logged in successfully");
+                finish();
             }
         });
+
     }
+
 
     private void requestCode() {
 
         phoneAuth = PhoneAuthProvider.getInstance();
 
         phoneAuth.verifyPhoneNumber(
-                phoneNumber,
+                phone.getText().toString(),
                 60,
                 TimeUnit.SECONDS,
                 this,
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                        smsCode = phoneAuthCredential.getSmsCode();
+//                        smsCode = phoneAuthCredential.getSmsCode();
                         if (phoneAuthCredential.getSmsCode() != null) {
                             pin.setValue(phoneAuthCredential.getSmsCode());
                         }

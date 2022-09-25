@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class User implements Serializable {
-    String name,referralCode, phone, password,mobileNumber;
+    String name,referralCode, phone, password;
     String fcmKey;
     String livePicPath,  belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
@@ -17,25 +17,25 @@ public class User implements Serializable {
     boolean paid=false;
     boolean rejected;
     boolean liked=false;
+    boolean phoneVerified;
 
     public User() {
     }
 
-    public User(String name, String phone, String password, String mobileNumber,String referralCode, String myReferralCode) {
+    public User(String name, String phone, String password, String referralCode, String myReferralCode) {
         this.name = name;
         this.phone = phone;
-        this.mobileNumber = mobileNumber;
         this.password = password;
         this.myReferralCode = myReferralCode;
         this.referralCode = referralCode;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public boolean isPhoneVerified() {
+        return phoneVerified;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneVerified(boolean phoneVerified) {
+        this.phoneVerified = phoneVerified;
     }
 
     public boolean isRejected() {

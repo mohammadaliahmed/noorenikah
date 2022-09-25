@@ -12,10 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +59,7 @@ public class Register extends AppCompatActivity {
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         foneCode = "+" + ccp.getDefaultCountryCode();
         onNewIntent(getIntent());
-        AlertsUtils.customTextView(Register.this,textt);
+        AlertsUtils.customTextView(Register.this, textt);
 
         checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,6 +69,7 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+
 
         ccp.registerPhoneNumberTextView(phone);
         login.setOnClickListener(new View.OnClickListener() {
@@ -114,26 +118,49 @@ public class Register extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void requestCode() {
-        String ph = phone.getText().toString();
-//        if (ph.startsWith("03")) {
-//            ph=ph.substring(1);
-//        }
-        Intent i = new Intent(Register.this, VerifyPhone.class);
-        i.putExtra("number", foneCode + ph);
-        i.putExtra("name", name.getText().toString());
-        i.putExtra("referralCode", referralCode.getText().toString());
-        i.putExtra("password", password.getText().toString());
-        startActivity(i);
+        String phoneNumber = foneCode+phone.getText().toString();
+        SharedPrefs.setPhone(phoneNumber);
+        String ph = phoneNumber.substring(phoneNumber.length() - 10);
 
 
+//        String ph = phone.getText().toString();
+//        Intent i = new Intent(Register.this, VerifyPhone.class);
+//        i.putExtra("number", foneCode + ph);
+//        i.putExtra("name", name.getText().toString());
+//        i.putExtra("referralCode", referralCode.getText().toString());
+//        i.putExtra("password", password.getText().toString());
+//        startActivity(i);
+
+        String myReferralCode = CommonUtils.getRandomCode(7);
+        User user = new User(
+                name.getText().toString(),
+                ph,
+                password.getText().toString(), referralCode.getText().toString(), myReferralCode);
+        if (referralCode.length() > 0) {
+            ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode.getText().toString(), false);
+            mDatabase.child("ReferralCodesHistory")
+                    .child(referralCode.getText().toString())
+                    .child(ph)
+                    .setValue(codePaid);
+        }
+
+        mDatabase.child("Users").child(ph).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                CommonUtils.showToast("Successfully registered");
+                SharedPrefs.setUser(user);
+                Intent i = new Intent(Register.this, CompleteProfileScreen.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     protected void onNewIntent(Intent intent) {
-
         super.onNewIntent(intent);
         String action = intent.getAction();
         String data = intent.getDataString();
@@ -143,7 +170,6 @@ public class Register extends AppCompatActivity {
             referralCode.setText(referalId);
         }
     }
-
 
 
 }

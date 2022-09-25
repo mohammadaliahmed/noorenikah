@@ -63,6 +63,7 @@ public class ViewFriendProfile extends AppCompatActivity {
 
                     Glide.with(ViewFriendProfile.this)
                             .load(user.getLivePicPath())
+                            .placeholder(R.drawable.picked)
                             .into(image);
 
                     name.setText("" + user.getName());

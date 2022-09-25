@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +50,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 23;
 
     RelativeLayout wholeLayout;
+    TextView skip;
 
     CheckBox consent;
     Button picPicture;
@@ -129,6 +131,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         pickedPicture = findViewById(R.id.pickedPicture);
         companyName = findViewById(R.id.companyName);
+        skip = findViewById(R.id.skip);
+
         about = findViewById(R.id.about);
         motherOccupation = findViewById(R.id.motherOccupation);
         fatherOccupation = findViewById(R.id.fatherOccupation);
@@ -141,8 +145,18 @@ public class CompleteProfileScreen extends AppCompatActivity {
                 initMatisse();
             }
         });
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CompleteProfileScreen.this,MainActivity.class));
+
+            }
+        });
+
         setUpFindViewByIds();
         setMaritalSpinner();
+
 //        setEducationSpinner();
         setHomeSpinner();
         consent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

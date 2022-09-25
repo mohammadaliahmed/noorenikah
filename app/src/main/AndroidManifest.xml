@@ -24,7 +24,9 @@
         <activity
             android:name="com.appsinventiv.noorenikah.Activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.VerifyPe.NoActionBar" />
+            android:theme="@style/Theme.VerifyPe.NoActionBar" >
+
+        </activity>
         <activity
             android:name="com.appsinventiv.noorenikah.Activities.Splash"
             android:exported="true"
@@ -60,7 +62,19 @@
             android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity android:name=".Activities.SearchActivity" />
-        <activity android:name=".Activities.ViewRequestProfile" />
+        <activity android:name=".Activities.ViewRequestProfile"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="noorenikah.com"
+                    android:pathPrefix="/profile"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.EditProfile" />
         <activity android:name=".Activities.ViewFriendProfile" />
         <activity android:name=".Activities.ListOfFriends" />
@@ -68,11 +82,11 @@
             android:name=".Activities.ChatScreen"
             android:exported="true"
             android:theme="@style/Theme.VerifyPe.NoActionBar">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                        <intent-filter>-->
+            <!--                            <action android:name="android.intent.action.MAIN" />-->
 
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+            <!--                            <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--                        </intent-filter>-->
         </activity>
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
@@ -89,10 +103,12 @@
         <activity
             android:name=".Activities.ViewSelectedPicture"
             android:theme="@style/Theme.VerifyPe.NoActionBar" />
+        <activity android:name=".Activities.Comments.CommentsActivity" />
+        <activity
+            android:name=".Activities.UseThis"
+            android:exported="true">
 
-        <!--        <meta-data-->
-        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-        <!--            android:value="ca-app-pub-5349923547931941~1242986914" />-->
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView search;
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
-    boolean firstTimeShow=false;
+    boolean firstTimeShow = false;
+    PromotionBanner promotionBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,23 @@ public class MainActivity extends AppCompatActivity {
         if (Constants.MARKETING_MSG) {
             showNotificationAlertAlert();
         }
+        getBannerFromDB();
+    }
+
+    private void getBannerFromDB() {
+        mDatabase.child("PromotionalBanner").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                promotionBanner = dataSnapshot.getValue(PromotionBanner.class);
+                SharedPrefs.setPromotionalBanner(promotionBanner);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showNotificationAlertAlert() {
@@ -150,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                         mRewardedAd = rewardedAd;
                         setCallbacksOfRewardAd();
-//                        if(!firstTimeShow){
-//
-//                            showReward();
-//                            firstTimeShow=true;
-//                        }
+                        if (!firstTimeShow) {
+
+                            showReward();
+                            firstTimeShow = true;
+                        }
                     }
                 });
 
@@ -322,10 +341,11 @@ public class MainActivity extends AppCompatActivity {
                         SharedPrefs.setFcmKey(token);
                         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("fcmKey").setValue(token);
                     } catch (Exception e) {
-                        Log.d("fcmKey",e.getMessage());
+                        Log.d("fcmKey", e.getMessage());
                     }
                 }
             });
         }
     }
+
 }

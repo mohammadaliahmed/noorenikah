@@ -4,6 +4,7 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
+import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
+import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
@@ -80,12 +83,40 @@ public class ViewPagerAdapter extends PagerAdapter {
         TextView name = itemView.findViewById(R.id.name);
         TextView details = itemView.findViewById(R.id.details);
         ImageView share = itemView.findViewById(R.id.share);
+        ImageView promotionBanner = itemView.findViewById(R.id.promotionBanner);
+        ImageView comment = itemView.findViewById(R.id.comment);
         ImageView chat = itemView.findViewById(R.id.chat);
+        ImageView verified = itemView.findViewById(R.id.verified);
         ImageView image = itemView.findViewById(R.id.image);
         ImageView likeUnlike = itemView.findViewById(R.id.likeUnlike);
         LinearLayout lockedInfo = itemView.findViewById(R.id.lockedInfo);
         User user = userList.get(position);
         callbacks.onShown(user);
+        if (SharedPrefs.getPromotionalBanner() != null) {
+            Glide.with(context).load(SharedPrefs.getPromotionalBanner().getImgUrl())
+                    .into(promotionBanner);
+
+        }
+
+        if (user.isPhoneVerified()) {
+            verified.setVisibility(View.VISIBLE);
+        } else {
+            verified.setVisibility(View.GONE);
+
+        }
+        verified.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtils.showToast("This user is verified");
+            }
+        });
+        promotionBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner().getUrl()));
+                context.startActivity(i);
+            }
+        });
         HashMap<String, String> map = SharedPrefs.getLikedMap();
         if (map != null) {
             if (map.containsKey(user.getPhone())) {
@@ -100,11 +131,21 @@ public class ViewPagerAdapter extends PagerAdapter {
             likeUnlike.setImageResource(R.drawable.ic_like_empty);
 
         }
-        share.setOnClickListener(new View.OnClickListener() {
+        comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(context, CommentsActivity.class);
+                i.putExtra("id", user.getPhone());
+                i.putExtra("fcmKey", user.getFcmKey());
+                context.startActivity(i);
             }
+        });
+        share.setOnClickListener(v -> {
+            String shareUrl = "http://noorenikah.com/profile?id=" + CommonUtils.getUserShareId(user.getPhone());
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+            context.startActivity(Intent.createChooser(shareIntent, "Share link via.."));
         });
         chat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,12 +216,14 @@ public class ViewPagerAdapter extends PagerAdapter {
                 lockedInfo.setVisibility(View.GONE);
                 Glide.with(context)
                         .load(user.getLivePicPath())
+                        .placeholder(R.drawable.picked)
                         .into(image);
             } else {
                 lockedInfo.setVisibility(View.VISIBLE);
                 Glide.with(context)
                         .load(user.getLivePicPath())
                         .apply(bitmapTransform(new BlurTransformation(50)))
+                        .placeholder(R.drawable.picked)
 
                         .into(image);
             }
@@ -189,7 +232,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             Glide.with(context)
                     .load(user.getLivePicPath())
                     .apply(bitmapTransform(new BlurTransformation(50)))
-
+                    .placeholder(R.drawable.picked)
                     .into(image);
         }
         name.setText(user.getName());

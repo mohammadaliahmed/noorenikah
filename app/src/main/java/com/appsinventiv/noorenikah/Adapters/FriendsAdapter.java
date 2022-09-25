@@ -51,6 +51,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         User user = userList.get(position);
         Glide.with(context)
                 .load(user.getLivePicPath())
+                .placeholder(R.drawable.picked)
                 .into(holder.image);
         holder.name.setText(user.getName() + ", " + user.getAge());
         holder.details.setText("Education: " + user.getEducation() + "\n" + "City: " + user.getCity() + "\nCast: " + user.getCast());

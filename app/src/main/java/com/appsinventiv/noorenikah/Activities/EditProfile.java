@@ -223,17 +223,21 @@ public class EditProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userModel = dataSnapshot.getValue(User.class);
                 if (userModel != null) {
-                    if (userModel.getGender().equalsIgnoreCase("female")) {
-                        female.setChecked(true);
-                    } else {
-                        male.setChecked(true);
+                    if(userModel.getGender()!=null) {
+                        if (userModel.getGender().equalsIgnoreCase("female")) {
+                            female.setChecked(true);
+                        } else {
+                            male.setChecked(true);
+                        }
                     }
-                    if (userModel.getJobOrBusiness().equalsIgnoreCase("job")) {
-                        jobRadio.setChecked(true);
-                    } else if (userModel.getJobOrBusiness().equalsIgnoreCase("jobless")) {
-                        joblessRadio.setChecked(true);
-                    } else {
-                        businessRadio.setChecked(true);
+                    if(userModel.getJobOrBusiness()!=null) {
+                        if (userModel.getJobOrBusiness().equalsIgnoreCase("job")) {
+                            jobRadio.setChecked(true);
+                        } else if (userModel.getJobOrBusiness().equalsIgnoreCase("jobless")) {
+                            joblessRadio.setChecked(true);
+                        } else {
+                            businessRadio.setChecked(true);
+                        }
                     }
 
 
@@ -245,9 +249,10 @@ public class EditProfile extends AppCompatActivity {
                     cast.setText(userModel.getCast());
                     homeSpinner.setSelection(homeAdapter.getPosition(userModel.getHomeType()));
                     try {
-                        Glide.with(EditProfile.this).load(userModel.getLivePicPath()).into(pickedPicture);
+                        Glide.with(EditProfile.this).load(userModel.getLivePicPath())
+                                .placeholder(R.drawable.picked).into(pickedPicture);
                     }catch (Exception e){
-                        
+
                     }
                     livePicPath = "" + userModel.getLivePicPath();
                     name.setText("" + userModel.getName());
@@ -284,7 +289,7 @@ public class EditProfile extends AppCompatActivity {
 
 
     private void setMaritalSpinner() {
-        String[] maritalStatuses = {"Marital Status", "Single", "Windowed",
+        String[] maritalStatuses = {"Marital Status", "Single", "Windowed","Separated",
                 "Divorced"};
         maritalSpinner = findViewById(R.id.maritalSpinner);
         maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

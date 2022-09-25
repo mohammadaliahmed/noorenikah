@@ -14,6 +14,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
+import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.Splash;
@@ -100,16 +101,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Constants.MARKETING_MSG_TITLE = notificationTitle;
             Constants.MARKETING_MSG_MESSAGE = messageBody;
             resultIntent = new Intent(this, MainActivity.class);
+        } else if (type.equals("comment")) {
+            resultIntent = new Intent(this, CommentsActivity.class);
+            resultIntent.putExtra("id", Id);
         } else {
             resultIntent = new Intent(this, MainActivity.class);
-
         }
-//        }
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-//        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
-//                0 /* Request code */, resultIntent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
 
         PendingIntent pendingIntent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {

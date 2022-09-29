@@ -1,7 +1,5 @@
 package com.appsinventiv.noorenikah.Utils;
 
-import static java.lang.System.exit;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,6 +17,7 @@ import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
+import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -103,6 +102,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent = new Intent(this, MainActivity.class);
         } else if (type.equals("comment")) {
             resultIntent = new Intent(this, CommentsActivity.class);
+            resultIntent.putExtra("id", Id);
+        } else if (type.equals("like")) {
+            resultIntent = new Intent(this, ViewRequestProfile.class);
             resultIntent.putExtra("id", Id);
         } else {
             resultIntent = new Intent(this, MainActivity.class);

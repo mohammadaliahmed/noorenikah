@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.appsinventiv.noorenikah.Adapters.ViewPagerAdapter;
+import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
@@ -41,8 +41,8 @@ public class HomeFragment extends Fragment {
     private View rootView;
     RecyclerView recycler;
     DatabaseReference mDatabase;
-    private List<User> usersList = new ArrayList<>();
-    HashMap<String,User> userMap=new HashMap<>();
+    private List<NewUserModel> usersList = new ArrayList<>();
+    HashMap<String, NewUserModel> userMap = new HashMap<>();
 
     //    UsersRecyclerAdapter adapter;
     private AdView mAdView;
@@ -55,9 +55,9 @@ public class HomeFragment extends Fragment {
     VerticalViewPager viewpager;
     private ViewPagerAdapter adapter;
     int currentPage = 0;
-    private ArrayList<String> requestedList=new ArrayList<>();
-    int dataLimit=10;
-    List<String> seenList=new ArrayList<>();
+    private ArrayList<String> requestedList = new ArrayList<>();
+    int dataLimit = 10;
+    List<String> seenList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,17 +72,17 @@ public class HomeFragment extends Fragment {
 
         adapter = new ViewPagerAdapter(getContext(), new ArrayList<>(), new ViewPagerAdapter.UsersAdapterCallbacks() {
             @Override
-            public void onLikeClicked(User user) {
-
+            public void onLikeClicked(NewUserModel user) {
+                sendLikeNotification(user);
             }
 
             @Override
-            public void onRequestClicked(User user) {
+            public void onRequestClicked(NewUserModel user) {
                 sendNotification(user);
             }
 
             @Override
-            public void onShown(User user) {
+            public void onShown(NewUserModel user) {
                 seenList.add(user.getPhone());
             }
         });
@@ -97,10 +97,10 @@ public class HomeFragment extends Fragment {
             public void onPageSelected(int position) {
                 currentPage = position;
 //                seenList.add(new ArrayList<>(userMap.values()).get(position).getPhone());
-                if(currentPage==userMap.size()-2){
-                    dataLimit+=10;
-                    getMoreData();
-                }
+//                if(currentPage==userMap.size()-2){
+//                    dataLimit+=10;
+//                    getMoreData();
+//                }
             }
 
             @Override
@@ -109,7 +109,21 @@ public class HomeFragment extends Fragment {
             }
         });
         mDatabase = Constants.M_DATABASE;
-        getFristDataFromDB();
+        List<NewUserModel> list = SharedPrefs.getUsersList();
+        if (list != null && list.size() > 0) {
+            if(list.size()>100){
+                usersList=list.subList(0,100);
+            }
+//            usersList = list;
+            Collections.shuffle(usersList);
+            progress.setVisibility(View.GONE);
+            adapter.setUserList(usersList);
+            getRequestSent();
+        } else {
+            progress.setVisibility(View.GONE);
+            getFristDataFromDB();
+        }
+
         LoadInterstritial();
 
         return rootView;
@@ -117,28 +131,30 @@ public class HomeFragment extends Fragment {
 
     private void getFristDataFromDB() {
         mDatabase.child("Users")
-                .limitToLast(dataLimit)
+                .limitToLast(1000)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {
+//                            CommonUtils.showToast("Here");
                             userMap.clear();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                User user = snapshot.getValue(User.class);
+                                NewUserModel user = snapshot.getValue(NewUserModel.class);
                                 if (user != null && user.getName() != null &&
                                         !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-                                    if (user.getEducation() != null) {
-                                        userMap.put(user.getPhone(),user);
-                                    }
+
+                                    userMap.put(user.getPhone(), user);
+
 
                                 }
                             }
-                            usersList=new ArrayList<>(userMap.values());
+                            usersList = new ArrayList<>(userMap.values());
 
                             Collections.shuffle(usersList);
                             progress.setVisibility(View.GONE);
 
                             adapter.setUserList(usersList);
+                            SharedPrefs.setUsersList(usersList);
                             getRequestSent();
                         }
                     }
@@ -150,40 +166,7 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void getMoreData() {
-        mDatabase.child("Users")
-                .limitToLast(dataLimit)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            User user = snapshot.getValue(User.class);
-                            if (user != null && user.getName() != null &&
-                                    !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-                                if (user.getEducation() != null) {
-                                    userMap.put(user.getPhone(),user);
-                                }
-                            }
-                        }
-//                        Collections.shuffle(new ArrayList<>());
-                        progress.setVisibility(View.GONE);
 
-                        for(String item:seenList){
-                            userMap.remove(item);
-                        }
-                        usersList=new ArrayList<>(userMap.values());
-                        Collections.shuffle(usersList);
-                        adapter.setData(usersList,requestedList);
-//                        CommonUtils.showToast("data is here");
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-    }
 
     private void getRequestSent() {
         mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
@@ -199,15 +182,32 @@ public class HomeFragment extends Fragment {
                         progress.setVisibility(View.GONE);
 
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
     }
+    private void sendLikeNotification(NewUserModel user) {
 
-    private void sendNotification(User user) {
+        showInterstitial();
+        NotificationAsync notificationAsync = new NotificationAsync(getContext());
+        String NotificationTitle =  user.getName()+" liked your profile";
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                user.getFcmKey(),
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "like");
+        String key = "" + System.currentTimeMillis();
+        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                NotificationMessage, "like", user.getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+        mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
+
+    }
+    private void sendNotification(NewUserModel user) {
 
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(getContext());

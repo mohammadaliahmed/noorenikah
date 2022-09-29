@@ -1,8 +1,6 @@
 package com.appsinventiv.noorenikah.Activities.Comments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.CompleteProfileScreen;
-import com.appsinventiv.noorenikah.Activities.LoginScreen;
-import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Adapters.CommentsAdapter;
 import com.appsinventiv.noorenikah.Models.CommentsModel;
+import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -32,7 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,6 +150,10 @@ public class CommentsActivity extends AppCompatActivity {
                 NotificationMessage,
                 id,
                 "comment");
+        String key = "" + System.currentTimeMillis();
+        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                NotificationMessage, "comment", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+        mDatabase.child("Notifications").child(id).child(key).setValue(model);
     }
 
 

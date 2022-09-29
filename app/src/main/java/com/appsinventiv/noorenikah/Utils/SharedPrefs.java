@@ -3,12 +3,14 @@ package com.appsinventiv.noorenikah.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class SharedPrefs {
     Context context;
@@ -67,20 +69,20 @@ public class SharedPrefs {
         return playersList;
     }
 //
-//    public static void setAdsList(List<AdDetails> itemList) {
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(itemList);
-//        preferenceSetter("setAdsList", json);
-//    }
-//
-//    public static List<AdDetails> getAdsList() {
-//        Gson gson = new Gson();
-//        List<AdDetails> playersList = (List<AdDetails>) gson.fromJson(preferenceGetter("setAdsList"),
-//                new TypeToken<List<AdDetails>>() {
-//                }.getType());
-//        return playersList;
-//    }
+    public static void setUsersList(List<NewUserModel> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("setUsersList", json);
+    }
+
+    public static List<NewUserModel> getUsersList() {
+        Gson gson = new Gson();
+        List<NewUserModel> playersList = (List<NewUserModel>) gson.fromJson(preferenceGetter("setUsersList"),
+                new TypeToken<List<NewUserModel>>() {
+                }.getType());
+        return playersList;
+    }
 
 
     public static String getLastMsg(String key) {

@@ -19,9 +19,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
-import com.appsinventiv.noorenikah.Activities.MainActivity;
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -29,19 +27,18 @@ import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class ViewPagerAdapter extends PagerAdapter {
     LayoutInflater mLayoutInflater;
     Context context;
-    List<User> userList;
+    List<NewUserModel> userList;
     UsersAdapterCallbacks callbacks;
     List<String> requestedList;
 
 
-    public ViewPagerAdapter(Context context, List<User> userList, UsersAdapterCallbacks callbacks) {
+    public ViewPagerAdapter(Context context, List<NewUserModel> userList, UsersAdapterCallbacks callbacks) {
         this.context = context;
         this.callbacks = callbacks;
         this.userList = userList;
@@ -49,12 +46,12 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
 
-    public void setUserList(List<User> userList) {
+    public void setUserList(List<NewUserModel> userList) {
         this.userList = userList;
         notifyDataSetChanged();
     }
 
-    public void setData(List<User> userList, List<String> requestedList) {
+    public void setData(List<NewUserModel> userList, List<String> requestedList) {
         this.requestedList = requestedList;
         this.userList = userList;
         notifyDataSetChanged();
@@ -90,7 +87,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView image = itemView.findViewById(R.id.image);
         ImageView likeUnlike = itemView.findViewById(R.id.likeUnlike);
         LinearLayout lockedInfo = itemView.findViewById(R.id.lockedInfo);
-        User user = userList.get(position);
+        NewUserModel user = userList.get(position);
         callbacks.onShown(user);
         if (SharedPrefs.getPromotionalBanner() != null) {
             Glide.with(context).load(SharedPrefs.getPromotionalBanner().getImgUrl())
@@ -180,6 +177,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                         SharedPrefs.setLikedMap(map);
                     }
                     user.setLiked(true);
+                    callbacks.onLikeClicked(user);
 
 
                 }
@@ -236,10 +234,11 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .into(image);
         }
         name.setText(user.getName());
-        details.setText("Education: " + user.getEducation() +
-                "\nMarital Status: " + user.getMaritalStatus() +
-                "\nCast: " + user.getCast() +
-                "\n" + "City: " + user.getCity());
+        details.setText(user.getDetails());
+//        details.setText("Education: " + user.getEducation() +
+//                "\nMarital Status: " + user.getMaritalStatus() +
+//                "\nCast: " + user.getCast() +
+//                "\n" + "City: " + user.getCity());
 
         container.addView(itemView);
         return itemView;
@@ -251,10 +250,10 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     public interface UsersAdapterCallbacks {
-        public void onLikeClicked(User user);
+        public void onLikeClicked(NewUserModel user);
 
-        public void onRequestClicked(User user);
+        public void onRequestClicked(NewUserModel user);
 
-        public void onShown(User user);
+        public void onShown(NewUserModel user);
     }
 }

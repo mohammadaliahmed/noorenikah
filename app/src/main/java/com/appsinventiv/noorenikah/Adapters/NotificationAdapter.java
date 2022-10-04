@@ -11,15 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.PaymentActivity;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
+import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -81,6 +84,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 }else if (item.getType().equalsIgnoreCase("profile")) {
                     Intent i = new Intent(context, MainActivity.class);
                     context.startActivity(i);
+                }
+                else if (item.getType().equals("comment")) {
+                    Intent resultIntent = new Intent(context, CommentsActivity.class);
+                    resultIntent.putExtra("id", SharedPrefs.getUser().getPhone());
+                    context.startActivity(resultIntent);
+
+                } else if (item.getType().equals("like")) {
+                    Intent resultIntent = new Intent(context, ViewRequestProfile.class);
+                    resultIntent.putExtra("phone", item.getHisId());
+                    context.startActivity(resultIntent);
+
                 }
             }
         });

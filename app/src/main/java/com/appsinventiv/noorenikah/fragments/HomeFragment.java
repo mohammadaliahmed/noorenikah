@@ -1,25 +1,33 @@
 package com.appsinventiv.noorenikah.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
 import com.appsinventiv.noorenikah.Adapters.ViewPagerAdapter;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
+import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.VerticalViewPager;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,34 +51,44 @@ public class HomeFragment extends Fragment {
     DatabaseReference mDatabase;
     private List<NewUserModel> usersList = new ArrayList<>();
     HashMap<String, NewUserModel> userMap = new HashMap<>();
-
-    //    UsersRecyclerAdapter adapter;
     private AdView mAdView;
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
     private HashMap<String, String> requestSentMap = new HashMap<>();
     ProgressBar progress;
 
-
-    VerticalViewPager viewpager;
-    private ViewPagerAdapter adapter;
-    int currentPage = 0;
+    private UsersRecyclerAdapter adapter;
     private ArrayList<String> requestedList = new ArrayList<>();
-    int dataLimit = 10;
     List<String> seenList = new ArrayList<>();
+    ImageView promotionBanner;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         adRequest = new AdRequest.Builder().build();
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        recycler = rootView.findViewById(R.id.recycler);
         mAdView = rootView.findViewById(R.id.adView);
+        promotionBanner = rootView.findViewById(R.id.promotionBanner);
         progress = rootView.findViewById(R.id.progress);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        viewpager = rootView.findViewById(R.id.viewpager);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        if (SharedPrefs.getPromotionalBanner() != null) {
+            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner().getImgUrl())
+                    .into(promotionBanner);
 
-        adapter = new ViewPagerAdapter(getContext(), new ArrayList<>(), new ViewPagerAdapter.UsersAdapterCallbacks() {
+        }
+        promotionBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner().getUrl()));
+                getContext().startActivity(i);
+            }
+        });
+
+        adapter = new UsersRecyclerAdapter(getContext(),
+                new ArrayList<>(), new UsersRecyclerAdapter.UsersAdapterCallbacks() {
             @Override
             public void onLikeClicked(NewUserModel user) {
                 sendLikeNotification(user);
@@ -86,47 +104,51 @@ public class HomeFragment extends Fragment {
                 seenList.add(user.getPhone());
             }
         });
-        viewpager.setAdapter(adapter);
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPage = position;
-//                seenList.add(new ArrayList<>(userMap.values()).get(position).getPhone());
-//                if(currentPage==userMap.size()-2){
-//                    dataLimit+=10;
-//                    getMoreData();
-//                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        recycler.setAdapter(adapter);
         mDatabase = Constants.M_DATABASE;
         List<NewUserModel> list = SharedPrefs.getUsersList();
         if (list != null && list.size() > 0) {
-            if(list.size()>100){
-                usersList=list.subList(0,100);
+            if (list.size() > 100) {
+                usersList = list.subList(0, 100);
             }
-//            usersList = list;
             Collections.shuffle(usersList);
             progress.setVisibility(View.GONE);
             adapter.setUserList(usersList);
             getRequestSent();
+            if (!SharedPrefs.getLastTime().equalsIgnoreCase("")) {
+                if (System.currentTimeMillis() >= (Long.parseLong(SharedPrefs.getLastTime()) + 864000000L)) {
+                    getFristDataFromDB();
+                }
+            } else {
+                SharedPrefs.setLastTime("" + System.currentTimeMillis());
+            }
+
         } else {
             progress.setVisibility(View.GONE);
             getFristDataFromDB();
         }
+//        testUser();
 
         LoadInterstritial();
 
         return rootView;
+    }
+
+    private void testUser() {
+        mDatabase.child("Users").child("3097748424").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                NewUserModel user = dataSnapshot.getValue(NewUserModel.class);
+                usersList.add(user);
+                adapter.setUserList(usersList);
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getFristDataFromDB() {
@@ -151,10 +173,15 @@ public class HomeFragment extends Fragment {
                             usersList = new ArrayList<>(userMap.values());
 
                             Collections.shuffle(usersList);
+                            SharedPrefs.setUsersList(usersList);
                             progress.setVisibility(View.GONE);
+                            if (usersList.size() > 100) {
+                                usersList = usersList.subList(0, 100);
+                            }
 
                             adapter.setUserList(usersList);
-                            SharedPrefs.setUsersList(usersList);
+                            SharedPrefs.setLastTime("" + System.currentTimeMillis());
+
                             getRequestSent();
                         }
                     }
@@ -165,7 +192,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
 
 
     private void getRequestSent() {
@@ -182,17 +208,19 @@ public class HomeFragment extends Fragment {
                         progress.setVisibility(View.GONE);
 
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
     }
+
     private void sendLikeNotification(NewUserModel user) {
 
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(getContext());
-        String NotificationTitle =  user.getName()+" liked your profile";
+        String NotificationTitle = SharedPrefs.getUser().getName() + " liked your profile";
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
@@ -203,15 +231,16 @@ public class HomeFragment extends Fragment {
                 "like");
         String key = "" + System.currentTimeMillis();
         NotificationModel model = new NotificationModel(key, NotificationTitle,
-                NotificationMessage, "like", user.getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+                NotificationMessage, "like", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
         mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
 
     }
+
     private void sendNotification(NewUserModel user) {
 
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(getContext());
-        String NotificationTitle = "New request from: " + user.getName();
+        String NotificationTitle = "New request from: " + SharedPrefs.getUser().getName();
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
@@ -227,7 +256,7 @@ public class HomeFragment extends Fragment {
 
         String key = "" + System.currentTimeMillis();
         NotificationModel model = new NotificationModel(key, NotificationTitle,
-                NotificationMessage, "request", user.getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+                NotificationMessage, "request", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
         mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
 
     }

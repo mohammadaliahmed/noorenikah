@@ -85,17 +85,17 @@ public class SearchActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        adapter = new UsersRecyclerAdapter(this, usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
-            @Override
-            public void onLikeClicked(User user) {
-
-            }
-
-            @Override
-            public void onRequestClicked(User user) {
-                sendNotification(user);
-            }
-        });
+//        adapter = new UsersRecyclerAdapter(this, usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
+//            @Override
+//            public void onLikeClicked(User user) {
+//
+//            }
+//
+//            @Override
+//            public void onRequestClicked(User user) {
+//                sendNotification(user);
+//            }
+//        });
         LoadInterstritial();
         recycler.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
@@ -126,7 +126,7 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     }
                     if (usersList.size() > 0) {
-                        adapter.setUserList(usersList);
+                        adapter.setUserList(new ArrayList<>());
                         getRequestSent();
 
                     } else {

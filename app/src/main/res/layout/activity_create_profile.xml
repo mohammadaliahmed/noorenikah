@@ -15,16 +15,16 @@
 
             <TextView
                 android:id="@+id/skip"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
                 android:layout_gravity="right"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:padding="5dp"
-                android:text="Skip for Now" />
+                android:text="Skip for Now"
+                android:textColor="@color/colorAccent"
+                android:textSize="17sp"
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -91,6 +91,33 @@
                         android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Name"
+                            android:inputType="textCapSentences" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Phone"
+                            android:inputType="textCapSentences" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <RadioGroup
                         android:layout_width="wrap_content"
@@ -819,7 +846,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
-                        android:text="About yourself"
+                        android:text="About User"
                         android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -832,7 +859,7 @@
                         android:layout_margin="10dp"
                         android:background="@drawable/grey_border"
                         android:gravity="top"
-                        android:hint="About yourself"
+                        android:hint="About User"
                         android:inputType="textMultiLine|textCapSentences"
                         android:lines="4"
                         android:padding="5dp" />
@@ -871,7 +898,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="3"
-                    android:text="By clicking the checkbox you give consent to share your information to other users. They can search, contact and see your pictures. \n\nYou also accept that information you have provided is correct. If found false you will be permanently banned from Noor-E-Nikah app"
+                    android:text="By clicking the checkbox you give consent to share  information to other users. They can search, contact and see  pictures. \n\nYou also accept that information you have provided is correct. If found false you will be permanently banned from Noor-E-Nikah app"
                     android:textColor="#000" />
             </LinearLayout>
         </LinearLayout>

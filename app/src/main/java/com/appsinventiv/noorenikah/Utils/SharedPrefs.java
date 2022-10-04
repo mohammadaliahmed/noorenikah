@@ -118,6 +118,14 @@ public class SharedPrefs {
         preferenceSetter("setPhone", username);
     }
 
+    public static String getLastTime() {
+        return preferenceGetter("getLastTime");
+    }
+
+    public static void setLastTime(String username) {
+        preferenceSetter("getLastTime", username);
+    }
+
     public static String getLon() {
         return preferenceGetter("getLon");
     }

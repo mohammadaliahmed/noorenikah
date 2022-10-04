@@ -84,7 +84,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context, ViewRequestProfile.class);
-                i.putExtra("user",user);
+                i.putExtra("phone",user.getPhone());
                 context.startActivity(i);
             }
         });

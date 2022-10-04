@@ -143,7 +143,7 @@ public class VerifyPhone extends AppCompatActivity {
     }
 
     private void checkUser() {
-        mDatabase.child(SharedPrefs.getUser().getPhone()).child("phoneVerified").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("phoneVerified").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Intent i = new Intent(VerifyPhone.this, MainActivity.class);

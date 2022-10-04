@@ -15,7 +15,9 @@ import androidx.fragment.app.Fragment;
 import com.appsinventiv.noorenikah.Activities.EditProfile;
 import com.appsinventiv.noorenikah.Activities.InviteHistory;
 import com.appsinventiv.noorenikah.Activities.ListOfFriends;
+import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
+import com.appsinventiv.noorenikah.Activities.MatchMaker.RegisterMatchMaker;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.VerifyPhone;
 import com.appsinventiv.noorenikah.R;
@@ -24,11 +26,9 @@ import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 
 public class MenuFragment extends Fragment {
 
-
     private View rootView;
     Button logout;
-
-    RelativeLayout editProfile, requestAccepted, privacy, terms;
+    RelativeLayout editProfile, requestAccepted, privacy, terms, matchMaker;
     RelativeLayout paymentsHistory;
     RelativeLayout invite;
     TextView verified;
@@ -40,10 +40,22 @@ public class MenuFragment extends Fragment {
         editProfile = rootView.findViewById(R.id.editProfile);
         requestAccepted = rootView.findViewById(R.id.requestAccepted);
         verified = rootView.findViewById(R.id.verified);
+        matchMaker = rootView.findViewById(R.id.matchMaker);
         invite = rootView.findViewById(R.id.invite);
         privacy = rootView.findViewById(R.id.privacy);
         terms = rootView.findViewById(R.id.terms);
         logout = rootView.findViewById(R.id.logout);
+        matchMaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SharedPrefs.getUser().isMatchMakerProfile()) {
+                    startActivity(new Intent(getContext(), MatchMakerProfile.class));
+                } else {
+                    startActivity(new Intent(getContext(), RegisterMatchMaker.class));
+
+                }
+            }
+        });
         terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,9 +103,9 @@ public class MenuFragment extends Fragment {
             }
         });
 
-        if(SharedPrefs.getUser().isPhoneVerified()){
+        if (SharedPrefs.getUser().isPhoneVerified()) {
             verified.setVisibility(View.GONE);
-        }else{
+        } else {
             verified.setVisibility(View.VISIBLE);
         }
         verified.setOnClickListener(new View.OnClickListener() {

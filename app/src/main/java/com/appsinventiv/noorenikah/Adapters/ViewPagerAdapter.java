@@ -80,7 +80,6 @@ public class ViewPagerAdapter extends PagerAdapter {
         TextView name = itemView.findViewById(R.id.name);
         TextView details = itemView.findViewById(R.id.details);
         ImageView share = itemView.findViewById(R.id.share);
-        ImageView promotionBanner = itemView.findViewById(R.id.promotionBanner);
         ImageView comment = itemView.findViewById(R.id.comment);
         ImageView chat = itemView.findViewById(R.id.chat);
         ImageView verified = itemView.findViewById(R.id.verified);
@@ -89,11 +88,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         LinearLayout lockedInfo = itemView.findViewById(R.id.lockedInfo);
         NewUserModel user = userList.get(position);
         callbacks.onShown(user);
-        if (SharedPrefs.getPromotionalBanner() != null) {
-            Glide.with(context).load(SharedPrefs.getPromotionalBanner().getImgUrl())
-                    .into(promotionBanner);
 
-        }
 
         if (user.isPhoneVerified()) {
             verified.setVisibility(View.VISIBLE);
@@ -107,13 +102,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 CommonUtils.showToast("This user is verified");
             }
         });
-        promotionBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner().getUrl()));
-                context.startActivity(i);
-            }
-        });
+
         HashMap<String, String> map = SharedPrefs.getLikedMap();
         if (map != null) {
             if (map.containsKey(user.getPhone())) {

@@ -109,6 +109,9 @@
             android:exported="true">
 
         </activity>
+        <activity android:name=".Activities.MatchMaker.RegisterMatchMaker" />
+        <activity android:name=".Activities.MatchMaker.MatchMakerProfile" />
+        <activity android:name=".Activities.MatchMaker.CreateProfile" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

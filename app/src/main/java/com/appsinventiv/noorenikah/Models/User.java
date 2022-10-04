@@ -18,6 +18,8 @@ public class User implements Serializable {
     boolean rejected;
     boolean liked=false;
     boolean phoneVerified;
+    boolean matchMakerProfile;
+    String matchMakerId;
 
     public User() {
     }
@@ -28,6 +30,22 @@ public class User implements Serializable {
         this.password = password;
         this.myReferralCode = myReferralCode;
         this.referralCode = referralCode;
+    }
+
+    public boolean isMatchMakerProfile() {
+        return matchMakerProfile;
+    }
+
+    public void setMatchMakerProfile(boolean matchMakerProfile) {
+        this.matchMakerProfile = matchMakerProfile;
+    }
+
+    public String getMatchMakerId() {
+        return matchMakerId;
+    }
+
+    public void setMatchMakerId(String matchMakerId) {
+        this.matchMakerId = matchMakerId;
     }
 
     public boolean isPhoneVerified() {

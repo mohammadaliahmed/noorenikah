@@ -25,13 +25,7 @@ public class UseThis extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         this.setTitle("Title");
-        click = findViewById(R.id.click);
-        click.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 
     @Override

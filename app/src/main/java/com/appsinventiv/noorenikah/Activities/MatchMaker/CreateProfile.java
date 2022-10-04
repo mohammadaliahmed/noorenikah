@@ -1,8 +1,10 @@
-package com.appsinventiv.noorenikah.Activities;
+package com.appsinventiv.noorenikah.Activities.MatchMaker;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,10 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
@@ -45,13 +49,13 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class CompleteProfileScreen extends AppCompatActivity {
+public class CreateProfile extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     private static final int REQUEST_CODE_CHOOSE = 23;
 
     RelativeLayout wholeLayout;
     TextView skip;
-
+    EditText name, phone;
     CheckBox consent;
     Button picPicture;
     private Spinner maritalSpinner;
@@ -75,6 +79,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
 
     private void setUpFindViewByIds() {
+        phone = findViewById(R.id.phone);
+        name = findViewById(R.id.name);
         age = findViewById(R.id.age);
         wholeLayout = findViewById(R.id.wholeLayout);
         height = findViewById(R.id.height);
@@ -127,8 +133,14 @@ public class CompleteProfileScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_complete_profile);
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+        setContentView(R.layout.activity_create_profile);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
+        }
+        this.setTitle("Create Prolile");
+        mDatabase = Constants.M_DATABASE;
         pickedPicture = findViewById(R.id.pickedPicture);
         companyName = findViewById(R.id.companyName);
         skip = findViewById(R.id.skip);
@@ -149,7 +161,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CompleteProfileScreen.this,MainActivity.class));
+                startActivity(new Intent(CreateProfile.this, MainActivity.class));
 
             }
         });
@@ -173,7 +185,15 @@ public class CompleteProfileScreen extends AppCompatActivity {
         saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (genderSelected == null) {
+                if (name.getText().length() == 0) {
+                    name.setError("Enter name");
+                    name.requestFocus();
+
+                } else if (phone.getText().length() == 0) {
+                    phone.setError("Enter phone");
+                    phone.requestFocus();
+
+                } else if (genderSelected == null) {
 
                     CommonUtils.showToast("Please select gender");
                 } else if (age.getText().length() == 0) {
@@ -208,7 +228,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                 } else if (city.getText().length() == 0) {
                     city.setError("Enter city");
                     city.requestFocus();
-                }  else if (about.getText().length() == 0) {
+                } else if (about.getText().length() == 0) {
                     about.setError("Enter some lines about yourself");
                     about.requestFocus();
 
@@ -218,55 +238,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                 } else if (!consentGiven) {
                     CommonUtils.showToast("Please accept the consent form");
                 } else {
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("livePicPath", livePicPath);
-                    map.put("age", Integer.parseInt(age.getText().toString()));
-                    map.put("height", Float.parseFloat(height.getText().toString()));
-                    map.put("income", Integer.parseInt(income.getText().toString()));
-                    map.put("belonging", belonging.getText().toString());
-                    map.put("houseSize", houseSize.getText().toString());
-                    map.put("city", city.getText().toString());
-                    map.put("houseAddress", houseAddress.getText().toString());
-                    map.put("nationality", nationality.getText().toString());
-                    map.put("fatherName", fatherName.getText().toString());
-                    map.put("motherName", motherName.getText().toString());
-                    map.put("brothers", Integer.parseInt(brothers.getText().toString()));
-                    map.put("sisters", Integer.parseInt(sisters.getText().toString()));
-                    map.put("gender", genderSelected);
-                    map.put("jobOrBusiness", jobOrBusiness);
-                    map.put("maritalStatus", selectedMaritalStatus);
-                    map.put("education", education.getText().toString());
-                    map.put("religion", religion.getText().toString());
-                    map.put("about", about.getText().toString());
-                    map.put("sect", sect.getText().toString());
-                    map.put("fatherOccupation", fatherOccupation.getText().toString());
-                    map.put("motherOccupation", motherOccupation.getText().toString());
-                    map.put("companyName", companyName.getText().toString());
-                    map.put("cast", cast.getText().toString());
-                    map.put("homeType", selectedHomeType);
-                    wholeLayout.setVisibility(View.VISIBLE);
-                    mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.getValue() != null) {
-                                        User user = dataSnapshot.getValue(User.class);
-                                        SharedPrefs.setUser(user);
-                                        startActivity(new Intent(CompleteProfileScreen.this, MainActivity.class));
-                                        finish();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
-                        }
-                    });
+                    uploadPicture();
 
                 }
             }
@@ -277,7 +249,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
 
     private void setMaritalSpinner() {
-        String[] maritalStatuses = { "Single","Married", "Windowed","Separated","Khula",
+        String[] maritalStatuses = {"Single", "Married", "Windowed", "Separated", "Khula",
                 "Divorced"};
         maritalSpinner = findViewById(R.id.maritalSpinner);
         maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -337,9 +309,9 @@ public class CompleteProfileScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
             mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-            CompressImage image = new CompressImage(CompleteProfileScreen.this);
+            CompressImage image = new CompressImage(CreateProfile.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
-            Glide.with(CompleteProfileScreen.this).load(mSelected.get(0)).into(pickedPicture);
+            Glide.with(CreateProfile.this).load(mSelected.get(0)).into(pickedPicture);
             uploadPicture();
         }
     }
@@ -367,6 +339,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         livePicPath = "" + uri;
+                                        saveData();
 
                                     }
                                 });
@@ -393,6 +366,61 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
     }
 
+    private void saveData() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("livePicPath", livePicPath);
+        map.put("age", Integer.parseInt(age.getText().toString()));
+        map.put("height", Float.parseFloat(height.getText().toString()));
+        map.put("income", Integer.parseInt(income.getText().toString()));
+        map.put("name", name.getText().toString());
+        map.put("phone", phone.getText().toString());
+        map.put("belonging", belonging.getText().toString());
+        map.put("houseSize", houseSize.getText().toString());
+        map.put("city", city.getText().toString());
+        map.put("houseAddress", houseAddress.getText().toString());
+        map.put("nationality", nationality.getText().toString());
+        map.put("fatherName", fatherName.getText().toString());
+        map.put("motherName", motherName.getText().toString());
+        map.put("brothers", Integer.parseInt(brothers.getText().toString()));
+        map.put("sisters", Integer.parseInt(sisters.getText().toString()));
+        map.put("gender", genderSelected);
+        map.put("jobOrBusiness", jobOrBusiness);
+        map.put("maritalStatus", selectedMaritalStatus);
+        map.put("education", education.getText().toString());
+        map.put("religion", religion.getText().toString());
+        map.put("about", about.getText().toString());
+        map.put("sect", sect.getText().toString());
+        map.put("fatherOccupation", fatherOccupation.getText().toString());
+        map.put("motherOccupation", motherOccupation.getText().toString());
+        map.put("companyName", companyName.getText().toString());
+        map.put("cast", cast.getText().toString());
+        map.put("matchMakerId", SharedPrefs.getUser().getPhone());
+        map.put("homeType", selectedHomeType);
+        wholeLayout.setVisibility(View.VISIBLE);
+        mDatabase.child("Users").child(phone.getText().toString()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                CommonUtils.showToast("Profile Created");
+                mDatabase.child("MatchMakers").child(SharedPrefs.getUser().getPhone()).child("profilesCreated").child(phone.getText().toString()).setValue(phone.getText().toString());
+                finish();
+            }
+        });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+
+
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }

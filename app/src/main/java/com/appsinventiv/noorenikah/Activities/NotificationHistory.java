@@ -51,7 +51,9 @@ public class NotificationHistory extends AppCompatActivity {
         adapter = new NotificationAdapter(this, itemList, new NotificationAdapter.NotificationAdapterCallbacks() {
             @Override
             public void onDeleteClicked(NotificationModel model) {
-                showAlert(model);
+                mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).child(model.getId()).removeValue();
+                CommonUtils.showToast("Cleared");
+//                showAlert(model);
             }
         });
         recycler.setAdapter(adapter);

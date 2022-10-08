@@ -1,7 +1,6 @@
 package com.appsinventiv.noorenikah.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,33 +15,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
-import com.appsinventiv.noorenikah.Utils.CompressImage;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
-import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class CompleteProfileScreen extends AppCompatActivity {
@@ -53,12 +41,10 @@ public class CompleteProfileScreen extends AppCompatActivity {
     TextView skip;
 
     CheckBox consent;
-    Button picPicture;
     private Spinner maritalSpinner;
     private String selectedMaritalStatus;
     private String selectedHomeType;
-    CircleImageView pickedPicture;
-    private String livePicPath;
+
     RadioButton male, female, jobRadio, joblessRadio, businessRadio;
     EditText age, height, income, belonging, houseSize, city, houseAddress, nationality,
             fatherName, motherName, brothers, sisters, cast, education;
@@ -66,8 +52,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
     DatabaseReference mDatabase;
     private String genderSelected;
     private String jobOrBusiness;
-    private ArrayList<String> mSelected = new ArrayList<>();
-    private String imageUrl;
+
     private boolean consentGiven;
     EditText about;
     EditText religion, sect;
@@ -129,7 +114,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_profile);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
-        pickedPicture = findViewById(R.id.pickedPicture);
         companyName = findViewById(R.id.companyName);
         skip = findViewById(R.id.skip);
 
@@ -138,18 +122,12 @@ public class CompleteProfileScreen extends AppCompatActivity {
         fatherOccupation = findViewById(R.id.fatherOccupation);
         religion = findViewById(R.id.religion);
         sect = findViewById(R.id.sect);
-        picPicture = findViewById(R.id.picPicture);
-        picPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initMatisse();
-            }
-        });
+
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CompleteProfileScreen.this,MainActivity.class));
+                startActivity(new Intent(CompleteProfileScreen.this, MainActivity.class));
 
             }
         });
@@ -208,21 +186,18 @@ public class CompleteProfileScreen extends AppCompatActivity {
                 } else if (city.getText().length() == 0) {
                     city.setError("Enter city");
                     city.requestFocus();
-                }  else if (about.getText().length() == 0) {
+                } else if (about.getText().length() == 0) {
                     about.setError("Enter some lines about yourself");
                     about.requestFocus();
 
-                } else if (livePicPath == null) {
-
-                    CommonUtils.showToast("Please upload picture");
-                } else if (!consentGiven) {
+                }  else if (!consentGiven) {
                     CommonUtils.showToast("Please accept the consent form");
                 } else {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("livePicPath", livePicPath);
+
                     map.put("age", Integer.parseInt(age.getText().toString()));
                     map.put("height", Float.parseFloat(height.getText().toString()));
-                    map.put("income", Integer.parseInt(income.getText().toString()));
+                    map.put("income", Integer.parseInt(income.getText().toString().equals("") ? "0" : income.getText().toString()));
                     map.put("belonging", belonging.getText().toString());
                     map.put("houseSize", houseSize.getText().toString());
                     map.put("city", city.getText().toString());
@@ -277,7 +252,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
 
     private void setMaritalSpinner() {
-        String[] maritalStatuses = { "Single","Married", "Windowed","Separated","Khula",
+        String[] maritalStatuses = {"Single", "Married", "Windowed", "Separated", "Khula",
                 "Divorced"};
         maritalSpinner = findViewById(R.id.maritalSpinner);
         maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -332,66 +307,8 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
-            mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-            CompressImage image = new CompressImage(CompleteProfileScreen.this);
-            imageUrl = image.compressImage("" + mSelected.get(0));
-            Glide.with(CompleteProfileScreen.this).load(mSelected.get(0)).into(pickedPicture);
-            uploadPicture();
-        }
-    }
-
-    private void uploadPicture() {
-        try {
-            String imgName = Long.toHexString(Double.doubleToLongBits(Math.random()));
-
-            Uri file = Uri.fromFile(new File(imageUrl));
-
-            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-
-            final StorageReference riversRef = mStorageRef.child("Photos").child(imgName);
-
-            riversRef.putFile(file)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Get a URL to the uploaded content
-
-                        String downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                        riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
-                                firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        livePicPath = "" + uri;
-
-                                    }
-                                });
 
 
-                            }
-                        });
-
-
-                    })
-                    .addOnFailureListener(exception -> {
-                        // Handle unsuccessful uploads
-                        // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
-
-                        CommonUtils.showToast("There was some error uploading pic");
-
-
-                    });
-        } catch (Exception e) {
-            mDatabase.child("Errors").child("mainError").child(mDatabase.push().getKey()).setValue(e.getMessage());
-        }
-
-
-    }
 
 
 

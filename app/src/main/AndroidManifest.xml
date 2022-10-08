@@ -112,6 +112,7 @@
         <activity android:name=".Activities.MatchMaker.RegisterMatchMaker" />
         <activity android:name=".Activities.MatchMaker.MatchMakerProfile" />
         <activity android:name=".Activities.MatchMaker.CreateProfile" />
+        <activity android:name=".Activities.UploadProfilePicture" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

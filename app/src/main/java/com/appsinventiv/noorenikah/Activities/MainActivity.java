@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
@@ -112,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
             showNotificationAlertAlert();
         }
         getBannerFromDB();
+
+
     }
+
 
     private void getBannerFromDB() {
         mDatabase.child("PromotionalBanner").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -233,6 +237,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (SharedPrefs.getUser().getLivePicPath() == null) {
+            CommonUtils.showToast("Please upload your profile picture");
+            startActivity(new Intent(MainActivity.this, UploadProfilePicture.class));
+        }
         getUserFromDb();
 
     }

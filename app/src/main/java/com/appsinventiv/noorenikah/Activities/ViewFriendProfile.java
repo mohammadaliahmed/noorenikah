@@ -90,10 +90,11 @@ public class ViewFriendProfile extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_chat:
-                Intent i = new Intent(ViewFriendProfile.this, ChatScreen.class);
-                i.putExtra("phone", user.getPhone());
-
-                startActivity(i);
+                if(user!=null) {
+                    Intent i = new Intent(ViewFriendProfile.this, ChatScreen.class);
+                    i.putExtra("phone", user.getPhone());
+                    startActivity(i);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

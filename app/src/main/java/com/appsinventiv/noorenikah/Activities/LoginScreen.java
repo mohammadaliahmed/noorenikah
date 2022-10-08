@@ -17,14 +17,12 @@ import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -50,7 +48,7 @@ public class LoginScreen extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         password = findViewById(R.id.password);
         phone = findViewById(R.id.phone);
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+        mDatabase = Constants.M_DATABASE;
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,36 +65,15 @@ public class LoginScreen extends AppCompatActivity {
                     password.setError("Enter Password");
                 } else if (!checked) {
                     CommonUtils.showToast("Please accept terms and conditions");
+                } else if (phone.getText().length() < 7 && phone.getText().length() > 15) {
+                    CommonUtils.showToast("Please enter correct phone number");
                 } else {
                     loginNow(phone.getText().toString(), password.getText().toString());
                 }
             }
         });
 
-//        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.getValue() != null) {
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        User user = snapshot.getValue(User.class);
-//                        if (user.getPhone() != null) {
-//                            usersMap.put(user.getPhone(), user);
-//
-//                        } else {
-//                            usersMap.put(user.getPhone(), user);
-//                        }
-//
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
         AlertsUtils.customTextView(LoginScreen.this, textt);
-
         checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -105,8 +82,6 @@ public class LoginScreen extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private void loginNow(String phone, String pass) {

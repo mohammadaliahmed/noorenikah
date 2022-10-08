@@ -161,7 +161,7 @@ public class EditProfile extends AppCompatActivity {
                 map.put("livePicPath", livePicPath);
                 map.put("age", Integer.parseInt(age.getText().toString()));
                 map.put("height", Float.parseFloat(height.getText().toString()));
-                map.put("income", Integer.parseInt(income.getText().toString()));
+                map.put("income", Integer.parseInt(income.getText().toString().equals("")?"0":income.getText().toString()));
                 map.put("belonging", belonging.getText().toString());
                 map.put("houseSize", houseSize.getText().toString());
                 map.put("name", name.getText().toString());

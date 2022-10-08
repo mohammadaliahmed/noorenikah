@@ -125,15 +125,6 @@ public class Register extends AppCompatActivity {
         SharedPrefs.setPhone(phoneNumber);
         String ph = phoneNumber.substring(phoneNumber.length() - 10);
 
-
-//        String ph = phone.getText().toString();
-//        Intent i = new Intent(Register.this, VerifyPhone.class);
-//        i.putExtra("number", foneCode + ph);
-//        i.putExtra("name", name.getText().toString());
-//        i.putExtra("referralCode", referralCode.getText().toString());
-//        i.putExtra("password", password.getText().toString());
-//        startActivity(i);
-
         String myReferralCode = CommonUtils.getRandomCode(7);
         User user = new User(
                 name.getText().toString(),
@@ -152,7 +143,7 @@ public class Register extends AppCompatActivity {
             public void onSuccess(Void unused) {
                 CommonUtils.showToast("Successfully registered");
                 SharedPrefs.setUser(user);
-                Intent i = new Intent(Register.this, CompleteProfileScreen.class);
+                Intent i = new Intent(Register.this, UploadProfilePicture.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();

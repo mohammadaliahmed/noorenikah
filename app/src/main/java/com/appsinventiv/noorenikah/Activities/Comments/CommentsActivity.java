@@ -136,8 +136,10 @@ public class CommentsActivity extends AppCompatActivity {
                 System.currentTimeMillis()
         );
         mDatabase.child("Comments").child(id).child(key).setValue(model);
-        if(!SharedPrefs.getUser().getPhone().equalsIgnoreCase(id)) {
-            sendNotification();
+        if (!SharedPrefs.getUser().getPhone().equalsIgnoreCase(id)) {
+            if (otherUser != null) {
+                sendNotification();
+            }
         }
     }
 

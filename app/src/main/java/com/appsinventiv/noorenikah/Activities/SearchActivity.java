@@ -56,14 +56,14 @@ public class SearchActivity extends AppCompatActivity {
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private AdRequest adRequest;
     private InterstitialAd interstitialAda;
-    private HashMap<String,String> requestSentMap=new HashMap<>();
+    private HashMap<String, String> requestSentMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         this.setTitle("Search results");
-         adRequest = new AdRequest.Builder().build();
+        adRequest = new AdRequest.Builder().build();
 
         minHeight = getIntent().getFloatExtra("minHeight", 4.0f);
         maxHeight = getIntent().getFloatExtra("maxHeight", 7.0f);
@@ -107,7 +107,7 @@ public class SearchActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null && user.getName() != null && user.getGender() != null &&
-                        !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                                !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                             if (
                                     user.getCity().equalsIgnoreCase(city)
                                             && user.getEducation().equalsIgnoreCase(education)
@@ -130,8 +130,10 @@ public class SearchActivity extends AppCompatActivity {
                         getRequestSent();
 
                     } else {
-                        adapter.setUserList(new ArrayList<>());
-                        noData.setVisibility(View.VISIBLE);
+                        if (adapter != null) {
+                            adapter.setUserList(new ArrayList<>());
+                            noData.setVisibility(View.VISIBLE);
+                        }
 
                     }
 
@@ -146,17 +148,18 @@ public class SearchActivity extends AppCompatActivity {
 
 
     }
+
     private void getRequestSent() {
         mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                 .child("sent").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                            String key=snapshot.getValue(String.class);
-                            requestSentMap.put(key,key);
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String key = snapshot.getValue(String.class);
+                            requestSentMap.put(key, key);
                         }
-                        List<String> requestedList=new ArrayList<>(requestSentMap.values());
+                        List<String> requestedList = new ArrayList<>(requestSentMap.values());
                         adapter.setRequestedList(requestedList);
 
                     }

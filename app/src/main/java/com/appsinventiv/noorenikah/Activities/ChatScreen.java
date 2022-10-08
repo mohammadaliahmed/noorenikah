@@ -306,7 +306,9 @@ public class ChatScreen extends AppCompatActivity {
             public void onCancel() {
                 //On Swipe To Cancel
                 Log.d("RecordView", "onCancel");
-                mRecorder.release();
+                if(mRecorder!=null) {
+                    mRecorder.release();
+                }
                 mRecorder = null;
 
             }
@@ -378,8 +380,12 @@ public class ChatScreen extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     otherUser = dataSnapshot.getValue(User.class);
                     name.setText(otherUser.getName());
-                    Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
-                            .placeholder(R.drawable.picked).into(picture);
+                    try {
+                        Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
+                                .placeholder(R.drawable.picked).into(picture);
+                    } catch (Exception e) {
+
+                    }
                 }
             }
 
@@ -427,7 +433,7 @@ public class ChatScreen extends AppCompatActivity {
         String key = "" + System.currentTimeMillis();
         ChatModel myModel = new ChatModel(key, msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
                 SharedPrefs.getUser().getName(),
-                SharedPrefs.getUser().getLivePicPath(),
+                SharedPrefs.getUser().getLivePicPath()==null?"":SharedPrefs.getUser().getLivePicPath(),
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getLivePicPath(),
@@ -442,8 +448,8 @@ public class ChatScreen extends AppCompatActivity {
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone()).child(otherUserPhone).child(key).setValue(
                 myModel
         );
-        if(type.equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE) ||type.equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)){
-            itemList.remove(itemList.size()-1);
+        if (type.equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE) || type.equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)) {
+            itemList.remove(itemList.size() - 1);
         }
 
         ChatModel hisModel = new ChatModel(key, msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
@@ -472,7 +478,7 @@ public class ChatScreen extends AppCompatActivity {
         } else if (type.equalsIgnoreCase(Constants.MESSAGE_TYPE_TEXT)) {
             String notificationText = msg;
             sendNotification(notificationText);
-        }else if (type.equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)) {
+        } else if (type.equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)) {
             String notificationText = "\uD83C\uDFB5 Audio";
             sendNotification(notificationText);
         }
@@ -564,13 +570,13 @@ public class ChatScreen extends AppCompatActivity {
             CompressImage image = new CompressImage(ChatScreen.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
             Intent intent = new Intent(ChatScreen.this, ViewSelectedPicture.class);
-            intent.putExtra("url",imageUrl);
+            intent.putExtra("url", imageUrl);
             startActivityForResult(intent, 1);
         }
         if (requestCode == 1 && resultCode == RESULT_OK) {
             if (data != null) {
                 String send = data.getStringExtra("send");
-                if(send.equalsIgnoreCase("send")){
+                if (send.equalsIgnoreCase("send")) {
                     ChatModel myModel = new ChatModel("" + System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
                             SharedPrefs.getUser().getName(),
                             SharedPrefs.getUser().getLivePicPath(),
@@ -738,7 +744,7 @@ public class ChatScreen extends AppCompatActivity {
             mRecorder = null;
             String fileNam = mFileName + recordingLocalUrl + ".mp3";
 
-            ChatModel myModel = new ChatModel(""+System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
+            ChatModel myModel = new ChatModel("" + System.currentTimeMillis(), msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
                     SharedPrefs.getUser().getName(),
                     SharedPrefs.getUser().getLivePicPath(),
                     SharedPrefs.getUser().getName(),
@@ -804,7 +810,6 @@ public class ChatScreen extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-
 
 
                     });

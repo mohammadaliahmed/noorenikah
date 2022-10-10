@@ -1,19 +1,31 @@
 package com.appsinventiv.noorenikah.Models;
 
+import java.util.HashMap;
+
 public class CommentsModel {
-    String id, comment,commentByName,phone,picUrl;
+    String id, comment, commentByName, phone, picUrl;
     long time;
+
+    HashMap<String, CommentReplyModel> replies;
 
     public CommentsModel() {
     }
 
-    public CommentsModel(String id, String comment, String commentByName,String phone, String picUrl, long time) {
+    public CommentsModel(String id, String comment, String commentByName, String phone, String picUrl, long time) {
         this.id = id;
         this.comment = comment;
         this.commentByName = commentByName;
         this.phone = phone;
         this.picUrl = picUrl;
         this.time = time;
+    }
+
+    public HashMap<String, CommentReplyModel> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(HashMap<String, CommentReplyModel> replies) {
+        this.replies = replies;
     }
 
     public String getPhone() {

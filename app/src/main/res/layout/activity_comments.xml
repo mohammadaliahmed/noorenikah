@@ -3,7 +3,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#ECECEC">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -13,18 +13,45 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id" />
 
-    <RelativeLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@id/bottom"
-        android:layout_below="@id/adView">
+        android:layout_marginTop="50dp"
+        android:layout_height="match_parent"
+        />
+<!--    </RelativeLayout>-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+    <RelativeLayout
+        android:id="@+id/replyingToView"
+        android:layout_above="@id/bottom"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/replyingToName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="Replying to: "
+            android:textColor="#000" />
 
-            android:layout_alignParentBottom="true" />
+        <ImageView
+            android:id="@+id/closeReply"
+            android:layout_width="20dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_close_black" />
     </RelativeLayout>
 
 
@@ -33,8 +60,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:background="#fff">
+        android:background="#fff"
+        android:padding="10dp">
+
 
         <EditText
             android:id="@+id/comment"

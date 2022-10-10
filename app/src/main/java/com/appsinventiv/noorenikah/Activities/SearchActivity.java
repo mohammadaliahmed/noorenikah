@@ -108,20 +108,27 @@ public class SearchActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
                         if (user != null && user.getName() != null && user.getGender() != null &&
                                 !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-                            if (
-                                    user.getCity().equalsIgnoreCase(city)
-                                            && user.getEducation().equalsIgnoreCase(education)
-                                            && user.getHomeType().equalsIgnoreCase(selectedHomeType)
-                                            && user.getJobOrBusiness().equalsIgnoreCase(jobOrBusiness)
-                                            && user.getCast().equalsIgnoreCase(cast)
-                                            && user.getHeight() > minHeight
-                                            && user.getHeight() < maxHeight
-                                            && user.getAge() > minAge
-                                            && user.getAge() < maxAge
-                                            && user.getIncome() > minIncome
-                                            && user.getIncome() < maxIncome
-                            )
-                                usersList.add(user);
+                            try {
+                                if (
+
+                                        user.getCity().equalsIgnoreCase(city)
+                                                && user.getEducation().equalsIgnoreCase(education)
+                                                && user.getHomeType().equalsIgnoreCase(selectedHomeType)
+                                                && user.getJobOrBusiness().equalsIgnoreCase(jobOrBusiness)
+                                                && user.getCast().equalsIgnoreCase(cast)
+                                                && user.getHeight() > minHeight
+                                                && user.getHeight() < maxHeight
+                                                && user.getAge() > minAge
+                                                && user.getAge() < maxAge
+                                                && user.getIncome() > minIncome
+                                                && user.getIncome() < maxIncome
+
+                                ) {
+                                    usersList.add(user);
+                                }
+                            } catch (Exception e) {
+
+                            }
 
                         }
                     }

@@ -24,11 +24,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String phone, String password, String referralCode, String myReferralCode) {
+    public User(String name, String phone, String password, String referralCode, String myReferralCode, String gender) {
         this.name = name;
         this.phone = phone;
         this.password = password;
         this.myReferralCode = myReferralCode;
+        this.gender = gender;
         this.referralCode = referralCode;
     }
 

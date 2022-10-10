@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,12 +42,16 @@ public class Register extends AppCompatActivity {
     TextView textt;
     CheckBox checkit;
     boolean checked = false;
+    RadioButton male, female;
+    String gender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        male = findViewById(R.id.male);
+        female = findViewById(R.id.female);
         login = findViewById(R.id.login);
         textt = findViewById(R.id.textt);
         register = findViewById(R.id.register);
@@ -60,6 +65,23 @@ public class Register extends AppCompatActivity {
         foneCode = "+" + ccp.getDefaultCountryCode();
         onNewIntent(getIntent());
         AlertsUtils.customTextView(Register.this, textt);
+
+        male.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    gender = "male";
+                }
+            }
+        });
+        female.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    gender = "female";
+                }
+            }
+        });
 
         checkit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -92,6 +114,8 @@ public class Register extends AppCompatActivity {
                     phone.setError("Enter valid phone number");
                 } else if (password.getText().length() == 0) {
                     password.setError("Enter Password");
+                } else if (gender==null) {
+                    CommonUtils.showToast("Please select gender");
                 } else if (!checked) {
                     CommonUtils.showToast("Please accept terms and conditions");
                 } else {
@@ -121,7 +145,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void requestCode() {
-        String phoneNumber = foneCode+phone.getText().toString();
+        String phoneNumber = foneCode + phone.getText().toString();
         SharedPrefs.setPhone(phoneNumber);
         String ph = phoneNumber.substring(phoneNumber.length() - 10);
 
@@ -129,8 +153,8 @@ public class Register extends AppCompatActivity {
         User user = new User(
                 name.getText().toString(),
                 ph,
-                password.getText().toString(), referralCode.getText().toString(), myReferralCode);
-        if (referralCode.length() > 0) {
+                password.getText().toString(), referralCode.getText().toString(), myReferralCode,gender);
+        if (referralCode.getText().length() > 0) {
             ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode.getText().toString(), false);
             mDatabase.child("ReferralCodesHistory")
                     .child(referralCode.getText().toString())

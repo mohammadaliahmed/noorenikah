@@ -1,24 +1,24 @@
 package com.appsinventiv.noorenikah.Models;
 
 public class NewUserModel {
-    String phone,name,details,verified,livePicPath,fcmKey;
+    String phone,name,gender,details,verified,livePicPath,fcmKey;
     boolean phoneVerified;
     boolean liked=false;
 
-    public NewUserModel(String phone, String name, String details, String verified, String livePicPath, String fcmKey) {
-        this.phone = phone;
-        this.name = name;
-        this.details = details;
-        this.verified = verified;
-        this.livePicPath = livePicPath;
-        this.fcmKey = fcmKey;
-    }
 
     public NewUserModel() {
     }
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public void setPhone(String phone) {

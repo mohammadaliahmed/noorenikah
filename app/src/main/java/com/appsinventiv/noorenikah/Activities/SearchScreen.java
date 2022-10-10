@@ -56,8 +56,8 @@ public class SearchScreen extends AppCompatActivity {
                 i.putExtra("maxAge", Integer.parseInt(maxAge.getText().toString()));
                 i.putExtra("minHeight", Float.parseFloat(minHeight.getText().toString()));
                 i.putExtra("maxHeight", Float.parseFloat(maxHeight.getText().toString()));
-                i.putExtra("maxIncome", Integer.parseInt(maxIncome.getText().toString()));
-                i.putExtra("minIncome", Integer.parseInt(minIncome.getText().toString()));
+                i.putExtra("maxIncome", Integer.parseInt(maxIncome.getText().toString().equals("")?"999999":maxIncome.getText().toString()));
+                i.putExtra("minIncome", Integer.parseInt(minIncome.getText().toString().equals("")?"0":minIncome.getText().toString()));
                 i.putExtra("city", city.getText().toString());
                 i.putExtra("selectedHomeType", selectedHomeType);
                 i.putExtra("jobOrBusiness", jobOrBusiness);

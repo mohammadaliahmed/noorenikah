@@ -7,26 +7,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
-import com.appsinventiv.noorenikah.Adapters.ViewPagerAdapter;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
-import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
-import com.appsinventiv.noorenikah.Utils.VerticalViewPager;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -61,11 +58,15 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> requestedList = new ArrayList<>();
     List<String> seenList = new ArrayList<>();
     ImageView promotionBanner;
+    String gender;
+    RadioButton male, female;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         adRequest = new AdRequest.Builder().build();
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        male = rootView.findViewById(R.id.male);
+        female = rootView.findViewById(R.id.female);
         recycler = rootView.findViewById(R.id.recycler);
         mAdView = rootView.findViewById(R.id.adView);
         promotionBanner = rootView.findViewById(R.id.promotionBanner);
@@ -79,6 +80,27 @@ public class HomeFragment extends Fragment {
                     .into(promotionBanner);
 
         }
+
+        male.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    gender = "male";
+                    filterData();
+                }
+            }
+        });
+        female.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    gender = "female";
+                    filterData();
+                }
+
+            }
+        });
+
         promotionBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +154,29 @@ public class HomeFragment extends Fragment {
         LoadInterstritial();
 
         return rootView;
+    }
+
+    private void filterData() {
+        usersList.clear();
+        progress.setVisibility(View.VISIBLE);
+
+        List<NewUserModel> list = SharedPrefs.getUsersList();
+        if (list != null && list.size() > 0) {
+            int count = 0;
+            for (NewUserModel item : list) {
+                if (item.getGender() != null && item.getGender().equalsIgnoreCase(gender)) {
+                    usersList.add(item);
+                    count++;
+                    if (count >= 100) {
+                        break;
+                    }
+                }
+            }
+            Collections.shuffle(usersList);
+            progress.setVisibility(View.GONE);
+            adapter.setUserList(usersList);
+
+        }
     }
 
     private void testUser() {

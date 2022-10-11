@@ -27,8 +27,8 @@ import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
-import com.appsinventiv.noorenikah.fragments.InviteFragment;
 import com.appsinventiv.noorenikah.fragments.MenuFragment;
+import com.appsinventiv.noorenikah.fragments.PostsFragment;
 import com.appsinventiv.noorenikah.fragments.RequestsFragment;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             fragment = new RequestsFragment();
 
         } else {
-            fragment = new HomeFragment();
+            fragment = new PostsFragment();
         }
 
         loadFragment(fragment);
@@ -300,15 +300,19 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             switch (item.getItemId()) {
+                case R.id.navigation_posts:
+                    fragment = new PostsFragment();
+                    loadFragment(fragment);
+                    return true;
                 case R.id.navigation_home:
                     fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation_invite:
-                    fragment = new InviteFragment();
-                    loadFragment(fragment);
-
-                    return true;
+//                case R.id.navigation_invite:
+//                    fragment = new InviteFragment();
+//                    loadFragment(fragment);
+//
+//                    return true;
                 case R.id.navigation_menu:
                     fragment = new MenuFragment();
                     loadFragment(fragment);

@@ -61,7 +61,22 @@ public class PostsFragment extends Fragment {
 
 
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new PostsAdapter(getContext(), itemList);
+        adapter = new PostsAdapter(getContext(), itemList, new PostsAdapter.PostsAdapterCallbacks() {
+            @Override
+            public void onLiked(PostModel model) {
+
+            }
+
+            @Override
+            public void onComment(PostModel model) {
+
+            }
+
+            @Override
+            public void onShare(PostModel model) {
+
+            }
+        });
         recycler.setAdapter(adapter);
 
         getDataFromDB();
@@ -74,7 +89,7 @@ public class PostsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel model = snapshot.getValue(PostModel.class);
-                    if (model != null) {
+                    if (model != null && model.isApproved()) {
                         itemList.add(model);
                     }
                 }

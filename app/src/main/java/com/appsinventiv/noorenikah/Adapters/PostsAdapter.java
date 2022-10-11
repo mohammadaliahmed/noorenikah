@@ -22,10 +22,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     Context context;
     List<PostModel> itemList;
+    PostsAdapterCallbacks callbacks;
 
-    public PostsAdapter(Context context, List<PostModel> itemList) {
+    public PostsAdapter(Context context, List<PostModel> itemList,PostsAdapterCallbacks callbacks) {
         this.context = context;
         this.itemList = itemList;
+        this.callbacks = callbacks;
     }
 
     public void setItemList(List<PostModel> itemList) {
@@ -86,6 +88,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             userImage = itemView.findViewById(R.id.userImage);
 
         }
+    }
+    public interface PostsAdapterCallbacks{
+        public void onLiked(PostModel model);
+        public void onComment(PostModel model);
+        public void onShare(PostModel model);
     }
 
 }

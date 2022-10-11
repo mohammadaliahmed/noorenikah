@@ -82,15 +82,16 @@ public class AddPost extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (text.getText().length() == 0) {
-                    text.setError("Enter post text");
+                if (imageUrl != null) {
+                    uploadPicture();
                 } else {
-                    if (imageUrl == null) {
-                        uploadPost();
+                    if (text.getText().length() == 0) {
+                        text.setText("Enter Text");
                     } else {
-                        uploadPicture();
+                        uploadPost();
                     }
                 }
+
             }
         });
     }

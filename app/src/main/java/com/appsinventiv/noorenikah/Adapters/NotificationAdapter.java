@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
 import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
@@ -91,6 +92,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 } else if (item.getType().equals("like")) {
                     Intent resultIntent = new Intent(context, ViewRequestProfile.class);
                     resultIntent.putExtra("phone", item.getHisId());
+                    context.startActivity(resultIntent);
+
+                }else if (item.getType().equals("matchmakerApproved")) {
+                    Intent resultIntent = new Intent(context, MatchMakerProfile.class);
                     context.startActivity(resultIntent);
 
                 }

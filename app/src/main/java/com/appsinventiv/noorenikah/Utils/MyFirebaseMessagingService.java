@@ -15,6 +15,7 @@ import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
 import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
@@ -94,6 +95,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("signout")) {
             SharedPrefs.logout();
             resultIntent = new Intent(this, Splash.class);
+
+        }else if (type.equals("matchmakerApproved")) {
+            resultIntent = new Intent(this, MatchMakerProfile.class);
 
         } else if (type.equals("marketing")) {
             Constants.MARKETING_MSG = true;

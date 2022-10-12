@@ -209,14 +209,11 @@ public class EditProfile extends AppCompatActivity {
 
                     }
                 });
-
             }
         });
 
         getDataFromServer();
-
     }
-
     private void getDataFromServer() {
         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
             @Override

@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
-import com.appsinventiv.noorenikah.Activities.InviteHistory;
+import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
-import com.appsinventiv.noorenikah.Activities.PaymentActivity;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
@@ -76,16 +75,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     i.putExtra("phone", item.getHisId());
                     context.startActivity(i);
                 } else if (item.getType().equalsIgnoreCase("payout")) {
-                    Intent i = new Intent(context, InviteHistory.class);
+                    Intent i = new Intent(context, InviteActivity.class);
                     context.startActivity(i);
                 } else if (item.getType().equalsIgnoreCase("payment")) {
                     Intent i = new Intent(context, PaymentsHistory.class);
                     context.startActivity(i);
-                }else if (item.getType().equalsIgnoreCase("profile")) {
+                } else if (item.getType().equalsIgnoreCase("profile")) {
                     Intent i = new Intent(context, MainActivity.class);
                     context.startActivity(i);
-                }
-                else if (item.getType().equals("comment")) {
+                } else if (item.getType().equals("comment")) {
                     Intent resultIntent = new Intent(context, CommentsActivity.class);
                     resultIntent.putExtra("id", SharedPrefs.getUser().getPhone());
                     context.startActivity(resultIntent);
@@ -96,6 +94,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     context.startActivity(resultIntent);
 
                 }
+//                callbacks.onDeleteClicked(item);
             }
         });
 

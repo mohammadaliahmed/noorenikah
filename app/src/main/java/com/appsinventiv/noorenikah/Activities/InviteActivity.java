@@ -31,6 +31,7 @@ import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
 import com.appsinventiv.noorenikah.Models.RequestPayoutModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.android.gms.ads.AdRequest;
@@ -49,8 +50,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InviteHistory extends AppCompatActivity {
-
+public class InviteActivity extends AppCompatActivity {
     Button invite, payout;
     int totalEarning = 0;
     private DatabaseReference mDatabase;
@@ -73,12 +73,13 @@ public class InviteHistory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_history);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
-            this.setTitle("Invite");
         }
+        this.setTitle("Invite");
         AdRequest adRequest = new AdRequest.Builder().build();
 
         RewardedAd.load(this, getResources().getString(R.string.reward_ad_unit_id),
@@ -94,35 +95,7 @@ public class InviteHistory extends AppCompatActivity {
                         mRewardedAd = rewardedAd;
                     }
                 });
-//        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-//            @Override
-//            public void onAdClicked() {
-//                // Called when a click is recorded for an ad.
-//            }
-//
-//            @Override
-//            public void onAdDismissedFullScreenContent() {
-//                // Called when ad is dismissed.
-//                // Set the ad reference to null so you don't show the ad a second time.
-//                mRewardedAd = null;
-//            }
-//
-//            @Override
-//            public void onAdFailedToShowFullScreenContent(AdError adError) {
-//                // Called when ad fails to show.
-//                mRewardedAd = null;
-//            }
-//
-//            @Override
-//            public void onAdImpression() {
-//                // Called when an impression is recorded for an ad.
-//            }
-//
-//            @Override
-//            public void onAdShowedFullScreenContent() {
-//                // Called when ad is shown.
-//            }
-//        });
+
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
 
         phone = findViewById(R.id.phone);
@@ -189,7 +162,7 @@ public class InviteHistory extends AppCompatActivity {
 
     public void showReward() {
         if (mRewardedAd != null) {
-            mRewardedAd.show(this, new OnUserEarnedRewardListener() {
+            mRewardedAd.show(InviteActivity.this, new OnUserEarnedRewardListener() {
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                     // Handle the reward.
@@ -242,33 +215,35 @@ public class InviteHistory extends AppCompatActivity {
     }
 
     private void getMyReferalData() {
-        mDatabase.child("ReferralCodesHistory").child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+        if (SharedPrefs.getUser().getMyReferralCode() != null) {
+            mDatabase.child("ReferralCodesHistory").child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                        ReferralCodePaidModel referralCodePaidModel = snapshot.getValue(ReferralCodePaidModel.class);
-                        if (referralCodePaidModel != null) {
-                            countInstalls++;
-                            if (referralCodePaidModel.isPaid()) {
-                                countPaidInstalls++;
+                            ReferralCodePaidModel referralCodePaidModel = snapshot.getValue(ReferralCodePaidModel.class);
+                            if (referralCodePaidModel != null) {
+                                countInstalls++;
+                                if (referralCodePaidModel.isPaid()) {
+                                    countPaidInstalls++;
+                                }
                             }
                         }
+                        totalInstalls.setText("" + countInstalls);
+                        totalInstallsPaid.setText("" + countPaidInstalls);
+                        totalEarning = (countPaidInstalls * Constants.PAYOUT_AMOUNT);
+                        totalEarningTv.setText("" + totalEarning);
+
                     }
-                    totalInstalls.setText("" + countInstalls);
-                    totalInstallsPaid.setText("" + countPaidInstalls);
-                    totalEarning = (countPaidInstalls * 200);
-                    totalEarningTv.setText("" + totalEarning);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
     }
 
     private void getAdminFcm() {
@@ -298,7 +273,7 @@ public class InviteHistory extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 CommonUtils.showToast("Request submitted");
-                finish();
+//                finish();
             }
         });
     }
@@ -321,7 +296,7 @@ public class InviteHistory extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View layout = layoutInflater.inflate(R.layout.alert_dialog_invite, null);
         dialog.setContentView(layout);
@@ -377,6 +352,5 @@ public class InviteHistory extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

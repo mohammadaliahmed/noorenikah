@@ -8,8 +8,8 @@
         android:title="Posts" />
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black"
-        android:title="Home" />
+        android:icon="@drawable/users"
+        android:title="Users" />
 
     <item
         android:id="@+id/navigation_notification"

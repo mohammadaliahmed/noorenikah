@@ -20,6 +20,7 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
 import com.appsinventiv.noorenikah.Utils.Constants;
+import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
@@ -27,7 +28,10 @@ import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,6 +49,7 @@ public class RegisterMatchMaker extends AppCompatActivity {
     private String imageUrl;
     DatabaseReference mDatabase;
     private String livePicPath;
+    private String adminFcmkey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,7 @@ public class RegisterMatchMaker extends AppCompatActivity {
                 initMatisse();
             }
         });
+        getAdminFcm();
 
 
     }
@@ -130,13 +136,15 @@ public class RegisterMatchMaker extends AppCompatActivity {
                                                 city.getText().toString(),
                                                 contactNo.getText().toString(),
                                                 SharedPrefs.getUser().getPhone(),
-                                                livePicPath
+                                                livePicPath,
+                                                false
                                         );
                                         mDatabase.child("MatchMakers").child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("matchMakerProfile").setValue(true);
-
+                                                mDatabase.child("Users")
+                                                        .child(SharedPrefs.getUser().getPhone()).child("matchMakerProfile").setValue(true);
+                                                sendNotification();
                                                 CommonUtils.showToast("Profile Created");
                                                 startActivity(new Intent(RegisterMatchMaker.this, MatchMakerProfile.class));
                                                 finish();
@@ -155,17 +163,42 @@ public class RegisterMatchMaker extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
 
                         CommonUtils.showToast("There was some error uploading pic");
 
 
                     });
         } catch (Exception e) {
-            mDatabase.child("Errors").child("mainError").child(mDatabase.push().getKey()).setValue(e.getMessage());
         }
 
 
+    }
+    private void sendNotification() {
+        NotificationAsync notificationAsync = new NotificationAsync(this);
+        String NotificationTitle = "New Match Maker";
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                adminFcmkey,
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "matchmaker");
+    }
+    private void getAdminFcm() {
+        mDatabase.child("Admin").child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null){
+                    adminFcmkey=dataSnapshot.getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initMatisse() {

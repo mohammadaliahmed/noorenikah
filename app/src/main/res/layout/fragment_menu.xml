@@ -123,31 +123,6 @@
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/invite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:clickable="true"
-
-            android:foreground="?android:attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Invite and earn"
-                android:textColor="#000"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
 
 
         <RelativeLayout
@@ -228,6 +203,37 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Match Maker"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/right_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+
+            android:layout_height="1dp"
+            android:background="#aaa" />
+
+        <RelativeLayout
+            android:id="@+id/invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Invite and Earn"
                 android:textColor="#000"
                 android:textSize="16sp" />
 

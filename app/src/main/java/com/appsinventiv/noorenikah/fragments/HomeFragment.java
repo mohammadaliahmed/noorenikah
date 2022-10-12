@@ -205,13 +205,18 @@ public class HomeFragment extends Fragment {
                         if (dataSnapshot.getValue() != null) {
 //                            CommonUtils.showToast("Here");
                             userMap.clear();
+
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                NewUserModel user = snapshot.getValue(NewUserModel.class);
-                                if (user != null && user.getName() != null &&
-                                        !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                                try {
+                                    NewUserModel user = snapshot.getValue(NewUserModel.class);
+                                    if (user != null && user.getName() != null &&
+                                            !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
 
-                                    userMap.put(user.getPhone(), user);
+                                        userMap.put(user.getPhone(), user);
 
+
+                                    }
+                                } catch (Exception e) {
 
                                 }
                             }

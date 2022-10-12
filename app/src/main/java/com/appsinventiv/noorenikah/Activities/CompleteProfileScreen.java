@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 
@@ -58,7 +59,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
     EditText religion, sect;
     EditText companyName, fatherOccupation, motherOccupation;
 
-
+    DecimalFormat df = new DecimalFormat("0.00");
     private void setUpFindViewByIds() {
         age = findViewById(R.id.age);
         wholeLayout = findViewById(R.id.wholeLayout);
@@ -196,7 +197,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     HashMap<String, Object> map = new HashMap<>();
 
                     map.put("age", Integer.parseInt(age.getText().toString()));
-                    map.put("height", Float.parseFloat(height.getText().toString()));
+                    map.put("height", df.format(Float.parseFloat(height.getText().toString())));
                     map.put("income", Integer.parseInt(income.getText().toString().equals("") ? "0" : income.getText().toString()));
                     map.put("belonging", belonging.getText().toString());
                     map.put("houseSize", houseSize.getText().toString());

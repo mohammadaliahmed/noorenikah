@@ -154,35 +154,37 @@ public class CommentsActivity extends AppCompatActivity {
                 commentId,
                 System.currentTimeMillis()
         );
-        mDatabase.child("Comments").child(id).child(commentId).child("replies").child(replyKey).setValue(model);
-        if (!replyingToId.equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-            mDatabase.child("Users").child(replyingToId).child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String fcm = dataSnapshot.getValue(String.class);
-                    NotificationAsync notificationAsync = new NotificationAsync(CommentsActivity.this);
-                    String NotificationTitle = SharedPrefs.getUser().getName() + " replied to your comment";
-                    String NotificationMessage = "Comment: " + cmnt;
-                    notificationAsync.execute(
-                            "ali",
-                            fcm,
-                            NotificationTitle,
-                            NotificationMessage,
-                            id,
-                            "comment");
-                    String key = "" + System.currentTimeMillis();
-                    NotificationModel model = new NotificationModel(key, NotificationTitle,
-                            NotificationMessage, "comment", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
-                    mDatabase.child("Notifications").child(id).child(key).setValue(model);
-                    removeReplyingView();
-                }
+        if(commentId!=null) {
+            mDatabase.child("Comments").child(id).child(commentId).child("replies").child(replyKey).setValue(model);
+            if (!replyingToId.equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                mDatabase.child("Users").child(replyingToId).child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String fcm = dataSnapshot.getValue(String.class);
+                        NotificationAsync notificationAsync = new NotificationAsync(CommentsActivity.this);
+                        String NotificationTitle = SharedPrefs.getUser().getName() + " replied to your comment";
+                        String NotificationMessage = "Comment: " + cmnt;
+                        notificationAsync.execute(
+                                "ali",
+                                fcm,
+                                NotificationTitle,
+                                NotificationMessage,
+                                id,
+                                "comment");
+                        String key = "" + System.currentTimeMillis();
+                        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                                NotificationMessage, "comment", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+                        mDatabase.child("Notifications").child(id).child(key).setValue(model);
+                        removeReplyingView();
+                    }
 
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

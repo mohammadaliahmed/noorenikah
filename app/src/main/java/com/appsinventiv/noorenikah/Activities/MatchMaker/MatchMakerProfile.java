@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.CreatedProfilesAdapter;
@@ -28,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +39,7 @@ public class MatchMakerProfile extends AppCompatActivity {
     RecyclerView recyclerView;
     private List<NewUserModel> itemList = new ArrayList<>();
     CreatedProfilesAdapter adapter;
+    TextView pendingApproval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +55,7 @@ public class MatchMakerProfile extends AppCompatActivity {
         mDatabase = Constants.M_DATABASE;
         createProfile = findViewById(R.id.createProfile);
         image = findViewById(R.id.image);
+        pendingApproval = findViewById(R.id.pendingApproval);
         recyclerView = findViewById(R.id.recycler);
         mbName = findViewById(R.id.mbName);
 
@@ -82,7 +81,21 @@ public class MatchMakerProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 itemList.clear();
                 MatchMakerModel user = dataSnapshot.getValue(MatchMakerModel.class);
-                Glide.with(MatchMakerProfile.this).load(user.getPicUrl()).into(image);
+                try {
+                    Glide.with(MatchMakerProfile.this).load(user.getPicUrl()).into(image);
+                } catch (Exception e) {
+
+                }
+                if (user.isApproved()) {
+                    pendingApproval.setVisibility(View.GONE);
+                    createProfile.setEnabled(true);
+
+                } else {
+                    pendingApproval.setVisibility(View.VISIBLE);
+                    createProfile.setEnabled(false);
+                    createProfile.setBackground(getResources().getDrawable(R.drawable.grey_bg));
+
+                }
                 mbName.setText(user.getMbName());
                 if (user.getProfilesCreated() != null) {
                     for (Map.Entry<String, Object> entry : user.getProfilesCreated().entrySet()) {

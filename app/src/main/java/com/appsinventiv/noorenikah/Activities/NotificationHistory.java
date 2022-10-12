@@ -57,27 +57,29 @@ public class NotificationHistory extends AppCompatActivity {
             }
         });
         recycler.setAdapter(adapter);
-        mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                itemList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    NotificationModel model = snapshot.getValue(NotificationModel.class);
-                    if (model != null) {
-                        itemList.add(model);
+        if (SharedPrefs.getUser() != null) {
+            mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    itemList.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        NotificationModel model = snapshot.getValue(NotificationModel.class);
+                        if (model != null) {
+                            itemList.add(model);
+                        }
                     }
+                    Collections.reverse(itemList);
+
+                    adapter.setItemList(itemList);
+
                 }
-                Collections.reverse(itemList);
 
-                adapter.setItemList(itemList);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
 
     }
 

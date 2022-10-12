@@ -76,6 +76,9 @@
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/edit_text_curved.xml" value="0.129" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/gradient.xml" value="0.1" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/gradient_bottom.xml" value="0.1" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/grey_bg.xml" value="0.129" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/grey_border.xml" value="0.129" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/nav_item_color_state.xml" value="0.129" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/pin_bg.xml" value="0.1735" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_add_post.xml" value="0.2" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_add_profile_pic.xml" value="0.16" />
@@ -83,9 +86,11 @@
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_comments.xml" value="0.18" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_complete_profile.xml" value="0.1675213675213675" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_contact_us.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_create_profile.xml" value="0.1696969696969697" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_invite_history.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_login.xml" value="0.1675929884566054" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_match_maker_profile.xml" value="0.17192982456140352" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_request_received.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/layout/activity_search.xml" value="0.20416666666666666" />

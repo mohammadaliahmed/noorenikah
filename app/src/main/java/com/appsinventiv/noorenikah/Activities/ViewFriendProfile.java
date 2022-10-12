@@ -60,11 +60,14 @@ public class ViewFriendProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     user = dataSnapshot.getValue(User.class);
+                    try {
+                        Glide.with(ViewFriendProfile.this)
+                                .load(user.getLivePicPath())
+                                .placeholder(R.drawable.picked)
+                                .into(image);
+                    }catch (Exception e){
 
-                    Glide.with(ViewFriendProfile.this)
-                            .load(user.getLivePicPath())
-                            .placeholder(R.drawable.picked)
-                            .into(image);
+                    }
 
                     name.setText("" + user.getName());
                     city.setText("" + user.getCity());

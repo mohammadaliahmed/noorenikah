@@ -91,9 +91,6 @@
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
         <activity android:name=".Activities.PaymentsHistory" />
-        <activity
-            android:name=".Activities.InviteHistory"
-            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Activities.PaymentActivity" />
         <activity android:name=".Activities.NotificationHistory" />
         <activity android:name=".Activities.SearchScreen" />
@@ -114,6 +111,7 @@
         <activity android:name=".Activities.MatchMaker.CreateProfile" />
         <activity android:name=".Activities.UploadProfilePicture" />
         <activity android:name=".Activities.Posts.AddPost" />
+        <activity android:name=".Activities.InviteActivity" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

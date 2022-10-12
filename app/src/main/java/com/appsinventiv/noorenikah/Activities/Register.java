@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
@@ -20,11 +19,8 @@ import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.rilixtech.CountryCodePicker;
 
 import java.util.HashMap;
@@ -125,29 +121,15 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        usersMap.put(user.getPhone(), user);
 
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void requestCode() {
         String phoneNumber = foneCode + phone.getText().toString();
         SharedPrefs.setPhone(phoneNumber);
         String ph = phoneNumber.substring(phoneNumber.length() - 10);
+        ph = ph.replaceAll("\\s+","");
+
 
         String myReferralCode = CommonUtils.getRandomCode(7);
         User user = new User(

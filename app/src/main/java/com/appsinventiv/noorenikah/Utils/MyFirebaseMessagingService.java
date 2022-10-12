@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
-import com.appsinventiv.noorenikah.Activities.InviteHistory;
+import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
@@ -87,7 +87,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent.putExtra("phone", Id);
         } else if (type.equals("payout")) {
 
-            resultIntent = new Intent(this, InviteHistory.class);
+            resultIntent = new Intent(this, InviteActivity.class);
         } else if (type.equals("profile")) {
 
             resultIntent = new Intent(this, MainActivity.class);

@@ -5,13 +5,16 @@ import java.util.HashMap;
 public class MatchMakerModel {
     String id, name, mbName, experience, city, contactNo,phone,picUrl;
     HashMap<String,Object> profilesCreated;
+    boolean approved;
 
     public MatchMakerModel(String id, String name, String mbName,
-                           String experience, String city, String contactNo, String phone, String picUrl) {
+                           String experience, String city, String contactNo, String phone, String picUrl
+    ,boolean approved) {
         this.id = id;
         this.name = name;
         this.mbName = mbName;
         this.experience = experience;
+        this.approved = approved;
         this.city = city;
         this.phone = phone;
         this.picUrl = picUrl;
@@ -19,6 +22,14 @@ public class MatchMakerModel {
     }
 
     public MatchMakerModel() {
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public HashMap<String, Object> getProfilesCreated() {

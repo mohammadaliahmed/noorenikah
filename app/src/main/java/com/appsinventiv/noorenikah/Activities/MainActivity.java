@@ -113,8 +113,24 @@ public class MainActivity extends AppCompatActivity {
             showNotificationAlertAlert();
         }
         getBannerFromDB();
+        getNotificationCountFromDB();
+
+    }
+
+    private void getNotificationCountFromDB() {
+        mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.Activities.MainActivity;
-import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
@@ -34,11 +33,7 @@ import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -139,7 +134,7 @@ public class CreateProfile extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
         }
-        this.setTitle("Create Prolile");
+        this.setTitle("Create Profile");
         mDatabase = Constants.M_DATABASE;
         pickedPicture = findViewById(R.id.pickedPicture);
         companyName = findViewById(R.id.companyName);
@@ -193,6 +188,10 @@ public class CreateProfile extends AppCompatActivity {
                     phone.setError("Enter phone");
                     phone.requestFocus();
 
+                }else if (phone.getText().length() <7 && phone.getText().length()>15) {
+                    phone.setError("Enter correct phone");
+                    phone.requestFocus();
+
                 } else if (genderSelected == null) {
 
                     CommonUtils.showToast("Please select gender");
@@ -229,7 +228,7 @@ public class CreateProfile extends AppCompatActivity {
                     city.setError("Enter city");
                     city.requestFocus();
                 } else if (about.getText().length() == 0) {
-                    about.setError("Enter some lines about yourself");
+                    about.setError("Enter some lines about them");
                     about.requestFocus();
 
                 } else if (livePicPath == null) {
@@ -312,7 +311,7 @@ public class CreateProfile extends AppCompatActivity {
             CompressImage image = new CompressImage(CreateProfile.this);
             imageUrl = image.compressImage("" + mSelected.get(0));
             Glide.with(CreateProfile.this).load(mSelected.get(0)).into(pickedPicture);
-            uploadPicture();
+
         }
     }
 

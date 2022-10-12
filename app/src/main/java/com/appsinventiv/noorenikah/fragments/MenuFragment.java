@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.appsinventiv.noorenikah.Activities.EditProfile;
-import com.appsinventiv.noorenikah.Activities.InviteHistory;
+import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.ListOfFriends;
 import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
@@ -28,9 +28,8 @@ public class MenuFragment extends Fragment {
 
     private View rootView;
     Button logout;
-    RelativeLayout editProfile, requestAccepted, privacy, terms, matchMaker;
+    RelativeLayout editProfile, requestAccepted, privacy, terms, matchMaker,invite;
     RelativeLayout paymentsHistory;
-    RelativeLayout invite;
     TextView verified;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,6 +61,13 @@ public class MenuFragment extends Fragment {
                 AlertsUtils.showTermsAlert(getContext());
             }
         });
+        invite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), InviteActivity.class));
+
+            }
+        });
         privacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,12 +80,7 @@ public class MenuFragment extends Fragment {
                 startActivity(new Intent(getContext(), PaymentsHistory.class));
             }
         });
-        invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), InviteHistory.class));
-            }
-        });
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

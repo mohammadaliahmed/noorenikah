@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_notifications"
         android:orderInCategory="100"
-        android:icon="@drawable/notification"
+        android:icon="@drawable/notifications"
         android:title="@string/action_settings"
         app:showAsAction="always" />
 </menu>

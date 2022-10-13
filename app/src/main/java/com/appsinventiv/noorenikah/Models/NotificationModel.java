@@ -2,7 +2,7 @@ package com.appsinventiv.noorenikah.Models;
 
 public class NotificationModel {
     String id, title, message, type, picUrl;
-    String hisId;
+    String hisId,postId;
     long time;
 
     public NotificationModel(String id, String title, String message, String type, String picUrl, String hisId, long time) {
@@ -16,6 +16,14 @@ public class NotificationModel {
     }
 
     public NotificationModel() {
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
     public String getHisId() {

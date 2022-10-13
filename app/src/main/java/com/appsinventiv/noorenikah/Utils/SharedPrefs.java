@@ -68,6 +68,22 @@ public class SharedPrefs {
                 }.getType());
         return playersList;
     }
+
+
+    public static void setPostLikedMap(HashMap<String, String> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("postliked", json);
+    }
+
+    public static HashMap<String, String> getPostLikedMap() {
+        Gson gson = new Gson();
+        HashMap<String, String> playersList = (HashMap<String, String>) gson.fromJson(preferenceGetter("postliked"),
+                new TypeToken<HashMap<String, String>>() {
+                }.getType());
+        return playersList;
+    }
 //
     public static void setUsersList(List<NewUserModel> itemList) {
 

@@ -353,14 +353,17 @@ public class ChatScreen extends AppCompatActivity {
     private void checkForBlockages() {
 
         if (SharedPrefs.getUser().getBlockedMe() != null && SharedPrefs.getUser().getBlockedMe().containsKey(otherUserPhone)) {
+            recordingArea.setVisibility(View.GONE);
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("This user has blocked you");
         } else if (SharedPrefs.getUser().getiBlocked() != null && SharedPrefs.getUser().getiBlocked().containsKey(otherUserPhone)) {
+            recordingArea.setVisibility(View.GONE);
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("You have blocked this user");
         } else {
+            recordingArea.setVisibility(View.VISIBLE);
             bottomArea.setVisibility(View.VISIBLE);
             blocked.setVisibility(View.GONE);
             blocked.setText("");

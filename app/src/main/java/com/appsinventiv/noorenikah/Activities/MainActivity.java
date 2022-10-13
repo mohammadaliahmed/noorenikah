@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,12 +58,13 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     public static BottomNavigationView navigation;
     Button buy;
-    ImageView notifications;
+    RelativeLayout notificationsView;
     ImageView search;
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
     boolean firstTimeShow = false;
     PromotionBanner promotionBanner;
+    TextView notificationCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        String myReferralCode = CommonUtils.getRandomCode(7);
         search = findViewById(R.id.search);
-        notifications = findViewById(R.id.notifications);
+        notificationCount = findViewById(R.id.notificationCount);
+        notificationsView = findViewById(R.id.notificationsView);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(fragment);
         updateFcmKey();
         buy = findViewById(R.id.buy);
-        notifications.setOnClickListener(new View.OnClickListener() {
+        notificationsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, NotificationHistory.class));
@@ -113,16 +116,16 @@ public class MainActivity extends AppCompatActivity {
             showNotificationAlertAlert();
         }
         getBannerFromDB();
-        getNotificationCountFromDB();
+
 
     }
 
     private void getNotificationCountFromDB() {
-        mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
+                long notiCount = dataSnapshot.getChildrenCount();
+                notificationCount.setText("" + notiCount);
 
             }
 
@@ -258,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, UploadProfilePicture.class));
         }
         getUserFromDb();
+        getNotificationCountFromDB();
 
     }
 

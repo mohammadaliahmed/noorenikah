@@ -3,11 +3,14 @@ package com.appsinventiv.noorenikah.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,12 +43,18 @@ public class Register extends AppCompatActivity {
     boolean checked = false;
     RadioButton male, female;
     String gender;
+    private Spinner maritalSpinner;
+    private String selectedMaritalStatus;
+    EditText city, sect, education;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        city = findViewById(R.id.city);
+        sect = findViewById(R.id.sect);
+        education = findViewById(R.id.education);
         male = findViewById(R.id.male);
         female = findViewById(R.id.female);
         login = findViewById(R.id.login);
@@ -61,7 +70,7 @@ public class Register extends AppCompatActivity {
         foneCode = "+" + ccp.getDefaultCountryCode();
         onNewIntent(getIntent());
         AlertsUtils.customTextView(Register.this, textt);
-
+        setMaritalSpinner();
         male.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -100,8 +109,6 @@ public class Register extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if (name.getText().length() == 0) {
                     name.setError("Enter Name");
                 } else if (phone.getText().length() == 0) {
@@ -110,8 +117,14 @@ public class Register extends AppCompatActivity {
                     phone.setError("Enter valid phone number");
                 } else if (password.getText().length() == 0) {
                     password.setError("Enter Password");
-                } else if (gender==null) {
+                } else if (gender == null) {
                     CommonUtils.showToast("Please select gender");
+                } else if (city.getText().length() == 0) {
+                    city.setError("Enter city");
+                } else if (sect.getText().length() == 0) {
+                    sect.setError("Enter sect");
+                } else if (education.getText().length() == 0) {
+                    education.setError("Enter education");
                 } else if (!checked) {
                     CommonUtils.showToast("Please accept terms and conditions");
                 } else {
@@ -128,14 +141,18 @@ public class Register extends AppCompatActivity {
         String phoneNumber = foneCode + phone.getText().toString();
         SharedPrefs.setPhone(phoneNumber);
         String ph = phoneNumber.substring(phoneNumber.length() - 10);
-        ph = ph.replaceAll("\\s+","");
-
+        ph = ph.replaceAll("\\s+", "");
 
         String myReferralCode = CommonUtils.getRandomCode(7);
         User user = new User(
                 name.getText().toString(),
                 ph,
-                password.getText().toString(), referralCode.getText().toString(), myReferralCode,gender);
+                password.getText().toString(), referralCode.getText().toString(), myReferralCode, gender,
+                city.getText().toString(),
+                sect.getText().toString(),
+                education.getText().toString(),
+                selectedMaritalStatus
+        );
         if (referralCode.getText().length() > 0) {
             ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode.getText().toString(), false);
             mDatabase.child("ReferralCodesHistory")
@@ -166,6 +183,27 @@ public class Register extends AppCompatActivity {
             referalId = referalIdFromLink.replace("refer?id=", "");
             referralCode.setText(referalId);
         }
+    }
+
+    private void setMaritalSpinner() {
+        String[] maritalStatuses = {"Single", "Married", "Windowed", "Separated", "Khula",
+                "Divorced"};
+        maritalSpinner = findViewById(R.id.maritalSpinner);
+        maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedMaritalStatus = maritalStatuses[i];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, maritalStatuses);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        maritalSpinner.setAdapter(aa);
     }
 
 

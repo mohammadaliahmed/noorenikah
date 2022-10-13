@@ -5,6 +5,7 @@ public class PostModel {
     int likeCount,commentCount;
     long time;
     boolean approved;
+    boolean liked;
 
 
     public PostModel(String id, String type, String imageUrl, String text, String userId,
@@ -20,6 +21,14 @@ public class PostModel {
         this.commentCount = commentCount;
         this.time = time;
         this.approved = approved;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public String getId() {

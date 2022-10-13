@@ -1,4 +1,4 @@
-package com.appsinventiv.noorenikah.Activities.Comments;
+package com.appsinventiv.noorenikah.Activities.Posts;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.appsinventiv.noorenikah.Adapters.CommentsAdapter;
 import com.appsinventiv.noorenikah.Models.CommentReplyModel;
 import com.appsinventiv.noorenikah.Models.CommentsModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -38,17 +38,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentsActivity extends AppCompatActivity {
+public class PostComments extends AppCompatActivity {
     RecyclerView recycler;
     EditText comment;
     ImageView send;
     AdView adView;
     DatabaseReference mDatabase;
-    String id;
+    String postId;
     private String cmnt;
     private List<CommentsModel> itemList = new ArrayList<>();
     CommentsAdapter adapter;
-    private User otherUser;
     private AdView mAdView;
     private AdRequest adRequest;
     boolean replying;
@@ -57,6 +56,7 @@ public class CommentsActivity extends AppCompatActivity {
     TextView replyingToName;
     ImageView closeReply;
     private String replyingToId;
+    private PostModel postModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class CommentsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
         }
-        this.setTitle("Comments");
+        this.setTitle("Post Comments");
         adRequest = new AdRequest.Builder().build();
 
         mAdView = findViewById(R.id.adView);
@@ -106,7 +106,7 @@ public class CommentsActivity extends AppCompatActivity {
         });
         recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recycler.setAdapter(adapter);
-        id = getIntent().getStringExtra("id");
+        postId = getIntent().getStringExtra("postId");
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
@@ -132,7 +132,22 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
         getDataFromDB();
-        getUserFromDB();
+        getPostFromDB();
+//        getUserFromDB();
+    }
+
+    private void getPostFromDB() {
+        mDatabase.child("Posts").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                postModel = dataSnapshot.getValue(PostModel.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void removeReplyingView() {
@@ -154,14 +169,14 @@ public class CommentsActivity extends AppCompatActivity {
                 commentId,
                 System.currentTimeMillis()
         );
-        if(commentId!=null) {
-            mDatabase.child("Comments").child(id).child(commentId).child("replies").child(replyKey).setValue(model);
+        if (commentId != null) {
+            mDatabase.child("PostComments").child(postId).child(commentId).child("replies").child(replyKey).setValue(model);
             if (!replyingToId.equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                 mDatabase.child("Users").child(replyingToId).child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String fcm = dataSnapshot.getValue(String.class);
-                        NotificationAsync notificationAsync = new NotificationAsync(CommentsActivity.this);
+                        NotificationAsync notificationAsync = new NotificationAsync(PostComments.this);
                         String NotificationTitle = SharedPrefs.getUser().getName() + " replied to your comment";
                         String NotificationMessage = "Comment: " + cmnt;
                         notificationAsync.execute(
@@ -169,13 +184,13 @@ public class CommentsActivity extends AppCompatActivity {
                                 fcm,
                                 NotificationTitle,
                                 NotificationMessage,
-                                id,
-                                "comment");
+                                postId,
+                                "postcomment");
                         String key = "" + System.currentTimeMillis();
                         NotificationModel model = new NotificationModel(key, NotificationTitle,
-                                NotificationMessage, "comment", SharedPrefs.getUser().getLivePicPath(),
-                                id, System.currentTimeMillis());
-                        mDatabase.child("Notifications").child(id).child(key).setValue(model);
+                                NotificationMessage, "postcomment", SharedPrefs.getUser().getLivePicPath(),
+                                postId, System.currentTimeMillis());
+                        mDatabase.child("Notifications").child(postModel.getUserId()).child(key).setValue(model);
                         removeReplyingView();
                     }
 
@@ -196,7 +211,7 @@ public class CommentsActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mDatabase.child("Comments").child(id).child(model.getParentId()).child("replies").child(model.getId())
+                mDatabase.child("PostComments").child(postId).child(model.getParentId()).child("replies").child(model.getId())
                         .removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -220,9 +235,11 @@ public class CommentsActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mDatabase.child("Comments").child(id).child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("PostComments").child(postId).child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        mDatabase.child("Posts").child(postId).child("commentCount").setValue(itemList.size());
+
                         CommonUtils.showToast("Comment deleted");
                     }
                 });
@@ -235,23 +252,9 @@ public class CommentsActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void getUserFromDB() {
-        mDatabase.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                otherUser = dataSnapshot.getValue(User.class);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void getDataFromDB() {
-        mDatabase.child("Comments").child(id).limitToLast(150).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("PostComments").child(postId).limitToLast(150).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 itemList.clear();
@@ -280,30 +283,42 @@ public class CommentsActivity extends AppCompatActivity {
                 SharedPrefs.getUser().getLivePicPath(),
                 System.currentTimeMillis()
         );
-        mDatabase.child("Comments").child(id).child(key).setValue(model);
-        if (!SharedPrefs.getUser().getPhone().equalsIgnoreCase(id)) {
-            if (otherUser != null) {
-                sendNotification();
-            }
+        mDatabase.child("PostComments").child(postId).child(key).setValue(model);
+        mDatabase.child("Posts").child(postId).child("commentCount").setValue(itemList.size() + 1);
+        if (!SharedPrefs.getUser().getPhone().equalsIgnoreCase(postModel.getUserId())) {
+            sendNotification();
         }
+
     }
 
     private void sendNotification() {
-        NotificationAsync notificationAsync = new NotificationAsync(this);
-        String NotificationTitle = "New comment posted by " + SharedPrefs.getUser().getName();
-        String NotificationMessage = "Comment: " + cmnt;
-        notificationAsync.execute(
-                "ali",
-                otherUser.getFcmKey(),
-                NotificationTitle,
-                NotificationMessage,
-                id,
-                "comment");
-        String key = "" + System.currentTimeMillis();
-        NotificationModel model = new NotificationModel(key, NotificationTitle,
-                NotificationMessage, "comment", SharedPrefs.getUser().getLivePicPath(),
-                id, System.currentTimeMillis());
-        mDatabase.child("Notifications").child(id).child(key).setValue(model);
+        mDatabase.child("Users").child(postModel.getUserId()).child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String fcmKey = dataSnapshot.getValue(String.class);
+                NotificationAsync notificationAsync = new NotificationAsync(PostComments.this);
+                String NotificationTitle = "New comment posted by " + SharedPrefs.getUser().getName();
+                String NotificationMessage = "Comment: " + cmnt;
+                notificationAsync.execute(
+                        "ali",
+                        fcmKey,
+                        NotificationTitle,
+                        NotificationMessage,
+                        postId,
+                        "postcomment");
+                String key = "" + System.currentTimeMillis();
+                NotificationModel model = new NotificationModel(key, NotificationTitle,
+                        NotificationMessage, "postcomment", SharedPrefs.getUser().getLivePicPath(),
+                        postId, System.currentTimeMillis());
+                mDatabase.child("Notifications").child(postModel.getUserId()).child(key).setValue(model);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

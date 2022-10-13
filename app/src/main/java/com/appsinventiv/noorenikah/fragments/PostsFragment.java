@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.Posts.AddPost;
 import com.appsinventiv.noorenikah.Adapters.PostsAdapter;
+import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
+import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -47,9 +49,7 @@ public class PostsFragment extends Fragment {
         if (SharedPrefs.getPromotionalBanner() != null) {
             Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner().getImgUrl())
                     .into(promotionBanner);
-
         }
-
         addPost = rootView.findViewById(R.id.addPost);
         recycler = rootView.findViewById(R.id.recycler);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -59,11 +59,21 @@ public class PostsFragment extends Fragment {
             }
         });
 
-
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         adapter = new PostsAdapter(getContext(), itemList, new PostsAdapter.PostsAdapterCallbacks() {
             @Override
-            public void onLiked(PostModel model) {
+            public void onLiked(PostModel model, boolean liked) {
+                if (liked) {
+                    mDatabase.child("PostLikes").child(model.getId())
+                            .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+                    if(!model.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                        sendLikeNotification(model);
+                    }
+                } else {
+                    mDatabase.child("PostLikes").child(model.getId())
+                            .child(SharedPrefs.getUser().getPhone()).removeValue();
+                }
+                mDatabase.child("Posts").child(model.getId()).child("likeCount").setValue(model.getLikeCount());
 
             }
 
@@ -79,11 +89,51 @@ public class PostsFragment extends Fragment {
         });
         recycler.setAdapter(adapter);
 
-        getDataFromDB();
+
         return rootView;
     }
 
+    private void sendLikeNotification(PostModel postModel) {
+
+        mDatabase.child("Users").child(postModel.getUserId()).child("fcmKey").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String fcmKey = dataSnapshot.getValue(String.class);
+                NotificationAsync notificationAsync = new NotificationAsync(getContext());
+                String NotificationTitle = "New Like";
+                String NotificationMessage = SharedPrefs.getUser().getName() + " liked your post";
+                notificationAsync.execute(
+                        "ali",
+                        fcmKey,
+                        NotificationTitle,
+                        NotificationMessage,
+                        postModel.getId(),
+                        "postlike");
+                String key = "" + System.currentTimeMillis();
+                NotificationModel model = new NotificationModel(key, NotificationTitle,
+                        NotificationMessage, "postlike", SharedPrefs.getUser().getLivePicPath(),
+                        postModel.getId(), System.currentTimeMillis());
+                mDatabase.child("Notifications").child(postModel.getUserId()).child(key).setValue(model);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDataFromDB();
+
+    }
+
     private void getDataFromDB() {
+        itemList.clear();
         mDatabase.child("Posts").limitToLast(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

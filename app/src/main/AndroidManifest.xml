@@ -112,6 +112,8 @@
         <activity android:name=".Activities.UploadProfilePicture" />
         <activity android:name=".Activities.Posts.AddPost" />
         <activity android:name=".Activities.InviteActivity" />
+        <activity android:name=".Activities.Posts.PostComments" />
+        <activity android:name=".Activities.Posts.PostLikes" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

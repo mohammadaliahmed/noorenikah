@@ -4,7 +4,6 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -223,7 +222,6 @@ public class ViewPagerAdapter extends PagerAdapter {
                     .into(image);
         }
         name.setText(user.getName());
-        details.setText(user.getDetails());
 //        details.setText("Education: " + user.getEducation() +
 //                "\nMarital Status: " + user.getMaritalStatus() +
 //                "\nCast: " + user.getCast() +

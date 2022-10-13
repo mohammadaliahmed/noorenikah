@@ -16,6 +16,8 @@ import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
 import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
+import com.appsinventiv.noorenikah.Activities.Posts.PostComments;
+import com.appsinventiv.noorenikah.Activities.Posts.PostLikes;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
@@ -96,7 +98,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             SharedPrefs.logout();
             resultIntent = new Intent(this, Splash.class);
 
-        }else if (type.equals("matchmakerApproved")) {
+        } else if (type.equals("matchmakerApproved")) {
             resultIntent = new Intent(this, MatchMakerProfile.class);
 
         } else if (type.equals("marketing")) {
@@ -107,6 +109,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("comment")) {
             resultIntent = new Intent(this, CommentsActivity.class);
             resultIntent.putExtra("id", Id);
+        }  else if (type.equals("postcomment")) {
+            resultIntent = new Intent(this, PostComments.class);
+            resultIntent.putExtra("postId", Id);
+        }else if (type.equals("postlike")) {
+            resultIntent = new Intent(this, PostLikes.class);
+            resultIntent.putExtra("postId", Id);
         } else if (type.equals("like")) {
             resultIntent = new Intent(this, ViewRequestProfile.class);
             resultIntent.putExtra("id", Id);
@@ -130,6 +138,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(messageBody))
                 .setContentIntent(pendingIntent);
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

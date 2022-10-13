@@ -1,12 +1,62 @@
 package com.appsinventiv.noorenikah.Models;
 
 public class NewUserModel {
-    String phone,name,gender,details,verified,livePicPath,fcmKey;
+    String phone,name,gender,verified,livePicPath,fcmKey,city,sect,education,maritalStatus,matchMakerId;
     boolean phoneVerified;
+    boolean matchMakerProfile=false;
     boolean liked=false;
 
 
     public NewUserModel() {
+    }
+
+    public String getMatchMakerId() {
+        return matchMakerId;
+    }
+
+
+    public boolean isMatchMakerProfile() {
+        return matchMakerProfile;
+    }
+
+    public void setMatchMakerProfile(boolean matchMakerProfile) {
+        this.matchMakerProfile = matchMakerProfile;
+    }
+
+    public void setMatchMakerId(String matchMakerId) {
+        this.matchMakerId = matchMakerId;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getSect() {
+        return sect;
+    }
+
+    public void setSect(String sect) {
+        this.sect = sect;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
     }
 
     public String getPhone() {
@@ -33,13 +83,7 @@ public class NewUserModel {
         this.name = name;
     }
 
-    public String getDetails() {
-        return details;
-    }
 
-    public void setDetails(String details) {
-        this.details = details;
-    }
 
     public String getVerified() {
         return verified;

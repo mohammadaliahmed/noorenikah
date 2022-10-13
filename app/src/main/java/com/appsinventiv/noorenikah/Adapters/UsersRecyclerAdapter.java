@@ -17,10 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
-import com.appsinventiv.noorenikah.Activities.PaymentProof;
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
-import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -34,11 +31,11 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdapter.ViewHolder> {
     Context context;
     List<NewUserModel> userList;
-   UsersAdapterCallbacks callbacks;
+    UsersAdapterCallbacks callbacks;
     List<String> requestedList;
 
     public UsersRecyclerAdapter(Context context, List<NewUserModel> userList,
-                               UsersAdapterCallbacks callbacks) {
+                                UsersAdapterCallbacks callbacks) {
         this.context = context;
         this.callbacks = callbacks;
         this.userList = userList;
@@ -79,6 +76,20 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             holder.verified.setVisibility(View.GONE);
 
         }
+        if(user.getMatchMakerId()!=null){
+            holder.matchMakerProfile.setVisibility(View.VISIBLE);
+
+        }else{
+            holder.matchMakerProfile.setVisibility(View.GONE);
+        }
+
+        holder.matchMakerProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtils.showToast("This profile is created by matchmaker");
+            }
+        });
+
         holder.verified.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,8 +173,8 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
             holder.requestBtn.setEnabled(false);
         } else {
-            holder. requestBtn.setText("Send request");
-            holder. requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
+            holder.requestBtn.setText("Send request");
+            holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
             holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_bg));
             holder.requestBtn.setEnabled(true);
 
@@ -174,7 +185,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
 
                 callbacks.onRequestClicked(user);
                 CommonUtils.showToast("Request sent");
-                holder. requestBtn.setText("Request Sent!");
+                holder.requestBtn.setText("Request Sent!");
                 holder.requestBtn.setTextColor(context.getResources().getColor(R.color.colorWhite));
                 holder.requestBtn.setBackground(context.getResources().getDrawable(R.drawable.btn_white_outline));
 
@@ -205,8 +216,16 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                     .placeholder(R.drawable.picked)
                     .into(holder.image);
         }
-        holder.name.setText(user.getName());
-        holder.details.setText(user.getDetails());
+        String nm=user.getName();
+        if(user.isMatchMakerProfile()){
+            nm+="(Matchmaker)";
+        }
+        holder.name.setText(nm);
+        holder.details.setText(
+                "Sect: " + (user.getSect()==null?"":user.getSect()) +
+                "\nCity: " + (user.getCity()==null?"":user.getCity()) +
+                "\nEducation: " + (user.getEducation()==null?"":user.getEducation())
+                + "\nMarital Status: " + (user.getMaritalStatus()==null?"":user.getMaritalStatus()));
     }
 
     @Override
@@ -217,7 +236,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         Button requestBtn;
         TextView name, details;
-        ImageView share, comment, chat, verified, image, likeUnlike;
+        ImageView share, comment, chat, verified, image, likeUnlike,matchMakerProfile;
         LinearLayout lockedInfo;
 
         public ViewHolder(@NonNull View itemView) {
@@ -230,6 +249,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             chat = itemView.findViewById(R.id.chat);
             verified = itemView.findViewById(R.id.verified);
             image = itemView.findViewById(R.id.image);
+            matchMakerProfile = itemView.findViewById(R.id.matchMakerProfile);
             likeUnlike = itemView.findViewById(R.id.likeUnlike);
             lockedInfo = itemView.findViewById(R.id.lockedInfo);
 

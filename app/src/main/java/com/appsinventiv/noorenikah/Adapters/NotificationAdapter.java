@@ -16,13 +16,14 @@ import com.appsinventiv.noorenikah.Activities.InviteActivity;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
+import com.appsinventiv.noorenikah.Activities.Posts.PostComments;
+import com.appsinventiv.noorenikah.Activities.Posts.PostLikes;
 import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
 import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
-import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -86,7 +87,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     context.startActivity(i);
                 } else if (item.getType().equals("comment")) {
                     Intent resultIntent = new Intent(context, CommentsActivity.class);
-                    resultIntent.putExtra("id", SharedPrefs.getUser().getPhone());
+                    resultIntent.putExtra("id",  item.getHisId());
+                    context.startActivity(resultIntent);
+
+                } else if (item.getType().equals("postcomment")) {
+                    Intent resultIntent = new Intent(context, PostComments.class);
+                    resultIntent.putExtra("postId",  item.getHisId());
+                    context.startActivity(resultIntent);
+
+                } else if (item.getType().equals("postlike")) {
+                    Intent resultIntent = new Intent(context, PostLikes.class);
+                    resultIntent.putExtra("postId",  item.getHisId());
                     context.startActivity(resultIntent);
 
                 } else if (item.getType().equals("like")) {

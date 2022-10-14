@@ -10,9 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Adapters.UserPostsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
+import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -27,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,6 +49,8 @@ public class ViewUserProfile extends AppCompatActivity {
     Button sendRequest, requestSent, friend;
     private HashMap<String, String> requestSentMap = new HashMap<>();
     RecyclerView recycler;
+    private List<PostModel> itemList = new ArrayList<>();
+    UserPostsAdapter adapter;
 
 
     @Override
@@ -54,7 +62,7 @@ public class ViewUserProfile extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
         }
-        this.setTitle("View Profile");
+//        this.setTitle("View Profile");
         recycler = findViewById(R.id.recycler);
         about = findViewById(R.id.about);
         image = findViewById(R.id.image);
@@ -72,7 +80,7 @@ public class ViewUserProfile extends AppCompatActivity {
         if (profileId != null) {
             getUserDataFromDB(profileId);
         }
-
+        adapter = new UserPostsAdapter(this, itemList);
         onNewIntent(getIntent());
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +92,48 @@ public class ViewUserProfile extends AppCompatActivity {
             }
         });
         getRequestSent();
+        recycler.setLayoutManager(new GridLayoutManager(this, 3));
+        recycler.setAdapter(adapter);
+        getPostsFromDB();
 
+    }
+
+    private void getPostsFromDB() {
+        itemList.clear();
+        mDatabase.child("PostsByUsers").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String postId = snapshot.getValue(String.class);
+                        getPostFromDb(postId);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getPostFromDb(String postId) {
+        mDatabase.child("Posts").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                PostModel model = dataSnapshot.getValue(PostModel.class);
+                if (model != null && model.getId() != null) {
+                    itemList.add(model);
+                }
+                adapter.setItemList(itemList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -165,7 +214,9 @@ public class ViewUserProfile extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     user = dataSnapshot.getValue(User.class);
                     if (user != null) {
+                        ViewUserProfile.this.setTitle(user.getName());
                         showUserData();
+
                     }
                 }
             }
@@ -198,7 +249,7 @@ public class ViewUserProfile extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_chat:
-                if(user!=null) {
+                if (user != null) {
                     Intent i = new Intent(ViewUserProfile.this, ChatScreen.class);
                     i.putExtra("phone", user.getPhone());
                     startActivity(i);

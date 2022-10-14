@@ -78,7 +78,9 @@ public class ListOfFriends extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     User user = dataSnapshot.getValue(User.class);
-                    userList.add(user);
+                    if(user!=null && user.getName()!=null && user.getPhone()!=null) {
+                        userList.add(user);
+                    }
                     adapter.setUserList(userList);
                 }
             }

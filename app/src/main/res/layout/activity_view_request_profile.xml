@@ -267,11 +267,11 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:visibility="gone"
             android:background="@drawable/btn_bg"
             android:inputType="textCapSentences"
             android:text="Send Request"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/requestSent"
@@ -310,10 +310,17 @@
             android:text="Posts Shared"
             android:textColor="#000" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:nestedScrollingEnabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 </ScrollView>

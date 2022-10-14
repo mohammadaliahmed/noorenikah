@@ -19,8 +19,7 @@ import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.Posts.PostComments;
 import com.appsinventiv.noorenikah.Activities.Posts.PostLikes;
 import com.appsinventiv.noorenikah.Activities.Splash;
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -77,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //            resultIntent = new Intent(this, MyAds.class);
 //        } else if (type.equalsIgnoreCase("marketing")) {
         if (type.equals("accepted")) {
-            resultIntent = new Intent(this, ViewFriendProfile.class);
+            resultIntent = new Intent(this, ViewUserProfile.class);
             resultIntent.putExtra("phone", Id);
 
         } else if (type.equals("request")) {
@@ -116,7 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent = new Intent(this, PostLikes.class);
             resultIntent.putExtra("postId", Id);
         } else if (type.equals("like")) {
-            resultIntent = new Intent(this, ViewRequestProfile.class);
+            resultIntent = new Intent(this, ViewUserProfile.class);
             resultIntent.putExtra("id", Id);
         } else {
             resultIntent = new Intent(this, MainActivity.class);

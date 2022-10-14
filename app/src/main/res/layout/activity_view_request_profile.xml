@@ -267,10 +267,41 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:visibility="gone"
             android:background="@drawable/btn_bg"
             android:inputType="textCapSentences"
             android:text="Send Request"
             android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/requestSent"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/btn_bg_blue_curved"
+            android:enabled="false"
+            android:inputType="textCapSentences"
+            android:text="Request Sent"
+            android:textColor="#034EC1"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/friend"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_bg_green"
+            android:enabled="false"
+            android:inputType="textCapSentences"
+            android:text="Friend"
+            android:textColor="#fff"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"

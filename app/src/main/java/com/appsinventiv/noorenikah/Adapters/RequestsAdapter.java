@@ -14,12 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.PaymentProof;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
-import com.appsinventiv.noorenikah.Utils.CommonUtils;
-import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -83,7 +80,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(context, ViewRequestProfile.class);
+                Intent i=new Intent(context, ViewUserProfile.class);
                 i.putExtra("phone",user.getPhone());
                 context.startActivity(i);
             }

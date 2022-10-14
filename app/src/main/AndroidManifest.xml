@@ -62,7 +62,7 @@
             android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity android:name=".Activities.SearchActivity" />
-        <activity android:name=".Activities.ViewRequestProfile"
+        <activity android:name=".Activities.ViewUserProfile"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -76,7 +76,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.EditProfile" />
-        <activity android:name=".Activities.ViewFriendProfile" />
         <activity android:name=".Activities.ListOfFriends" />
         <activity
             android:name=".Activities.ChatScreen"

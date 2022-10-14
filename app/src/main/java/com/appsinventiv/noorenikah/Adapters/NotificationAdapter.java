@@ -18,8 +18,7 @@ import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Activities.Posts.PostComments;
 import com.appsinventiv.noorenikah.Activities.Posts.PostLikes;
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -73,7 +72,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     Constants.REQUEST_RECEIVED = true;
                     context.startActivity(new Intent(context, MainActivity.class));
                 } else if (item.getType().equalsIgnoreCase("accepted")) {
-                    Intent i = new Intent(context, ViewFriendProfile.class);
+                    Intent i = new Intent(context, ViewUserProfile.class);
                     i.putExtra("phone", item.getHisId());
                     context.startActivity(i);
                 } else if (item.getType().equalsIgnoreCase("payout")) {
@@ -101,7 +100,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     context.startActivity(resultIntent);
 
                 } else if (item.getType().equals("like")) {
-                    Intent resultIntent = new Intent(context, ViewRequestProfile.class);
+                    Intent resultIntent = new Intent(context, ViewUserProfile.class);
                     resultIntent.putExtra("phone", item.getHisId());
                     context.startActivity(resultIntent);
 

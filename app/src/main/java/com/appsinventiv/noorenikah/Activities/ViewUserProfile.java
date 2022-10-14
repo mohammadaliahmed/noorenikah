@@ -1,10 +1,7 @@
 package com.appsinventiv.noorenikah.Activities;
 
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,14 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
-public class ViewRequestProfile extends AppCompatActivity {
+public class ViewUserProfile extends AppCompatActivity {
 
     CircleImageView image;
     TextView name, city, maritalStatus, education, cast, jobOrBusiness, about;
@@ -45,9 +40,10 @@ public class ViewRequestProfile extends AppCompatActivity {
 
 
     DatabaseReference mDatabase;
-    Button sendRequest;
+    Button sendRequest, requestSent, friend;
     private HashMap<String, String> requestSentMap = new HashMap<>();
     RecyclerView recycler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +58,8 @@ public class ViewRequestProfile extends AppCompatActivity {
         recycler = findViewById(R.id.recycler);
         about = findViewById(R.id.about);
         image = findViewById(R.id.image);
+        requestSent = findViewById(R.id.requestSent);
+        friend = findViewById(R.id.friend);
         sendRequest = findViewById(R.id.sendRequest);
         name = findViewById(R.id.name);
         city = findViewById(R.id.city);
@@ -71,7 +69,7 @@ public class ViewRequestProfile extends AppCompatActivity {
         jobOrBusiness = findViewById(R.id.jobOrBusiness);
         mDatabase = Constants.M_DATABASE;
         profileId = getIntent().getStringExtra("phone");
-        if(profileId!=null) {
+        if (profileId != null) {
             getUserDataFromDB(profileId);
         }
 
@@ -85,8 +83,10 @@ public class ViewRequestProfile extends AppCompatActivity {
                 sendNotification(user);
             }
         });
+        getRequestSent();
 
     }
+
 
     private void sendNotification(User user) {
 
@@ -137,16 +137,15 @@ public class ViewRequestProfile extends AppCompatActivity {
                         }
                         ArrayList<String> requestedList = new ArrayList<>(requestSentMap.values());
                         if (requestedList.size() > 0 && requestedList.contains(user.getPhone())) {
-
-                            sendRequest.setText("Request Sent!");
-                            sendRequest.setTextColor(getResources().getColor(R.color.colorAccent));
-                            sendRequest.setBackground(getResources().getDrawable(R.drawable.btn_red_outline));
-                            sendRequest.setEnabled(false);
+                            requestSent.setVisibility(View.VISIBLE);
                         } else {
-                            sendRequest.setText("Send Request");
-                            sendRequest.setTextColor(getResources().getColor(R.color.colorWhite));
-                            sendRequest.setBackground(getResources().getDrawable(R.drawable.btn_bg));
-                            sendRequest.setEnabled(true);
+                            sendRequest.setVisibility(View.VISIBLE);
+                        }
+                        if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+                            friend.setVisibility(View.VISIBLE);
+                            sendRequest.setVisibility(View.GONE);
+                            requestSent.setVisibility(View.GONE);
+
 
                         }
 
@@ -180,7 +179,6 @@ public class ViewRequestProfile extends AppCompatActivity {
     private void showUserData() {
         Glide.with(this)
                 .load(user.getLivePicPath())
-                .apply(bitmapTransform(new BlurTransformation(50)))
                 .placeholder(R.drawable.picked)
                 .into(image);
 
@@ -193,20 +191,28 @@ public class ViewRequestProfile extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_chat:
+                if(user!=null) {
+                    Intent i = new Intent(ViewUserProfile.this, ChatScreen.class);
+                    i.putExtra("phone", user.getPhone());
+                    startActivity(i);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-
-
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
-
 
 }

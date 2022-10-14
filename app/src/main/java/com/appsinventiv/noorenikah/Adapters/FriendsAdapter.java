@@ -1,28 +1,22 @@
 package com.appsinventiv.noorenikah.Adapters;
 
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     Context context;
@@ -60,7 +54,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, ViewFriendProfile.class);
+                Intent i = new Intent(context, ViewUserProfile.class);
                 i.putExtra("phone", user.getPhone());
                 context.startActivity(i);
             }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.R;
 import com.bumptech.glide.Glide;
@@ -60,7 +60,7 @@ public class CreatedProfilesAdapter extends RecyclerView.Adapter<CreatedProfiles
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(context, ViewFriendProfile.class);
+                Intent i=new Intent(context, ViewUserProfile.class);
                 i.putExtra("phone",item.getPhone());
                 context.startActivity(i);
             }

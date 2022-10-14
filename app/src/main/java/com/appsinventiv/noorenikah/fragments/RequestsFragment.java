@@ -13,8 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.PaymentProof;
-import com.appsinventiv.noorenikah.Activities.ViewFriendProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Adapters.RequestsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
@@ -62,7 +61,7 @@ public class RequestsFragment extends Fragment {
                             .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
                     CommonUtils.showToast("Accepted");
                     sendNotification(user);
-                    Intent i = new Intent(getActivity(), ViewFriendProfile.class);
+                    Intent i = new Intent(getActivity(), ViewUserProfile.class);
                     i.putExtra("phone", user.getPhone());
                     startActivity(i);
 //                }else{

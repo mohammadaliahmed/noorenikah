@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.EditProfile;
-import com.appsinventiv.noorenikah.Activities.ViewRequestProfile;
+import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.CommentReplyModel;
 import com.appsinventiv.noorenikah.Models.CommentsModel;
 import com.appsinventiv.noorenikah.R;
@@ -69,7 +69,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 if (commentModel.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                     context.startActivity(new Intent(context, EditProfile.class));
                 } else {
-                    Intent i = new Intent(context, ViewRequestProfile.class);
+                    Intent i = new Intent(context, ViewUserProfile.class);
                     i.putExtra("phone", commentModel.getPhone());
                     context.startActivity(i);
                 }

@@ -216,7 +216,7 @@ public class ChatScreen extends AppCompatActivity {
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ChatScreen.this, ViewFriendProfile.class);
+                Intent i = new Intent(ChatScreen.this, ViewUserProfile.class);
                 i.putExtra("phone", otherUserPhone);
                 startActivity(i);
             }
@@ -224,7 +224,7 @@ public class ChatScreen extends AppCompatActivity {
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ChatScreen.this, ViewFriendProfile.class);
+                Intent i = new Intent(ChatScreen.this, ViewUserProfile.class);
                 i.putExtra("phone", otherUserPhone);
                 startActivity(i);
             }

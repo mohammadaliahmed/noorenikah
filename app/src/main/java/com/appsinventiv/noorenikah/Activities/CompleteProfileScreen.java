@@ -59,7 +59,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
     EditText religion, sect;
     EditText companyName, fatherOccupation, motherOccupation;
 
-    DecimalFormat df = new DecimalFormat("0.00");
     private void setUpFindViewByIds() {
         age = findViewById(R.id.age);
         wholeLayout = findViewById(R.id.wholeLayout);
@@ -195,7 +194,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                     about.setError("Enter some lines about yourself");
                     about.requestFocus();
 
-                }  else if (!consentGiven) {
+                } else if (!consentGiven) {
                     CommonUtils.showToast("Please accept the consent form");
                 } else {
                     HashMap<String, Object> map = new HashMap<>();
@@ -311,10 +310,6 @@ public class CompleteProfileScreen extends AppCompatActivity {
 
 
     }
-
-
-
-
 
 
 }

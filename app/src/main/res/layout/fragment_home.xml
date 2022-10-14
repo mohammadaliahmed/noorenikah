@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDEDED"
+    android:background="@drawable/bg"
     tools:context=".fragments.HomeFragment">
 
 
@@ -17,7 +17,7 @@
 
     <LinearLayout
         android:id="@+id/genderLayout"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="5dp"
@@ -25,7 +25,9 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
+        android:background="#fff"
         android:orientation="horizontal"
+
         android:weightSum="3">
 
         <TextView
@@ -69,8 +71,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="90dp"
-        android:layout_marginBottom="50dp" />
+        android:layout_above="@+id/adView"
+        android:layout_marginTop="90dp" />
 
 
     <com.google.android.gms.ads.AdView
@@ -80,7 +82,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
+        ads:adUnitId="@string/banner_ad_unit_id"/>
 
     <ProgressBar
         android:id="@+id/progress"

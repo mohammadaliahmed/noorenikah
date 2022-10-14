@@ -1,5 +1,6 @@
 package com.appsinventiv.noorenikah.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +21,14 @@ import com.appsinventiv.noorenikah.Adapters.PostsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,9 +47,18 @@ public class PostsFragment extends Fragment {
     PostsAdapter adapter;
     ImageView promotionBanner;
 
+    private AdView mAdView;
+    private AdRequest adRequest;
+
+    ProgressBar progress;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_posts, container, false);
+        adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        progress = rootView.findViewById(R.id.progress);
+        mAdView = rootView.findViewById(R.id.adView);
+        mAdView.loadAd(adRequest);
         mDatabase = Constants.M_DATABASE;
         promotionBanner = rootView.findViewById(R.id.promotionBanner);
 
@@ -66,7 +82,7 @@ public class PostsFragment extends Fragment {
                 if (liked) {
                     mDatabase.child("PostLikes").child(model.getId())
                             .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
-                    if(!model.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                    if (!model.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                         sendLikeNotification(model);
                     }
                 } else {
@@ -86,11 +102,43 @@ public class PostsFragment extends Fragment {
             public void onShare(PostModel model) {
 
             }
+
+            @Override
+            public void onRemovePost(PostModel model) {
+                showAlert(model);
+            }
         });
         recycler.setAdapter(adapter);
 
 
         return rootView;
+    }
+
+    private void showAlert(PostModel model) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Alert");
+        builder.setMessage("Do you want to delete this? ");
+
+        // add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabase.child("Posts").child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        CommonUtils.showToast("Post deleted");
+                        getDataFromDB();
+                    }
+                });
+
+
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void sendLikeNotification(PostModel postModel) {
@@ -134,9 +182,11 @@ public class PostsFragment extends Fragment {
 
     private void getDataFromDB() {
         itemList.clear();
+        progress.setVisibility(View.VISIBLE);
         mDatabase.child("Posts").limitToLast(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progress.setVisibility(View.GONE);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel model = snapshot.getValue(PostModel.class);
                     if (model != null && model.isApproved()) {

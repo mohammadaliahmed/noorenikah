@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.User;
@@ -46,6 +47,7 @@ public class ViewRequestProfile extends AppCompatActivity {
     DatabaseReference mDatabase;
     Button sendRequest;
     private HashMap<String, String> requestSentMap = new HashMap<>();
+    RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class ViewRequestProfile extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         this.setTitle("View Profile");
+        recycler = findViewById(R.id.recycler);
         about = findViewById(R.id.about);
         image = findViewById(R.id.image);
         sendRequest = findViewById(R.id.sendRequest);

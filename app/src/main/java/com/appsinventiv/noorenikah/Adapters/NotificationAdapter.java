@@ -87,17 +87,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     context.startActivity(i);
                 } else if (item.getType().equals("comment")) {
                     Intent resultIntent = new Intent(context, CommentsActivity.class);
-                    resultIntent.putExtra("id",  item.getHisId());
+                    resultIntent.putExtra("id", item.getHisId());
                     context.startActivity(resultIntent);
 
                 } else if (item.getType().equals("postcomment")) {
                     Intent resultIntent = new Intent(context, PostComments.class);
-                    resultIntent.putExtra("postId",  item.getHisId());
+                    resultIntent.putExtra("postId", item.getHisId());
                     context.startActivity(resultIntent);
 
                 } else if (item.getType().equals("postlike")) {
                     Intent resultIntent = new Intent(context, PostLikes.class);
-                    resultIntent.putExtra("postId",  item.getHisId());
+                    resultIntent.putExtra("postId", item.getHisId());
                     context.startActivity(resultIntent);
 
                 } else if (item.getType().equals("like")) {
@@ -105,12 +105,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     resultIntent.putExtra("phone", item.getHisId());
                     context.startActivity(resultIntent);
 
-                }else if (item.getType().equals("matchmakerApproved")) {
+                } else if (item.getType().equals("matchmakerApproved")) {
                     Intent resultIntent = new Intent(context, MatchMakerProfile.class);
                     context.startActivity(resultIntent);
 
+                } else if (item.getType().equals("marketing")) {
+                    Constants.MARKETING_MSG = true;
+                    Constants.MARKETING_MSG_TITLE = item.getTitle();
+                    Constants.MARKETING_MSG_MESSAGE = item.getMessage();
+                    Intent resultIntent = new Intent(context, MainActivity.class);
+                    context.startActivity(resultIntent);
                 }
-//                callbacks.onDeleteClicked(item);
             }
         });
 

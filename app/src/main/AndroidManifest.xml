@@ -92,7 +92,6 @@
         <activity android:name=".Activities.PaymentProof" />
         <activity android:name=".Activities.PaymentsHistory" />
         <activity android:name=".Activities.PaymentActivity" />
-        <activity android:name=".Activities.NotificationHistory" />
         <activity android:name=".Activities.SearchScreen" />
         <activity
             android:name=".Activities.ViewPictures"
@@ -114,6 +113,7 @@
         <activity android:name=".Activities.InviteActivity" />
         <activity android:name=".Activities.Posts.PostComments" />
         <activity android:name=".Activities.Posts.PostLikes" />
+        <activity android:name=".Activities.MenuActivity" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

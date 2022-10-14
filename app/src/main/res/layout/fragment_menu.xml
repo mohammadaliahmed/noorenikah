@@ -11,14 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Menu"
-            android:textColor="#000"
-            android:textSize="30sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/verified"
@@ -48,6 +40,38 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Edit Profile"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/right_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+
+            android:layout_height="1dp"
+            android:background="#aaa" />
+
+        <RelativeLayout
+            android:id="@+id/myPosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="10dp"
+
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="My posts"
                 android:textColor="#000"
                 android:textSize="16sp" />
 
@@ -122,7 +146,6 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
-
 
 
         <RelativeLayout

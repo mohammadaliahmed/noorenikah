@@ -12,16 +12,16 @@
         android:title="Users" />
 
     <item
-        android:id="@+id/navigation_notification"
-        android:icon="@drawable/ic_notification"
+        android:id="@+id/navigation_request"
+        android:icon="@drawable/wc"
         android:title="Requests" />
     <item
         android:id="@+id/navigation_chat"
         android:icon="@drawable/chat"
         android:title="Chat" />
     <item
-        android:id="@+id/navigation_menu"
-        android:icon="@drawable/menu"
-        android:title="Menu" />
+        android:id="@+id/navigation_notification"
+        android:icon="@drawable/ic_notification"
+        android:title="Notifications" />
 
 </menu>

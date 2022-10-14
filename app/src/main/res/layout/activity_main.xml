@@ -48,42 +48,21 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/notificationsView"
+            android:layout_toLeftOf="@id/menu"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="5dp"
             android:src="@drawable/searccc" />
 
-        <RelativeLayout
-            android:id="@+id/notificationsView"
-            android:layout_marginRight="5dp"
-            android:layout_width="wrap_content"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
-
-            <ImageView
-                android:id="@+id/notifications"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-
-                     android:padding="5dp"
-                android:src="@drawable/notifications" />
-            <TextView
-                android:layout_marginLeft="20dp"
-                android:text="0"
-                android:textColor="#fff"
-                android:id="@+id/notificationCount"
-                android:textSize="11sp"
-                android:gravity="center"
-                android:background="@drawable/red_mic_bg"
-                android:layout_width="16dp"
-                android:layout_height="16dp"/>
-
-        </RelativeLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:padding="5dp"
+            android:src="@drawable/menu" />
 
 
     </RelativeLayout>

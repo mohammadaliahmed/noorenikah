@@ -61,6 +61,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Glide.with(context).load(postModel.getImageUrl()).into(holder.postImage);
 
         }
+        if(postModel.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())){
+            holder.removePost.setVisibility(View.VISIBLE);
+        }else{
+            holder.removePost.setVisibility(View.GONE);
+
+        }
+
+
         HashMap<String, String> map = SharedPrefs.getPostLikedMap();
         if (map != null) {
             if (map.containsKey(postModel.getId())) {
@@ -75,6 +83,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             holder.likeUnlike.setImageResource(R.drawable.ic_like_empty);
 
         }
+
         holder.likeUnlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +159,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 context.startActivity(i);
             }
         });
+        holder.removePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              callbacks.onRemovePost(postModel);
+            }
+        });
 
 
     }
@@ -161,7 +176,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, text, commentCount, likesCount, time;
-        ImageView postImage, likeUnlike, comment, share;
+        ImageView postImage, likeUnlike, comment, share, removePost;
         CircleImageView userImage;
         RelativeLayout userView;
 
@@ -178,6 +193,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             commentCount = itemView.findViewById(R.id.commentCount);
             userView = itemView.findViewById(R.id.userView);
             userImage = itemView.findViewById(R.id.userImage);
+            removePost = itemView.findViewById(R.id.removePost);
 
         }
     }
@@ -188,6 +204,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void onComment(PostModel model);
 
         public void onShare(PostModel model);
+
+        public void onRemovePost(PostModel model);
     }
 
 }

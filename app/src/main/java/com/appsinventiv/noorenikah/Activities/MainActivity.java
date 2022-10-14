@@ -28,7 +28,7 @@ import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
-import com.appsinventiv.noorenikah.fragments.MenuFragment;
+import com.appsinventiv.noorenikah.fragments.NotificationFragment;
 import com.appsinventiv.noorenikah.fragments.PostsFragment;
 import com.appsinventiv.noorenikah.fragments.RequestsFragment;
 import com.google.android.gms.ads.AdError;
@@ -47,9 +47,10 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public static BottomNavigationView navigation;
     Button buy;
     RelativeLayout notificationsView;
-    ImageView search;
+    ImageView search, menuImg;
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
     boolean firstTimeShow = false;
@@ -72,25 +73,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        String myReferralCode = CommonUtils.getRandomCode(7);
         search = findViewById(R.id.search);
-        notificationCount = findViewById(R.id.notificationCount);
-        notificationsView = findViewById(R.id.notificationsView);
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+        menuImg = findViewById(R.id.menu);
+        mDatabase = Constants.M_DATABASE;
         navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
         if (Constants.REQUEST_RECEIVED) {
             fragment = new RequestsFragment();
-
         } else {
             fragment = new PostsFragment();
         }
-
         loadFragment(fragment);
         updateFcmKey();
         buy = findViewById(R.id.buy);
-        notificationsView.setOnClickListener(new View.OnClickListener() {
+        menuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NotificationHistory.class));
+                startActivity(new Intent(MainActivity.this, MenuActivity.class));
             }
         });
         search.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
             showNotificationAlertAlert();
         }
         getBannerFromDB();
-
-
     }
 
     private void getNotificationCountFromDB() {
@@ -125,8 +121,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long notiCount = dataSnapshot.getChildrenCount();
-                notificationCount.setText("" + notiCount);
+                if (notiCount > 0) {
+                    BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_notification);
+                    View badge = LayoutInflater.from(MainActivity.this)
+                            .inflate(R.layout.layout_noti_badge, navigation,
+                                    false);
+                    TextView text = badge.findViewById(R.id.badge_text_view);
+                    text.setText("" + notiCount);
+                    itemView.addView(badge);
+                } else {
 
+                }
             }
 
             @Override
@@ -136,6 +141,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getRequestDataFromDB() {
+        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone()).child("received")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        long notiCount = dataSnapshot.getChildrenCount();
+                        if (notiCount > 0) {
+
+                            BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_request);
+                            View badge = LayoutInflater.from(MainActivity.this)
+                                    .inflate(R.layout.layout_noti_badge, navigation,
+                                            false);
+                            TextView text = badge.findViewById(R.id.badge_text_view);
+                            text.setText("" + notiCount);
+                            itemView.addView(badge);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
 
     private void getBannerFromDB() {
         mDatabase.child("PromotionalBanner").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -262,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
         }
         getUserFromDb();
         getNotificationCountFromDB();
+        getRequestDataFromDB();
+
 
     }
 
@@ -328,13 +359,10 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
-//                case R.id.navigation_invite:
-//                    fragment = new InviteFragment();
-//                    loadFragment(fragment);
-//
-//                    return true;
-                case R.id.navigation_menu:
-                    fragment = new MenuFragment();
+
+                case R.id.navigation_notification:
+//                    startActivity(new Intent(MainActivity.this, NotificationHistory.class));
+                    fragment = new NotificationFragment();
                     loadFragment(fragment);
 
                     return true;
@@ -344,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(fragment);
 
                     return true;
-                case R.id.navigation_notification:
+                case R.id.navigation_request:
                     fragment = new RequestsFragment();
                     loadFragment(fragment);
                     return true;

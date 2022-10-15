@@ -113,6 +113,8 @@
         <activity android:name=".Activities.Posts.PostComments" />
         <activity android:name=".Activities.Posts.PostLikes" />
         <activity android:name=".Activities.MenuActivity" />
+        <activity android:name=".Activities.Posts.ViewPost" />
+        <activity android:name=".Activities.ViewMyProfile" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

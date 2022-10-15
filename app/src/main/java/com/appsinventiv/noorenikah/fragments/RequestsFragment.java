@@ -124,7 +124,8 @@ public class RequestsFragment extends Fragment {
                                 getUserData(userId);
                             }
                         } else {
-//                            adapter.setUserList(userList);
+                            userList.clear();
+                            adapter.setUserList(userList);
                             noRequests.setVisibility(View.VISIBLE);
 
                         }

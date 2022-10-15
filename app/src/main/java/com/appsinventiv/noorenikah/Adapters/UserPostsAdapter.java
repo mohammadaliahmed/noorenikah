@@ -2,6 +2,7 @@ package com.appsinventiv.noorenikah.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.Posts.ViewPost;
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.Models.User;
@@ -40,19 +42,29 @@ public class UserPostsAdapter extends RecyclerView.Adapter<UserPostsAdapter.View
         UserPostsAdapter.ViewHolder viewHolder = new UserPostsAdapter.ViewHolder(view);
         return viewHolder;
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostModel postModel = itemList.get(position);
         if (postModel.getType().equalsIgnoreCase("text")) {
             holder.text.setVisibility(View.VISIBLE);
             holder.postImage.setVisibility(View.GONE);
+            holder.text.setText(postModel.getText());
         } else if (postModel.getType().equalsIgnoreCase("image")) {
             holder.postImage.setVisibility(View.VISIBLE);
             holder.text.setVisibility(View.GONE);
             Glide.with(context).load(postModel.getImageUrl()).into(holder.postImage);
 
         }
-        holder.text.setText(postModel.getText());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ViewPost.class);
+                i.putExtra("postId", postModel.getId());
+                context.startActivity(i);
+            }
+        });
+
     }
 
     @Override
@@ -61,7 +73,7 @@ public class UserPostsAdapter extends RecyclerView.Adapter<UserPostsAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView  text;
+        TextView text;
         ImageView postImage;
 
         public ViewHolder(@NonNull View itemView) {

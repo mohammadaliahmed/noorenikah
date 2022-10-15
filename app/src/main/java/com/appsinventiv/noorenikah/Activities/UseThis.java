@@ -12,7 +12,7 @@ import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 
 public class UseThis extends AppCompatActivity {
-    Button click;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

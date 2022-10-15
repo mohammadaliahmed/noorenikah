@@ -85,9 +85,8 @@ public class ViewUserProfile extends AppCompatActivity {
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest.setText("Request Sent!");
-                sendRequest.setTextColor(getResources().getColor(R.color.colorAccent));
-                sendRequest.setBackground(getResources().getDrawable(R.drawable.btn_red_outline));
+                requestSent.setVisibility(View.VISIBLE);
+                sendRequest.setVisibility(View.GONE);
                 sendNotification(user);
             }
         });
@@ -100,7 +99,7 @@ public class ViewUserProfile extends AppCompatActivity {
 
     private void getPostsFromDB() {
         itemList.clear();
-        mDatabase.child("PostsByUsers").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("PostsByUsers").child(profileId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -190,7 +189,8 @@ public class ViewUserProfile extends AppCompatActivity {
                         } else {
                             sendRequest.setVisibility(View.VISIBLE);
                         }
-                        if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+
+                        if (SharedPrefs.getUser().getFriends() != null && SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
                             friend.setVisibility(View.VISIBLE);
                             sendRequest.setVisibility(View.GONE);
                             requestSent.setVisibility(View.GONE);

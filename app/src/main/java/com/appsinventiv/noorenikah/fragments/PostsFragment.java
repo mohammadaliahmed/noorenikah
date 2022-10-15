@@ -110,6 +110,7 @@ public class PostsFragment extends Fragment {
         });
         recycler.setAdapter(adapter);
 
+        getDataFromDB();
 
         return rootView;
     }
@@ -173,12 +174,6 @@ public class PostsFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getDataFromDB();
-
-    }
 
     private void getDataFromDB() {
         itemList.clear();

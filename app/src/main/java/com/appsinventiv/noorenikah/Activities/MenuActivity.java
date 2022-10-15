@@ -20,7 +20,7 @@ import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 public class MenuActivity extends AppCompatActivity {
 
     Button logout;
-    RelativeLayout editProfile, requestAccepted, privacy, terms, matchMaker, invite;
+    RelativeLayout  requestAccepted, privacy, terms, matchMaker, invite, myProfile;
     RelativeLayout paymentsHistory;
     TextView verified;
 
@@ -36,7 +36,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         this.setTitle("Menu");
         paymentsHistory = findViewById(R.id.paymentsHistory);
-        editProfile = findViewById(R.id.editProfile);
+        myProfile = findViewById(R.id.myProfile);
         requestAccepted = findViewById(R.id.requestAccepted);
         verified = findViewById(R.id.verified);
         matchMaker = findViewById(R.id.matchMaker);
@@ -59,6 +59,12 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertsUtils.showTermsAlert(MenuActivity.this);
+            }
+        });
+        myProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, ViewMyProfile.class));
             }
         });
         invite.setOnClickListener(new View.OnClickListener() {
@@ -91,12 +97,7 @@ public class MenuActivity extends AppCompatActivity {
                 finish();
             }
         });
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this, EditProfile.class));
-            }
-        });
+
         requestAccepted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

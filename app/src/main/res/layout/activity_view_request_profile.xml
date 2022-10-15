@@ -281,11 +281,11 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
 
-            android:background="@drawable/btn_bg_blue_curved"
+            android:background="@drawable/btn_red_outline"
             android:enabled="false"
             android:inputType="textCapSentences"
             android:text="Request Sent"
-            android:textColor="#034EC1"
+            android:textColor="@color/colorAccent"
             android:visibility="gone" />
 
         <Button
@@ -316,9 +316,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
-                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
         </RelativeLayout>
 
     </LinearLayout>

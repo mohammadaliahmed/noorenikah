@@ -25,8 +25,9 @@
             android:textColor="#fff"
             android:visibility="gone" />
 
+
         <RelativeLayout
-            android:id="@+id/editProfile"
+            android:id="@+id/myProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -39,39 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Edit Profile"
-                android:textColor="#000"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-
-            android:layout_height="1dp"
-            android:background="#aaa" />
-
-        <RelativeLayout
-            android:id="@+id/myPosts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_margin="10dp"
-
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="My posts"
+                android:text="My Profile"
                 android:textColor="#000"
                 android:textSize="16sp" />
 

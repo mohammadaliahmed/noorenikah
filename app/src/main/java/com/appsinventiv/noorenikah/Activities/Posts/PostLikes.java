@@ -1,8 +1,11 @@
 package com.appsinventiv.noorenikah.Activities.Posts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,8 @@ import com.appsinventiv.noorenikah.Adapters.LikesAdapter;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,12 +33,17 @@ public class PostLikes extends AppCompatActivity {
     DatabaseReference mDatabase;
     private List<NewUserModel> itemList = new ArrayList<>();
     LikesAdapter adapter;
-
+    Button viewPost;
+    private AdView mAdView;
+    private AdRequest adRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_likes);
-
+        adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView = findViewById(R.id.adView);
+        mAdView.loadAd(adRequest);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -43,10 +53,19 @@ public class PostLikes extends AppCompatActivity {
         mDatabase = Constants.M_DATABASE;
         adapter = new LikesAdapter(this, itemList);
         recycler = findViewById(R.id.recycler);
+        viewPost = findViewById(R.id.viewPost);
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recycler.setAdapter(adapter);
         postId = getIntent().getStringExtra("postId");
         getDataFromDB();
+        viewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PostLikes.this, ViewPost.class);
+                i.putExtra("postId", postId);
+                startActivity(i);
+            }
+        });
 
     }
 

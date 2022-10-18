@@ -117,28 +117,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getNotificationCountFromDB() {
-        mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long notiCount = dataSnapshot.getChildrenCount();
-                if (notiCount > 0) {
-                    BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_notification);
-                    View badge = LayoutInflater.from(MainActivity.this)
-                            .inflate(R.layout.layout_noti_badge, navigation,
-                                    false);
-                    TextView text = badge.findViewById(R.id.badge_text_view);
-                    text.setText("" + notiCount);
-                    itemView.addView(badge);
-                } else {
+        if(SharedPrefs.getUser()!=null && SharedPrefs.getUser().getPhone()!=null) {
+            mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long notiCount = dataSnapshot.getChildrenCount();
+                    if (notiCount > 0) {
+                        BottomNavigationItemView itemView = navigation.findViewById(R.id.navigation_notification);
+                        View badge = LayoutInflater.from(MainActivity.this)
+                                .inflate(R.layout.layout_noti_badge, navigation,
+                                        false);
+                        TextView text = badge.findViewById(R.id.badge_text_view);
+                        text.setText("" + notiCount);
+                        itemView.addView(badge);
+                    } else {
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
     }
 
     private void getRequestDataFromDB() {

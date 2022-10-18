@@ -36,6 +36,7 @@ public class PostLikes extends AppCompatActivity {
     Button viewPost;
     private AdView mAdView;
     private AdRequest adRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +74,7 @@ public class PostLikes extends AppCompatActivity {
         mDatabase.child("PostLikes").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mDatabase.child("Posts").child(postId).child("likeCount").setValue(dataSnapshot.getChildrenCount());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String userId = snapshot.getValue(String.class);
                     getUserFromDB(userId);

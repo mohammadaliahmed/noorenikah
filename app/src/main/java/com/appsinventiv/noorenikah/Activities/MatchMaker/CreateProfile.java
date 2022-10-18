@@ -230,11 +230,7 @@ public class CreateProfile extends AppCompatActivity {
                 } else if (about.getText().length() == 0) {
                     about.setError("Enter some lines about them");
                     about.requestFocus();
-
-                } else if (livePicPath == null) {
-
-                    CommonUtils.showToast("Please upload picture");
-                } else if (!consentGiven) {
+                }  else if (!consentGiven) {
                     CommonUtils.showToast("Please accept the consent form");
                 } else {
                     uploadPicture();
@@ -316,6 +312,8 @@ public class CreateProfile extends AppCompatActivity {
     }
 
     private void uploadPicture() {
+        wholeLayout.setVisibility(View.VISIBLE);
+
         try {
             String imgName = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
@@ -352,7 +350,6 @@ public class CreateProfile extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
 
                         CommonUtils.showToast("There was some error uploading pic");
 

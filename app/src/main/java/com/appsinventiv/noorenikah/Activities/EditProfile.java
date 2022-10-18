@@ -394,7 +394,6 @@ public class EditProfile extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
 
                         CommonUtils.showToast("There was some error uploading pic");
 

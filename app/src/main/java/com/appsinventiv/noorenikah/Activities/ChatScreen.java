@@ -440,7 +440,7 @@ public class ChatScreen extends AppCompatActivity {
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getLivePicPath(),
-                otherUser.getName(),
+                otherUser.getName()==null?"Name=Unknown":otherUser.getName(),
                 otherUser.getPhone(),
                 otherUser.getLivePicPath(),
                 true,
@@ -641,7 +641,6 @@ public class ChatScreen extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
                         CommonUtils.showToast("There was some error uploading pic");
 
                     });

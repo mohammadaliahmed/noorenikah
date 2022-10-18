@@ -70,9 +70,15 @@ public class MatchMakerProfile extends AppCompatActivity {
                 startActivity(new Intent(MatchMakerProfile.this, CreateProfile.class));
             }
         });
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getMbData();
-
-
     }
 
     private void getMbData() {

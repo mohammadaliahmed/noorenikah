@@ -130,16 +130,20 @@ public class UploadProfilePicture extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         livePicPath = "" + uri;
-                                        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("livePicPath").setValue(livePicPath).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                User us = SharedPrefs.getUser();
-                                                us.setLivePicPath(livePicPath);
-                                                SharedPrefs.setUser(us);
-                                                startActivity(new Intent(UploadProfilePicture.this,CompleteProfileScreen.class));
-                                                finish();
-                                            }
-                                        });
+                                        if(SharedPrefs.getUser()!=null && SharedPrefs.getUser().getPhone()!=null) {
+                                            mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("livePicPath").setValue(livePicPath).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    User us = SharedPrefs.getUser();
+                                                    us.setLivePicPath(livePicPath);
+                                                    SharedPrefs.setUser(us);
+                                                    startActivity(new Intent(UploadProfilePicture.this, CompleteProfileScreen.class));
+                                                    finish();
+                                                }
+                                            });
+                                        }else{
+                                            CommonUtils.showToast("There is some error");
+                                        }
 
                                     }
                                 });
@@ -153,7 +157,6 @@ public class UploadProfilePicture extends AppCompatActivity {
                     .addOnFailureListener(exception -> {
                         // Handle unsuccessful uploads
                         // ...
-                        mDatabase.child("Errors").child("picUploadError").child(mDatabase.push().getKey()).setValue(exception.getMessage());
 
                         CommonUtils.showToast("There was some error uploading pic");
 

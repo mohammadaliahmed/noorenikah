@@ -415,12 +415,13 @@ public class ChatScreen extends AppCompatActivity {
                                         itemList.add(model);
                                     }
                                 }
-                                adapter.setItemList(itemList);
-                                recyclerView.scrollToPosition(itemList.size() - 1);
+
                                 mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
                                         .child(otherUserPhone).child(itemList.get(itemList.size() - 1).getId()).child("read").setValue(true);
 
                             }
+                            adapter.setItemList(itemList);
+                            recyclerView.scrollToPosition(itemList.size() - 1);
                         }
                     }
 

@@ -86,6 +86,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("msg")) {
 
             resultIntent = new Intent(this, ChatScreen.class);
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
             resultIntent.putExtra("phone", Id);
         } else if (type.equals("payout")) {
 

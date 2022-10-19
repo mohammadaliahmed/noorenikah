@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="40dp"
                 android:background="@null"
                 android:hint="Enter Message"
                 android:inputType="textCapSentences|textMultiLine"

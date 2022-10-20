@@ -51,6 +51,7 @@ public class PostsFragment extends Fragment {
     private AdRequest adRequest;
 
     ProgressBar progress;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_posts, container, false);
@@ -174,7 +175,6 @@ public class PostsFragment extends Fragment {
     }
 
 
-
     private void getDataFromDB() {
         itemList.clear();
         progress.setVisibility(View.VISIBLE);
@@ -184,7 +184,7 @@ public class PostsFragment extends Fragment {
                 progress.setVisibility(View.GONE);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel model = snapshot.getValue(PostModel.class);
-                    if (model != null && model.isApproved()) {
+                    if (model != null && model.getType()!=null) {
                         itemList.add(model);
                     }
                 }

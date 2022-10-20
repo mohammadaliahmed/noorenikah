@@ -407,19 +407,21 @@ public class ChatScreen extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null) {
                             itemList.clear();
-                            if (screenActive) {
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                                    ChatModel model = snapshot.getValue(ChatModel.class);
-                                    if (model != null && model.getMessage() != null) {
-                                        itemList.add(model);
-                                    }
+                                ChatModel model = snapshot.getValue(ChatModel.class);
+                                if (model != null && model.getMessage() != null) {
+                                    itemList.add(model);
                                 }
+                            }
+                            if (screenActive) {
+
 
                                 mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
                                         .child(otherUserPhone).child(itemList.get(itemList.size() - 1).getId()).child("read").setValue(true);
 
                             }
+
                             adapter.setItemList(itemList);
                             recyclerView.scrollToPosition(itemList.size() - 1);
                         }

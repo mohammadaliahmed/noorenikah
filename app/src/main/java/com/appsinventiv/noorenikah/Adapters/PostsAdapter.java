@@ -167,6 +167,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         });
 
 
+        if(postModel.getText().length()>100){
+
+        }
+
     }
 
     @Override

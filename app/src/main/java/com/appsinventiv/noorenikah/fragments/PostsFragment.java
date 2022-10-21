@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.Posts.AddPost;
 import com.appsinventiv.noorenikah.Adapters.PostsAdapter;
+import com.appsinventiv.noorenikah.Models.LikesModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.PostModel;
 import com.appsinventiv.noorenikah.R;
@@ -81,8 +82,11 @@ public class PostsFragment extends Fragment {
             @Override
             public void onLiked(PostModel model, boolean liked) {
                 if (liked) {
-                    mDatabase.child("PostLikes").child(model.getId())
-                            .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+                    LikesModel likesModel = new LikesModel(
+                            SharedPrefs.getUser().getPhone(), SharedPrefs.getUser().getPhone(), SharedPrefs.getUser().getName(),
+                            SharedPrefs.getUser().getLivePicPath());
+                    mDatabase.child("PostLikes").child(model.getId()).child(SharedPrefs.getUser().getPhone())
+                            .setValue(likesModel);
                     if (!model.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                         sendLikeNotification(model);
                     }
@@ -184,7 +188,7 @@ public class PostsFragment extends Fragment {
                 progress.setVisibility(View.GONE);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel model = snapshot.getValue(PostModel.class);
-                    if (model != null && model.getType()!=null) {
+                    if (model != null && model.getType() != null) {
                         itemList.add(model);
                     }
                 }

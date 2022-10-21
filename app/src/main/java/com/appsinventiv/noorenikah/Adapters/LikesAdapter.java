@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appsinventiv.noorenikah.Activities.EditProfile;
 import com.appsinventiv.noorenikah.Activities.ViewMyProfile;
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
+import com.appsinventiv.noorenikah.Models.LikesModel;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -23,19 +24,15 @@ import java.util.List;
 
 public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.ViewHolder> {
     Context context;
-    List<NewUserModel> itemList;
-
-
-    public LikesAdapter(Context context, List<NewUserModel> itemList) {
+    List<LikesModel> itemList;
+    public LikesAdapter(Context context, List<LikesModel> itemList) {
         this.context = context;
         this.itemList = itemList;
     }
-
-    public void setItemList(List<NewUserModel> itemList) {
+    public void setItemList(List<LikesModel> itemList) {
         this.itemList = itemList;
         notifyDataSetChanged();
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,12 +40,11 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.ViewHolder> 
         LikesAdapter.ViewHolder viewHolder = new LikesAdapter.ViewHolder(view);
         return viewHolder;
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        NewUserModel commentModel = itemList.get(position);
+        LikesModel commentModel = itemList.get(position);
         Glide.with(context)
-                .load(commentModel.getLivePicPath())
+                .load(commentModel.getPicUrl())
                 .placeholder(R.drawable.picked)
                 .into(holder.image);
         holder.name.setText(commentModel.getName());
@@ -64,27 +60,18 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.ViewHolder> 
                 }
             }
         });
-
     }
-
     @Override
     public int getItemCount() {
         return itemList.size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView image;
-
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             image = itemView.findViewById(R.id.image);
-
         }
     }
-
-
-
 }

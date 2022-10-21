@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.LikesAdapter;
+import com.appsinventiv.noorenikah.Models.LikesModel;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -31,7 +32,7 @@ public class PostLikes extends AppCompatActivity {
     RecyclerView recycler;
     String postId;
     DatabaseReference mDatabase;
-    private List<NewUserModel> itemList = new ArrayList<>();
+    private List<LikesModel> itemList = new ArrayList<>();
     LikesAdapter adapter;
     Button viewPost;
     private AdView mAdView;
@@ -74,29 +75,20 @@ public class PostLikes extends AppCompatActivity {
         mDatabase.child("PostLikes").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mDatabase.child("Posts").child(postId).child("likeCount").setValue(dataSnapshot.getChildrenCount());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String userId = snapshot.getValue(String.class);
-                    getUserFromDB(userId);
+                    try {
+                        LikesModel model = snapshot.getValue(LikesModel.class);
+                        if (model != null && model.getName() != null) {
+                            itemList.add(model);
+                        }
+                        adapter.setItemList(itemList);
+                        mDatabase.child("Posts").child(postId).child("likeCount").setValue(itemList.size());
+
+
+                    } catch (Exception e) {
+
+                    }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void getUserFromDB(String userId) {
-        mDatabase.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                NewUserModel model = dataSnapshot.getValue(NewUserModel.class);
-                if (model != null && model.getName() != null) {
-                    itemList.add(model);
-                }
-                adapter.setItemList(itemList);
             }
 
             @Override

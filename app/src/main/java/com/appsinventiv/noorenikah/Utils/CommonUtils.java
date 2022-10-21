@@ -30,7 +30,7 @@ public class CommonUtils {
     }
 
     public static String  getUserShareId(String phone){
-        String abc = "Z,Y,X,W,V,U,T,S,R,Q,P,O,N,M,L,K,J,I,H,G,F,E,D,C,B,A";
+        String abc = "N,Q,ex,R,V,wU,T,kxw,R,,P,T,N,M,L,K,J,I,H,G,F,Z,e,C,B,A";
         String[] abcArr=abc.split(",");
         String[] foneArr = phone.split("");
         String newProfileId="";

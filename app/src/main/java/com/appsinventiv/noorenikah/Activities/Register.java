@@ -151,7 +151,7 @@ public class Register extends AppCompatActivity {
                 city.getText().toString(),
                 sect.getText().toString(),
                 education.getText().toString(),
-                selectedMaritalStatus
+                selectedMaritalStatus, System.currentTimeMillis()
         );
         if (referralCode.getText().length() > 0) {
             ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode.getText().toString(), false);

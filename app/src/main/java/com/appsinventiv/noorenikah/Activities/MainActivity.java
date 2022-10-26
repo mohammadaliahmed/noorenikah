@@ -51,6 +51,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -401,7 +402,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         String token = task.getResult();
                         SharedPrefs.setFcmKey(token);
-                        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("fcmKey").setValue(token);
+                        HashMap<String,Object>ma=new HashMap<>();
+                        ma.put("fcmKey",token);
+                        ma.put("lastLoginTime",""+System.currentTimeMillis());
+                        mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(ma);
                     } catch (Exception e) {
                         Log.d("fcmKey", e.getMessage());
                     }

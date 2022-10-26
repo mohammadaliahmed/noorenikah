@@ -4,29 +4,31 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class User implements Serializable {
-    String name,referralCode, phone, password;
+    String name, referralCode, phone, password;
     String fcmKey;
-    String livePicPath,  belonging, houseSize, city, houseAddress,
+    String livePicPath, belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
-            maritalStatus, education, religion, cast, homeType,sect,companyName,fatherOccupation,
-            motherOccupation,about;
-    int age,income,brothers,sisters;
+            maritalStatus, education, religion, cast, homeType, sect, companyName, fatherOccupation,
+            motherOccupation, about;
+    int age, income, brothers, sisters;
     float height;
     String myReferralCode;
-    HashMap<String,String> friends,blockedMe,iBlocked;
-    boolean paid=false;
+    HashMap<String, String> friends, blockedMe, iBlocked;
+    boolean paid = false;
     boolean rejected;
-    boolean liked=false;
+    boolean liked = false;
     boolean phoneVerified;
     boolean matchMakerProfile;
     String matchMakerId;
+    long time;
+    String lastLoginTime;
 
     public User() {
     }
 
     public User(String name, String phone, String password,
                 String referralCode, String myReferralCode, String gender,
-                String city, String sect, String education,String maritalStatus
+                String city, String sect, String education, String maritalStatus, long time
     ) {
         this.name = name;
         this.phone = phone;
@@ -38,6 +40,23 @@ public class User implements Serializable {
         this.maritalStatus = maritalStatus;
         this.gender = gender;
         this.referralCode = referralCode;
+        this.time = time;
+    }
+
+    public String getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(String lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public boolean isMatchMakerProfile() {
@@ -69,7 +88,7 @@ public class User implements Serializable {
     }
 
     public HashMap<String, String> getBlockedMe() {
-        if(blockedMe==null) return new HashMap<>();
+        if (blockedMe == null) return new HashMap<>();
 
         return blockedMe;
     }
@@ -87,7 +106,7 @@ public class User implements Serializable {
     }
 
     public HashMap<String, String> getiBlocked() {
-        if(iBlocked==null) return new HashMap<>();
+        if (iBlocked == null) return new HashMap<>();
         return iBlocked;
     }
 

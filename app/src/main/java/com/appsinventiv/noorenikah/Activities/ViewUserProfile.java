@@ -251,7 +251,7 @@ public class ViewUserProfile extends AppCompatActivity {
             case R.id.action_chat:
                 if (user != null) {
                     Intent i = new Intent(ViewUserProfile.this, ChatScreen.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     i.putExtra("phone", user.getPhone());
                     startActivity(i);
                 }

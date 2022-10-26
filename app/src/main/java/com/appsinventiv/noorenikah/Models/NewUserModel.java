@@ -2,12 +2,21 @@ package com.appsinventiv.noorenikah.Models;
 
 public class NewUserModel {
     String phone,name,gender,verified,livePicPath,fcmKey,city,sect,education,maritalStatus,matchMakerId;
+    String lastLoginTime;
     boolean phoneVerified;
     boolean matchMakerProfile=false;
     boolean liked=false;
 
 
     public NewUserModel() {
+    }
+
+    public String getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(String lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     public String getMatchMakerId() {

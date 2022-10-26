@@ -95,7 +95,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             public void onClick(View view) {
                 Intent i = new Intent(context, ChatScreen.class);
                 i.putExtra("phone", model.getHisPhone());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 context.startActivity(i);
             }
         });

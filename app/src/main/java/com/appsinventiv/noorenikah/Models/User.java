@@ -22,13 +22,13 @@ public class User implements Serializable {
     String matchMakerId;
     long time;
     String lastLoginTime;
-
+    int appVersion;
     public User() {
     }
 
     public User(String name, String phone, String password,
                 String referralCode, String myReferralCode, String gender,
-                String city, String sect, String education, String maritalStatus, long time
+                String city, String sect, String education, String maritalStatus, long time,int appVersion
     ) {
         this.name = name;
         this.phone = phone;
@@ -41,6 +41,15 @@ public class User implements Serializable {
         this.gender = gender;
         this.referralCode = referralCode;
         this.time = time;
+        this.appVersion = appVersion;
+    }
+
+    public int getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(int appVersion) {
+        this.appVersion = appVersion;
     }
 
     public String getLastLoginTime() {

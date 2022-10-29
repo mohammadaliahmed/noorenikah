@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
@@ -151,7 +152,8 @@ public class Register extends AppCompatActivity {
                 city.getText().toString(),
                 sect.getText().toString(),
                 education.getText().toString(),
-                selectedMaritalStatus, System.currentTimeMillis()
+                selectedMaritalStatus, System.currentTimeMillis(),
+                BuildConfig.VERSION_CODE
         );
         if (referralCode.getText().length() > 0) {
             ReferralCodePaidModel codePaid = new ReferralCodePaidModel(ph, referralCode.getText().toString(), false);

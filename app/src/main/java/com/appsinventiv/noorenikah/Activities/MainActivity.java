@@ -2,10 +2,15 @@ package com.appsinventiv.noorenikah.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,10 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
 import com.appsinventiv.noorenikah.R;
@@ -60,19 +67,17 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     public static BottomNavigationView navigation;
     Button buy;
-    RelativeLayout notificationsView;
     ImageView search, menuImg;
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
     boolean firstTimeShow = false;
     PromotionBanner promotionBanner;
-    TextView notificationCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        String myReferralCode = CommonUtils.getRandomCode(7);
+
         search = findViewById(R.id.search);
         menuImg = findViewById(R.id.menu);
         mDatabase = Constants.M_DATABASE;
@@ -115,10 +120,56 @@ public class MainActivity extends AppCompatActivity {
             showNotificationAlertAlert();
         }
         getBannerFromDB();
+        getVersionCOdeFromDB();
+    }
+
+    private void getVersionCOdeFromDB() {
+        mDatabase.child("Admin").child("versionCode").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Integer code = dataSnapshot.getValue(Integer.class);
+                PackageInfo pInfo = null;
+                try {
+                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    String version = pInfo.versionName;
+                    int verCode = pInfo.versionCode;
+                    if (code > verCode) {
+                        showUpdateAlert();
+                    } else {
+
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showUpdateAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Version Alert!!");
+        builder.setMessage("There is a new version available on play store\nPlease update for new features ");
+        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.appsinventiv.noorenikah"));
+                startActivity(i);
+            }
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void getNotificationCountFromDB() {
-        if(SharedPrefs.getUser()!=null && SharedPrefs.getUser().getPhone()!=null) {
+        if (SharedPrefs.getUser() != null && SharedPrefs.getUser().getPhone() != null) {
             mDatabase.child("Notifications").child(SharedPrefs.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -195,10 +246,13 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(layout);
         TextView title = layout.findViewById(R.id.title);
         TextView message = layout.findViewById(R.id.message);
-        Button close = layout.findViewById(R.id.close);
+        ImageView close = layout.findViewById(R.id.close);
 
         title.setText(Constants.MARKETING_MSG_TITLE);
         message.setText(Constants.MARKETING_MSG_MESSAGE);
+        message.setMovementMethod(new ScrollingMovementMethod());
+
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -402,9 +456,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         String token = task.getResult();
                         SharedPrefs.setFcmKey(token);
-                        HashMap<String,Object>ma=new HashMap<>();
-                        ma.put("fcmKey",token);
-                        ma.put("lastLoginTime",""+System.currentTimeMillis());
+                        HashMap<String, Object> ma = new HashMap<>();
+                        ma.put("currentAppVersion", BuildConfig.VERSION_CODE);
+                        ma.put("fcmKey", token);
+                        ma.put("lastLoginTime", "" + System.currentTimeMillis());
                         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(ma);
                     } catch (Exception e) {
                         Log.d("fcmKey", e.getMessage());

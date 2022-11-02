@@ -80,12 +80,13 @@
         <activity
             android:name=".Activities.ChatScreen"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.VerifyPe.NoActionBar">
-            <!--                        <intent-filter>-->
-            <!--                            <action android:name="android.intent.action.MAIN" />-->
+<!--                                    <intent-filter>-->
+<!--                                        <action android:name="android.intent.action.MAIN" />-->
 
-            <!--                            <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--                        </intent-filter>-->
+<!--                                        <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                                    </intent-filter>-->
         </activity>
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />

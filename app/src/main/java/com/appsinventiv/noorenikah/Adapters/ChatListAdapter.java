@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -55,29 +56,36 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 .load(model.getHisPic())
                 .placeholder(R.drawable.picked)
                 .into(holder.picture);
-        if (model.isRead()) {
+        if (BuildConfig.VERSION_CODE > 22) {
+            if (model.getStatus() != null && model.getStatus().equalsIgnoreCase("read")) {
+                holder.unreadDot.setVisibility(View.GONE);
+                holder.name.setTypeface(null, Typeface.NORMAL);
+                holder.message.setTypeface(null, Typeface.NORMAL);
+                holder.time.setTypeface(null, Typeface.NORMAL);
+            } else {
+                holder.unreadDot.setVisibility(View.VISIBLE);
+                holder.name.setTypeface(null, Typeface.BOLD);
+                holder.message.setTypeface(null, Typeface.BOLD);
+                holder.time.setTypeface(null, Typeface.BOLD);
+                countUnreadChats++;
+            }
+        }else{
             holder.unreadDot.setVisibility(View.GONE);
             holder.name.setTypeface(null, Typeface.NORMAL);
             holder.message.setTypeface(null, Typeface.NORMAL);
             holder.time.setTypeface(null, Typeface.NORMAL);
-        } else {
-            holder.unreadDot.setVisibility(View.VISIBLE);
-            holder.name.setTypeface(null, Typeface.BOLD);
-            holder.message.setTypeface(null, Typeface.BOLD);
-            holder.time.setTypeface(null, Typeface.BOLD);
-            countUnreadChats++;
         }
-        if(countUnreadChats>0) {
+        if (countUnreadChats > 0) {
             MainActivity.showBadge(context, "" + countUnreadChats);
-        }else{
+        } else {
             MainActivity.removeBadge();
 
         }
 
         holder.name.setText(model.getHisName());
         holder.time.setText(CommonUtils.getFormattedDate(model.getTime()));
-        String msg="";
-        if(model.getType()!=null) {
+        String msg = "";
+        if (model.getType() != null) {
             if (model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_AUDIO)) {
                 msg = "\uD83C\uDFB5 Audio";
             } else if (model.getType().equalsIgnoreCase(Constants.MESSAGE_TYPE_IMAGE)) {
@@ -85,17 +93,17 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             } else {
                 msg = model.getMessage();
             }
-        }else{
+        } else {
             msg = model.getMessage();
         }
-        holder.message.setText(model.getName() + ": " +msg);
+        holder.message.setText(model.getName() + ": " + msg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, ChatScreen.class);
                 i.putExtra("phone", model.getHisPhone());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });

@@ -20,6 +20,7 @@ import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Adapters.ChatListAdapter;
 import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,43 +36,57 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ChatFragment extends Fragment {
-
-
     private View rootView;
     HashMap<String, ChatModel> itemMap=new HashMap<>();
     RecyclerView recyclerView;
     private DatabaseReference mDatabase;
     ChatListAdapter adapter;
     private List<ChatModel> itemList=new ArrayList<>();
-    private HashMap<String,String> itemMapVal=new HashMap<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        mDatabase = Constants.M_DATABASE;
         recyclerView=rootView.findViewById(R.id.recyclerView);
         adapter=new ChatListAdapter(getContext(),itemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adapter);
-        getDataFromDB();
 
+        itemMap=SharedPrefs.getChatMap();
+        if(itemMap==null){
+            itemMap=new HashMap<>();
+            itemList=new ArrayList<>(itemMap.values());
+            adapter.setItemList(itemList);
+        }else{
+            itemList=new ArrayList<>(itemMap.values());
+            Collections.sort(itemList, new Comparator<ChatModel>() {
+                @Override
+                public int compare(ChatModel listData, ChatModel t1) {
+                    Long ob1 = listData.getTime();
+                    Long ob2 = t1.getTime();
+                    return ob2.compareTo(ob1);
+                }
+            });
+            adapter.setItemList(itemList);
+        }
+        getDataFromDB();
         return rootView;
     }
 
     private void getDataFromDB() {
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                itemList.clear();
+                itemMap=new HashMap<>();
                 if(dataSnapshot.getValue()!=null){
                     for (DataSnapshot phoneNumbers:dataSnapshot.getChildren()) {
                         for (DataSnapshot msgs:phoneNumbers.getChildren()){
                             ChatModel model=msgs.getValue(ChatModel.class);
                             itemMap.put(phoneNumbers.getKey(),model);
-//                            itemMapVal.put(phoneNumbers.getKey(),phoneNumbers.getKey());
-
                         }
                     }
-//                    SharedPrefs.setReadMap(itemMapVal);
                     itemList=new ArrayList<>(itemMap.values());
                     Collections.sort(itemList, new Comparator<ChatModel>() {
                         @Override
@@ -83,7 +98,11 @@ public class ChatFragment extends Fragment {
                         }
                     });
                     adapter.setItemList(itemList);
+                    SharedPrefs.setChatMap(itemMap);
 
+
+                }else{
+                    SharedPrefs.setChatMap(itemMap);
                 }
             }
 
@@ -97,7 +116,9 @@ public class ChatFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-       adapter.notifyDataSetChanged();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

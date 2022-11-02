@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/drawable/btn_red_outline.xml" value="0.1205" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/drawable/edit_text_curved.xml" value="0.1565" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/drawable/mic_bg_red.xml" value="0.1565" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/drawable/red_mic_bg.xml" value="0.1565" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout-v23/activity_chat_screen.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/activity_add_post.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/activity_chat_screen.xml" value="0.24722222222222223" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/activity_comments.xml" value="0.18055555555555555" />
@@ -15,7 +19,9 @@
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/alert_dialog_notification.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/fragment_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/item_container.xml" value="0.25416666666666665" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/left_chat_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/post_item_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/right_chat_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/user_item_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/layout/user_post_item_layout.xml" value="0.18055555555555555" />
         <entry key="..\:/android projects/noonikahNew/app/src/main/res/menu/main_menu.xml" value="0.18055555555555555" />

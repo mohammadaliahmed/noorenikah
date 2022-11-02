@@ -3,6 +3,9 @@ package com.appsinventiv.noorenikah.Utils;
 import android.app.Application;
 import android.content.Context;
 
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
+
 public class ApplicationClass extends Application {
     private static ApplicationClass instance;
 
@@ -15,6 +18,9 @@ public class ApplicationClass extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        EmojiManager.install(new GoogleEmojiProvider());
+
+
 
     }
 

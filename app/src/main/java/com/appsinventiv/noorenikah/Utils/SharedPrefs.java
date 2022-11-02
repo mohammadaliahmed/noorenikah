@@ -3,6 +3,7 @@ package com.appsinventiv.noorenikah.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
@@ -19,40 +20,19 @@ public class SharedPrefs {
 
     }
 
-    public static void setReadMap(HashMap<String, String> itemList) {
 
-        Gson gson = new Gson();
-        String json = gson.toJson(itemList);
-        preferenceSetter("unread", json);
-    }
-
-    public static HashMap<String, String> getReadMap() {
-        Gson gson = new Gson();
-        HashMap<String, String> playersList = (HashMap<String, String>) gson.fromJson(preferenceGetter("unread"),
-                new TypeToken<HashMap<String, String>>() {
-                }.getType());
-        return playersList;
-    }
-
-
-    public static void setPromotionalBanner(PromotionBanner banner) {
+    public static void setPromotionalBanner(PromotionBanner banner,String Key) {
 
         Gson gson = new Gson();
         String json = gson.toJson(banner);
-        preferenceSetter("setPromotionalBanner", json);
+        preferenceSetter(Key, json);
     }
 
-    public static PromotionBanner getPromotionalBanner() {
+    public static PromotionBanner getPromotionalBanner(String key) {
         Gson gson = new Gson();
-        return gson.fromJson(preferenceGetter("setPromotionalBanner"),PromotionBanner.class);
+        return gson.fromJson(preferenceGetter(key),PromotionBanner.class);
 
     }
-
-
-
-
-
-
 
     public static void setLikedMap(HashMap<String, String> itemList) {
 
@@ -68,6 +48,24 @@ public class SharedPrefs {
                 }.getType());
         return playersList;
     }
+
+
+
+    public static void setChatMap(HashMap<String, ChatModel> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("getChatMap", json);
+    }
+
+    public static HashMap<String, ChatModel> getChatMap() {
+        Gson gson = new Gson();
+        HashMap<String, ChatModel> playersList = (HashMap<String, ChatModel>) gson.fromJson(preferenceGetter("getChatMap"),
+                new TypeToken<HashMap<String, ChatModel>>() {
+                }.getType());
+        return playersList;
+    }
+
 
 
     public static void setPostLikedMap(HashMap<String, String> itemList) {
@@ -96,6 +94,20 @@ public class SharedPrefs {
         Gson gson = new Gson();
         List<NewUserModel> playersList = (List<NewUserModel>) gson.fromJson(preferenceGetter("setUsersList"),
                 new TypeToken<List<NewUserModel>>() {
+                }.getType());
+        return playersList;
+    }
+ public static void setChatList(List<ChatModel> itemList,String key) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("setChatList"+key, json);
+    }
+
+    public static List<ChatModel> getChatList(String key) {
+        Gson gson = new Gson();
+        List<ChatModel> playersList = (List<ChatModel>) gson.fromJson(preferenceGetter("setChatList"+key),
+                new TypeToken<List<ChatModel>>() {
                 }.getType());
         return playersList;
     }
@@ -204,8 +216,8 @@ public class SharedPrefs {
     public static void logout() {
         SharedPreferences pref = ApplicationClass.getInstance().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.apply();
+        editor.clear().apply();
+
 
     }
 }

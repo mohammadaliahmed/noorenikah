@@ -15,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ViewPictures;
@@ -138,7 +139,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
             holder.message.setText(model.getMessage());
 
         }
+        if (model.getStatus() != null) {
+            holder.msgStatus.setVisibility(View.VISIBLE);
+            try {
+                if (model.getStatus().equalsIgnoreCase("seen")) {
+                    Glide.with(context).load(R.drawable.seen).into(holder.msgStatus);
+                } else {
+                    Glide.with(context).load(R.drawable.sent).into(holder.msgStatus);
 
+                }
+
+            } catch (Exception e) {
+
+            }
+
+        } else {
+            holder.msgStatus.setVisibility(View.GONE);
+        }
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,11 +272,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         mPlayingPosition = -1;
     }
 
-//    public void stopPlayer() {
-//        if (null != mediaPlayer) {
-//            releaseMediaPlayer();
-//        }
-//    }
+
 
     private void performPlayButtonClick(ChatModel recordingItem, ViewHolder myViewHolder) {
 
@@ -283,9 +296,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
                     }
                     if (recordingItem.getSenderId().equals(SharedPrefs.getUser().getPhone())) {
 
-                        updateNonPlayingView(mAudioPlayingHolder,"right");
-                    }else{
-                        updateNonPlayingView(mAudioPlayingHolder,"left");
+                        updateNonPlayingView(mAudioPlayingHolder, "right");
+                    } else {
+                        updateNonPlayingView(mAudioPlayingHolder, "left");
 
                     }
                 }
@@ -328,12 +341,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         ImageView picture, image, playPause;
         RelativeLayout audio;
         SeekBar seekBar;
+        ImageView msgStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             picture = itemView.findViewById(R.id.picture);
             image = itemView.findViewById(R.id.image);
             audio = itemView.findViewById(R.id.audio);
+            msgStatus = itemView.findViewById(R.id.msgStatus);
             seekBar = itemView.findViewById(R.id.seek);
             playPause = itemView.findViewById(R.id.playPause);
             audioTime = itemView.findViewById(R.id.audioTime);

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -27,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.ArraySet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,18 +64,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiPopup;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatScreen extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 23;
     String mFileName;
-    EditText message;
+    EmojiEditText message;
     ImageView send;
     private DatabaseReference mDatabase;
     String msg = "";
@@ -101,6 +106,10 @@ public class ChatScreen extends AppCompatActivity {
     RelativeLayout messagingArea;
     private MediaRecorder mRecorder;
     private String recordingLocalUrl;
+    ViewGroup rootView;
+
+    ImageView emoji;
+    EmojiPopup emojiPopup;
 
     @Override
     protected void onResume() {
@@ -119,12 +128,20 @@ public class ChatScreen extends AppCompatActivity {
 
         }
         getPermissions();
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        rootView = findViewById(R.id.main_activity_root_view);
+
+        emoji = findViewById(R.id.emoji);
         messagingArea = findViewById(R.id.messagingArea);
         recordingArea = findViewById(R.id.recordingArea);
         recordView = (RecordView) findViewById(R.id.record_view);
         recordButton = (RecordButton) findViewById(R.id.record_button);
         SetupFileName();
         setUpRecord();
+
 
 //IMPORTANT
         adRequest = new AdRequest.Builder().build();
@@ -232,9 +249,14 @@ public class ChatScreen extends AppCompatActivity {
         KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
             public void onToggleSoftKeyboard(boolean isVisible) {
+                if (isVisible) {
+
+                } else {
+                    params.setMargins(0, 0, 150, 0);
+                    messagingArea.setLayoutParams(params);
+                }
+                recordButton.setVisibility(View.VISIBLE);
                 recyclerView.scrollToPosition(itemList.size() - 1);
-
-
             }
         });
 
@@ -260,7 +282,42 @@ public class ChatScreen extends AppCompatActivity {
 
             }
         });
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView).build(message);
+        emoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toggles visibility of the Popup.
+
+
+                if (emojiPopup.isShowing()) {
+                    emojiPopup.dismiss();
+                    params.setMargins(0, 0, 150, 0);
+                    messagingArea.setLayoutParams(params);
+                    recordButton.setVisibility(View.VISIBLE);
+
+                } else {
+                    emojiPopup.toggle();
+
+                    params.setMargins(0, 0, 150, 70);
+                    messagingArea.setLayoutParams(params);
+                    recordButton.setVisibility(View.INVISIBLE);
+
+
+                }
+
+            }
+        });
         getOtherUserFromDb();
+
+        itemList = SharedPrefs.getChatList(otherUserPhone);
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+
+        }
+        adapter.setItemList(itemList);
+        recyclerView.scrollToPosition(itemList.size() - 1);
+
+
         getDataFromDb();
 
     }
@@ -306,7 +363,7 @@ public class ChatScreen extends AppCompatActivity {
             public void onCancel() {
                 //On Swipe To Cancel
                 Log.d("RecordView", "onCancel");
-                if(mRecorder!=null) {
+                if (mRecorder != null) {
                     mRecorder.release();
                 }
                 mRecorder = null;
@@ -400,30 +457,41 @@ public class ChatScreen extends AppCompatActivity {
     }
 
     private void getDataFromDb() {
-
         mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
-                .child(otherUserPhone).limitToLast(100).addValueEventListener(new ValueEventListener() {
+                .child(otherUserPhone).limitToLast(150).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        itemList.clear();
                         if (dataSnapshot.getValue() != null) {
-                            itemList.clear();
+
+                            List<String> unreadList = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                                 ChatModel model = snapshot.getValue(ChatModel.class);
                                 if (model != null && model.getMessage() != null) {
                                     itemList.add(model);
+                                    if (!model.getSenderId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())
+                                            && model.getStatus() != null && model.getStatus().equalsIgnoreCase("sent")) {
+
+                                        unreadList.add(model.getId());
+                                    }
                                 }
-                            }
-                            if (screenActive) {
-
-
-                                mDatabase.child("Chats").child(SharedPrefs.getUser().getPhone())
-                                        .child(otherUserPhone).child(itemList.get(itemList.size() - 1).getId()).child("read").setValue(true);
-
                             }
 
                             adapter.setItemList(itemList);
+                            SharedPrefs.setChatList(itemList, otherUserPhone);
                             recyclerView.scrollToPosition(itemList.size() - 1);
+                            if (screenActive) {
+                                for (String item : unreadList) {
+                                    mDatabase.child("Chats")
+                                            .child(otherUserPhone)
+                                            .child(SharedPrefs.getUser().getPhone())
+                                            .child(item).child("status").setValue("seen");
+
+                                }
+                            }
+                        } else {
+                            SharedPrefs.setChatList(itemList, otherUserPhone);
                         }
                     }
 
@@ -439,14 +507,14 @@ public class ChatScreen extends AppCompatActivity {
         String key = "" + System.currentTimeMillis();
         ChatModel myModel = new ChatModel(key, msg, SharedPrefs.getUser().getPhone(), otherUserPhone,
                 SharedPrefs.getUser().getName(),
-                SharedPrefs.getUser().getLivePicPath()==null?"":SharedPrefs.getUser().getLivePicPath(),
+                SharedPrefs.getUser().getLivePicPath() == null ? "" : SharedPrefs.getUser().getLivePicPath(),
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getLivePicPath(),
-                otherUser.getName()==null?"Name=Unknown":otherUser.getName(),
+                otherUser.getName() == null ? "Name=Unknown" : otherUser.getName(),
                 otherUser.getPhone(),
                 otherUser.getLivePicPath(),
-                true,
+                "sent",
                 System.currentTimeMillis(), type,
                 livePicPath, livePicPath, livePicPath,
                 recordingTime
@@ -467,7 +535,7 @@ public class ChatScreen extends AppCompatActivity {
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getLivePicPath(),
-                false,
+                "sent",
                 System.currentTimeMillis(),
                 type,
                 livePicPath, livePicPath, livePicPath,
@@ -592,7 +660,7 @@ public class ChatScreen extends AppCompatActivity {
                             otherUser.getName(),
                             otherUser.getPhone(),
                             otherUser.getLivePicPath(),
-                            true,
+                            "sent",
                             System.currentTimeMillis(), Constants.MESSAGE_TYPE_IMAGE,
                             imageUrl, livePicPath, livePicPath,
                             recordingTime
@@ -758,7 +826,7 @@ public class ChatScreen extends AppCompatActivity {
                     otherUser.getName(),
                     otherUser.getPhone(),
                     otherUser.getLivePicPath(),
-                    true,
+                    "sent",
                     System.currentTimeMillis(), Constants.MESSAGE_TYPE_AUDIO,
                     "", livePicPath, fileNam,
                     recordingTime

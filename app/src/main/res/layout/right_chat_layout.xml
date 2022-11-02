@@ -28,75 +28,88 @@
             android:layout_gravity="center"
 
             android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/msgStatus"
+            android:layout_width="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/sent"
+            android:layout_height="15dp"/>
+
     </LinearLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
+        android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/pictureArea"
         android:background="@drawable/right_msg_bg"
         android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="200dp"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
         <RelativeLayout
-            android:id="@+id/audio"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:visibility="visible">
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/playPause"
-                android:layout_width="30dp"
-                android:padding="2dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/play_btn_red"
-                android:visibility="visible" />
-
-            <SeekBar
-                android:id="@+id/seek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="12dp"
-                android:maxHeight="1.5dp"
-                android:progressDrawable="@drawable/progress"
-                android:thumb="@drawable/seekbar_thumb_right" />
+                android:id="@+id/image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
 
             <TextView
-                android:id="@+id/audioTime"
-
+                android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/seek"
-                android:layout_marginLeft="40dp"
-                android:text="0.5"
-                android:textColor="@color/colorAccent"
-                android:textSize="10sp" />
+                android:maxWidth="200dp"
+                android:text=""
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/audio"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+
+                <ImageView
+                    android:id="@+id/playPause"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:src="@drawable/play_btn_red"
+                    android:visibility="visible" />
+
+                <SeekBar
+                    android:id="@+id/seek"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="12dp"
+                    android:maxHeight="1.5dp"
+                    android:progressDrawable="@drawable/progress"
+                    android:thumb="@drawable/seekbar_thumb_right" />
+
+                <TextView
+                    android:id="@+id/audioTime"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/seek"
+                    android:layout_marginLeft="40dp"
+                    android:text="0.5"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="10sp" />
+            </RelativeLayout>
         </RelativeLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

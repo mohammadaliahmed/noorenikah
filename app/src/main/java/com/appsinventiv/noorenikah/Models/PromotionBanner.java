@@ -1,14 +1,17 @@
 package com.appsinventiv.noorenikah.Models;
 
 public class PromotionBanner {
-    String url,imgUrl;
-
-    public PromotionBanner(String url, String imgUrl) {
-        this.url = url;
-        this.imgUrl = imgUrl;
-    }
+    String url,imgUrl,placement;
 
     public PromotionBanner() {
+    }
+
+    public String getPlacement() {
+        return placement;
+    }
+
+    public void setPlacement(String placement) {
+        this.placement = placement;
     }
 
     public String getUrl() {

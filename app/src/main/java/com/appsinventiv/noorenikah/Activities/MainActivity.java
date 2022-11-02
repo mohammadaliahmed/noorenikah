@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
     boolean firstTimeShow = false;
-    PromotionBanner promotionBanner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,8 +224,13 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("PromotionalBanner").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                promotionBanner = dataSnapshot.getValue(PromotionBanner.class);
-                SharedPrefs.setPromotionalBanner(promotionBanner);
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+
+                    PromotionBanner promotionBanner = snapshot.getValue(PromotionBanner.class);
+
+                    SharedPrefs.setPromotionalBanner(promotionBanner,promotionBanner.getPlacement());
+                }
+
 
             }
 

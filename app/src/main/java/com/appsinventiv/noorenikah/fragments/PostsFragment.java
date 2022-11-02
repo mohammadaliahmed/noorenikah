@@ -65,8 +65,8 @@ public class PostsFragment extends Fragment {
         mDatabase = Constants.M_DATABASE;
         promotionBanner = rootView.findViewById(R.id.promotionBanner);
 
-        if (SharedPrefs.getPromotionalBanner() != null) {
-            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner().getImgUrl())
+        if (SharedPrefs.getPromotionalBanner("postsScreen") != null) {
+            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner("postsScreen").getImgUrl())
                     .into(promotionBanner);
         }
         addPost = rootView.findViewById(R.id.addPost);
@@ -80,7 +80,7 @@ public class PostsFragment extends Fragment {
         promotionBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner().getUrl()));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner("postsScreen").getUrl()));
                 getContext().startActivity(i);
             }
         });

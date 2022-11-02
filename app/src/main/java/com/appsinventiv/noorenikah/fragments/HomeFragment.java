@@ -75,8 +75,8 @@ public class HomeFragment extends Fragment {
         mAdView.loadAd(adRequest);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        if (SharedPrefs.getPromotionalBanner() != null) {
-            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner().getImgUrl())
+        if (SharedPrefs.getPromotionalBanner("usersScreen") != null) {
+            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner("usersScreen").getImgUrl())
                     .into(promotionBanner);
 
         }
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
         promotionBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner().getUrl()));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner("usersScreen").getUrl()));
                 getContext().startActivity(i);
             }
         });

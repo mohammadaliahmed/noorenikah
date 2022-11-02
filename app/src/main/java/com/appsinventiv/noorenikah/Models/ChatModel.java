@@ -4,7 +4,7 @@ public class ChatModel {
     String id, message, senderId, sendTo, name, picUrl, myName, myPic, hisName, hisPic,
             myPhone, hisPhone;
     long time;
-    boolean read;
+    String status;
     String type, imageUrl,videoUrl,audioUrl;
     long mediaTime;
 
@@ -16,7 +16,7 @@ public class ChatModel {
 
     public ChatModel(String id, String message, String senderId, String sendTo, String name, String picUrl,
                      String myName, String myPic, String myPhone, String hisName, String hisPhone, String hisPic,
-                     boolean read,
+                     String status,
                      long time, String type, String imageUrl, String videoUrl, String audioUrl,long mediaTime) {
         this.id = id;
         this.message = message;
@@ -28,7 +28,7 @@ public class ChatModel {
         this.type = type;
         this.myName = myName;
         this.myPic = myPic;
-        this.read = read;
+        this.status = status;
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
         this.audioUrl = audioUrl;
@@ -37,6 +37,14 @@ public class ChatModel {
         this.hisPhone = hisPhone;
         this.mediaTime = mediaTime;
         this.myPhone = myPhone;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getMediaTime() {
@@ -79,13 +87,7 @@ public class ChatModel {
         this.type = type;
     }
 
-    public boolean isRead() {
-        return read;
-    }
 
-    public void setRead(boolean read) {
-        this.read = read;
-    }
 
     public String getMyPhone() {
         return myPhone;

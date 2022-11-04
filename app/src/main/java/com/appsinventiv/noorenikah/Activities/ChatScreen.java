@@ -436,25 +436,27 @@ public class ChatScreen extends AppCompatActivity {
     }
 
     private void getOtherUserFromDb() {
-        mDatabase.child("Users").child(otherUserPhone).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Users").child(otherUserPhone).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    otherUser = dataSnapshot.getValue(User.class);
-                    name.setText(otherUser.getName());
-                    try {
-                        Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
-                                .placeholder(R.drawable.picked).into(picture);
-                        if (otherUser.getLastLoginTime() != null) {
-                            if (otherUser.getLastLoginTime().equalsIgnoreCase("online")) {
-                                userStatus.setText("Online");
-                            } else {
-                                long time = Long.parseLong(otherUser.getLastLoginTime());
-                                userStatus.setText("Last active: " + CommonUtils.getFormattedDate(time));
+                    if(screenActive) {
+                        otherUser = dataSnapshot.getValue(User.class);
+                        name.setText(otherUser.getName());
+                        try {
+                            Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
+                                    .placeholder(R.drawable.picked).into(picture);
+                            if (otherUser.getLastLoginTime() != null) {
+                                if (otherUser.getLastLoginTime().equalsIgnoreCase("online")) {
+                                    userStatus.setText("Online");
+                                } else {
+                                    long time = Long.parseLong(otherUser.getLastLoginTime());
+                                    userStatus.setText("Last active: " + CommonUtils.getFormattedDate(time));
+                                }
                             }
-                        }
-                    } catch (Exception e) {
+                        } catch (Exception e) {
 
+                        }
                     }
                 }
             }

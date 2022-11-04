@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
+import com.appsinventiv.noorenikah.Adapters.MainSliderAdapter;
 import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.User;
@@ -50,12 +53,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +126,40 @@ public class MainActivity extends AppCompatActivity {
         }
         getBannerFromDB();
         getVersionCOdeFromDB();
+        if (SharedPrefs.getDemoShown().equalsIgnoreCase("")) {
+            showHowToUse();
+        }
+    }
+
+    private void showHowToUse() {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_demo, null);
+        dialog.setContentView(layout);
+        DotsIndicator dotsIndicator = layout.findViewById(R.id.dots);
+        ViewPager viewPager = layout.findViewById(R.id.viewpager);
+        ImageView close = layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                SharedPrefs.setDemoShown("true");
+            }
+        });
+        ArrayList<Integer> pics = new ArrayList<>();
+        pics.add(R.drawable.img1);
+        pics.add(R.drawable.img2);
+        pics.add(R.drawable.img3);
+        pics.add(R.drawable.img4);
+        pics.add(R.drawable.img5);
+        pics.add(R.drawable.img6);
+        MainSliderAdapter mViewPagerAdapter = new MainSliderAdapter(this, pics);
+        viewPager.setAdapter(mViewPagerAdapter);
+        dotsIndicator.setViewPager(viewPager);
+        dialog.show();
+
     }
 
     private void getVersionCOdeFromDB() {
@@ -224,13 +263,16 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("PromotionalBanner").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                try {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    PromotionBanner promotionBanner = snapshot.getValue(PromotionBanner.class);
+                        PromotionBanner promotionBanner = snapshot.getValue(PromotionBanner.class);
 
-                    SharedPrefs.setPromotionalBanner(promotionBanner,promotionBanner.getPlacement());
+                        SharedPrefs.setPromotionalBanner(promotionBanner, promotionBanner.getPlacement());
+                    }
+                } catch (Exception e) {
+
                 }
-
 
             }
 
@@ -464,7 +506,6 @@ public class MainActivity extends AppCompatActivity {
                         HashMap<String, Object> ma = new HashMap<>();
                         ma.put("currentAppVersion", BuildConfig.VERSION_CODE);
                         ma.put("fcmKey", token);
-                        ma.put("lastLoginTime", "" + System.currentTimeMillis());
                         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).updateChildren(ma);
                     } catch (Exception e) {
                         Log.d("fcmKey", e.getMessage());

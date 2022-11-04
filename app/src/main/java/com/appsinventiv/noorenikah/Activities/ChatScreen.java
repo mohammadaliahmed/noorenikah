@@ -110,6 +110,7 @@ public class ChatScreen extends AppCompatActivity {
 
     ImageView emoji;
     EmojiPopup emojiPopup;
+    TextView userStatus;
 
     @Override
     protected void onResume() {
@@ -135,6 +136,7 @@ public class ChatScreen extends AppCompatActivity {
         rootView = findViewById(R.id.main_activity_root_view);
 
         emoji = findViewById(R.id.emoji);
+        userStatus = findViewById(R.id.userStatus);
         messagingArea = findViewById(R.id.messagingArea);
         recordingArea = findViewById(R.id.recordingArea);
         recordView = (RecordView) findViewById(R.id.record_view);
@@ -443,6 +445,14 @@ public class ChatScreen extends AppCompatActivity {
                     try {
                         Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())
                                 .placeholder(R.drawable.picked).into(picture);
+                        if (otherUser.getLastLoginTime() != null) {
+                            if (otherUser.getLastLoginTime().equalsIgnoreCase("online")) {
+                                userStatus.setText("Online");
+                            } else {
+                                long time = Long.parseLong(otherUser.getLastLoginTime());
+                                userStatus.setText("Last active: " + CommonUtils.getFormattedDate(time));
+                            }
+                        }
                     } catch (Exception e) {
 
                     }

@@ -20,7 +20,7 @@ import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 public class MenuActivity extends AppCompatActivity {
 
     Button logout;
-    RelativeLayout  requestAccepted, privacy, terms, matchMaker, invite, myProfile;
+    RelativeLayout requestAccepted, privacy, terms, matchMaker, invite, myProfile, contactAdmin;
     RelativeLayout paymentsHistory;
     TextView verified;
 
@@ -35,6 +35,7 @@ public class MenuActivity extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         this.setTitle("Menu");
+        contactAdmin = findViewById(R.id.contactAdmin);
         paymentsHistory = findViewById(R.id.paymentsHistory);
         myProfile = findViewById(R.id.myProfile);
         requestAccepted = findViewById(R.id.requestAccepted);
@@ -111,6 +112,12 @@ public class MenuActivity extends AppCompatActivity {
             verified.setVisibility(View.VISIBLE);
         }
         verified.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, VerifyPhone.class));
+            }
+        });
+        contactAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MenuActivity.this, VerifyPhone.class));

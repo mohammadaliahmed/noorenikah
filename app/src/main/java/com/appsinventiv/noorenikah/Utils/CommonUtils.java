@@ -7,6 +7,8 @@ import android.text.format.DateFormat;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.security.SecureRandom;
 import java.util.Calendar;
 
@@ -29,18 +31,18 @@ public class CommonUtils {
         });
     }
 
-    public static String  getUserShareId(String phone){
+    public static String getUserShareId(String phone) {
         String abc = "N,Q,ex,R,V,wU,T,kxw,R,,P,T,N,M,L,K,J,I,H,G,F,Z,e,C,B,A";
-        String[] abcArr=abc.split(",");
+        String[] abcArr = abc.split(",");
         String[] foneArr = phone.split("");
-        String newProfileId="";
+        String newProfileId = "";
         for (int i = 0; i < foneArr.length; i++) {
-            newProfileId=newProfileId+foneArr[i]+abcArr[i];
+            newProfileId = newProfileId + foneArr[i] + abcArr[i];
         }
         return newProfileId;
     }
 
-    public static String cleanUserId(String id){
+    public static String cleanUserId(String id) {
         return id.replaceAll("[^\\d.]", "");
     }
 
@@ -83,6 +85,7 @@ public class CommonUtils {
         return DateFormat.format("dd MMM , h:mm aa", smsTime).toString();
 
     }
+
     public static String getDuration(long seconds) {
         seconds = (seconds / 1000);
         long s = seconds % 60;
@@ -92,4 +95,10 @@ public class CommonUtils {
     }
 
 
+    public static void sendCustomerStatus(String online) {
+        if (SharedPrefs.getUser() != null) {
+            DatabaseReference mDatabase = Constants.M_DATABASE;
+            mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("lastLoginTime").setValue(online);
+        }
+    }
 }

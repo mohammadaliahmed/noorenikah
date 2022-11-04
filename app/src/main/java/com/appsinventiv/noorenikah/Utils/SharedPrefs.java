@@ -130,12 +130,12 @@ public class SharedPrefs {
     }
 
 
-    public static String getLat() {
-        return preferenceGetter("getLat");
+    public static String getDemoShown() {
+        return preferenceGetter("getDemoShown");
     }
 
-    public static void setLat(String username) {
-        preferenceSetter("getLat", username);
+    public static void setDemoShown(String username) {
+        preferenceSetter("getDemoShown", username);
     }
 
     public static String getPhone() {

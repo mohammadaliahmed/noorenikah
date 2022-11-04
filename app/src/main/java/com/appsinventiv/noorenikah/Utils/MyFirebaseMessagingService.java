@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.provider.Settings;
 import android.util.Log;
@@ -24,6 +26,9 @@ import com.appsinventiv.noorenikah.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -37,6 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
     String Id;
+    private String imageFromNotification;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -54,12 +60,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             message = map.get("Message");
             title = map.get("Title");
             type = map.get("Type");
+            imageFromNotification = map.get("Image");
             Id = map.get("Id");
+            Bitmap bitmap = getBitmapfromUrl(imageFromNotification);
 
-            handleNow(title, message);
+
+            handleNow(title, message, bitmap);
 
 
         }
+
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
@@ -67,7 +77,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void handleNow(String notificationTitle, String messageBody) {
+    public Bitmap getBitmapfromUrl(String imageUrl) {
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            return bitmap;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+
+        }
+    }
+
+    private void handleNow(String notificationTitle, String messageBody, Bitmap image) {
 
         int num = (int) System.currentTimeMillis();
         /**Creates an explicit intent for an Activity in your app**/
@@ -109,10 +137,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (type.equals("comment")) {
             resultIntent = new Intent(this, CommentsActivity.class);
             resultIntent.putExtra("id", Id);
-        }  else if (type.equals("postcomment")) {
+        } else if (type.equals("postcomment")) {
             resultIntent = new Intent(this, PostComments.class);
             resultIntent.putExtra("postId", Id);
-        }else if (type.equals("postlike")) {
+        } else if (type.equals("postlike")) {
             resultIntent = new Intent(this, PostLikes.class);
             resultIntent.putExtra("postId", Id);
         } else if (type.equals("like")) {
@@ -134,13 +162,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle(notificationTitle)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(messageBody))
-                .setContentIntent(pendingIntent);
+        if (image != null) {
+
+            mBuilder
+                    .setContentTitle(notificationTitle)
+                    .setContentText(messageBody)
+                    .setLargeIcon(image)
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                .setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText(messageBody))
+
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(image)
+                            .setBigContentTitle(notificationTitle)
+                            .setSummaryText(messageBody)
+                            .bigLargeIcon(image)
+                    )
+
+                    .setContentIntent(pendingIntent);
+        } else {
+            mBuilder
+                    .setContentTitle(notificationTitle)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(messageBody))
+                    .setContentIntent(pendingIntent);
+        }
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 

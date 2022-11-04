@@ -13,10 +13,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:src="@drawable/picked"
             app:civ_border_color="@color/colorAccent"
             app:civ_border_width="1dp" />
@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/black_border"
             android:gravity="center"
@@ -47,7 +46,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
 
@@ -60,7 +59,7 @@
                 android:id="@+id/name"
                 android:layout_width="0dp"
 
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -80,7 +79,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
 
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
@@ -92,7 +91,7 @@
             <TextView
                 android:id="@+id/city"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
 
                 android:background="@drawable/black_border"
@@ -112,7 +111,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
 
@@ -124,7 +123,7 @@
             <TextView
                 android:id="@+id/maritalStatus"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -143,7 +142,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
 
@@ -156,7 +155,7 @@
                 android:id="@+id/education"
                 android:layout_width="0dp"
 
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -176,7 +175,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -188,7 +187,7 @@
                 android:id="@+id/cast"
                 android:layout_width="0dp"
 
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -207,7 +206,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
 
                 android:background="@drawable/black_border"
@@ -219,7 +218,7 @@
             <TextView
                 android:id="@+id/jobOrBusiness"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -238,7 +237,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
 
                 android:background="@drawable/black_border"
@@ -250,7 +249,7 @@
             <TextView
                 android:id="@+id/about"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="2"
                 android:background="@drawable/black_border"
                 android:gravity="left|center"
@@ -263,7 +262,7 @@
         <Button
             android:id="@+id/sendRequest"
             android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_margin="10dp"
@@ -276,7 +275,7 @@
         <Button
             android:id="@+id/requestSent"
             android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_margin="10dp"
@@ -291,7 +290,7 @@
         <Button
             android:id="@+id/friend"
             android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
 
             android:layout_gravity="center"

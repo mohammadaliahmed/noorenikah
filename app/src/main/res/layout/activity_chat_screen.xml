@@ -52,18 +52,33 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_marginRight="50dp"
             android:layout_toRightOf="@id/picture"
             android:clickable="true"
+            android:layout_marginStart="5dp"
+
             android:foreground="?android:attr/selectableItemBackground"
             android:lines="1"
-            android:padding="10dp"
 
             android:text=""
             android:textColor="#000"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/userStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/picture"
+            android:lines="1"
+            android:text=""
+
+            />
 
     </RelativeLayout>
 
@@ -113,8 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:background="#F6F6F6"
         android:layout_alignParentBottom="true"
+        android:background="#F6F6F6"
         android:padding="10dp">
 
 

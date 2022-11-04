@@ -5,245 +5,282 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginBottom="70dp"
+        android:layout_height="wrap_content">
 
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/verified"
+        <LinearLayout
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:orientation="vertical">
 
-            android:background="@drawable/btn_bg"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Please verify your phone number"
-            android:textColor="#fff"
-            android:visibility="gone" />
-
-
-        <RelativeLayout
-            android:id="@+id/myProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_margin="10dp"
-
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/verified"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="My Profile"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="20dp"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-
-            android:layout_height="1dp"
-            android:background="#aaa" />
+                android:background="@drawable/btn_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Please verify your phone number"
+                android:textColor="#fff"
+                android:visibility="gone" />
 
 
-        <RelativeLayout
-            android:id="@+id/requestAccepted"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
+            <RelativeLayout
+                android:id="@+id/myProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Request Accepted"
-                android:textColor="#000"
-                android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:layout_margin="10dp"
 
-        <View
-            android:layout_width="match_parent"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
 
-            android:layout_height="1dp"
-            android:background="#aaa" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="My Profile"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:id="@+id/paymentsHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:clickable="true"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
-            android:foreground="?android:attr/selectableItemBackground"
-            android:visibility="gone">
+            <View
+                android:layout_width="match_parent"
 
-            <TextView
+                android:layout_height="1dp"
+                android:background="#aaa" />
+
+
+            <RelativeLayout
+                android:id="@+id/requestAccepted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Payments History"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="10dp"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Request Accepted"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:id="@+id/terms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+            <View
+                android:layout_width="match_parent"
 
-            <TextView
+                android:layout_height="1dp"
+                android:background="#aaa" />
+
+            <RelativeLayout
+                android:id="@+id/paymentsHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Terms and conditions"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="10dp"
+                android:clickable="true"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:foreground="?android:attr/selectableItemBackground"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Payments History"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
 
-        <View
-            android:layout_width="match_parent"
-
-            android:layout_height="1dp"
-            android:background="#aaa" />
-
-        <RelativeLayout
-            android:id="@+id/privacy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
+            <RelativeLayout
+                android:id="@+id/terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Privacy Policy"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="10dp"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Terms and conditions"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
 
-        <View
-            android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
 
-            android:layout_height="1dp"
-            android:background="#aaa" />
+                android:layout_height="1dp"
+                android:background="#aaa" />
 
-        <RelativeLayout
-            android:id="@+id/matchMaker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
+            <RelativeLayout
+                android:id="@+id/privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Match Maker"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="10dp"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
 
-        <View
-            android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Privacy Policy"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
-            android:layout_height="1dp"
-            android:background="#aaa" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/invite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
 
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+            <View
+                android:layout_width="match_parent"
 
-            <TextView
+                android:layout_height="1dp"
+                android:background="#aaa" />
+
+            <RelativeLayout
+                android:id="@+id/matchMaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Invite and Earn"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:layout_margin="10dp"
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Match Maker"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+
+                android:layout_height="1dp"
+                android:background="#aaa" />
+
+            <RelativeLayout
+                android:id="@+id/invite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Invite and Earn"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
 
 
-        <View
-            android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
 
-            android:layout_height="1dp"
-            android:background="#aaa" />
-    </LinearLayout>
+                android:layout_height="1dp"
+                android:background="#aaa" />
+
+            <RelativeLayout
+                android:id="@+id/contactAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Contact Admin"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+
+                android:layout_height="1dp"
+                android:background="#aaa" />
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/logout"

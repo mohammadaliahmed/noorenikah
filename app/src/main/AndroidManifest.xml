@@ -116,6 +116,7 @@
         <activity android:name=".Activities.MenuActivity" />
         <activity android:name=".Activities.Posts.ViewPost" />
         <activity android:name=".Activities.ViewMyProfile" />
+        <activity android:name=".Activities.ContactAdmin" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

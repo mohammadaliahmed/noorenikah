@@ -58,6 +58,8 @@ public class PostComments extends AppCompatActivity {
     TextView replyingToName;
     ImageView closeReply;
     private String replyingToId;
+
+    Button viewPost;
     private PostModel postModel;
 
     @Override
@@ -72,6 +74,7 @@ public class PostComments extends AppCompatActivity {
         this.setTitle("Post Comments");
         adRequest = new AdRequest.Builder().build();
 
+        viewPost = findViewById(R.id.viewPost);
         mAdView = findViewById(R.id.adView);
         replyingToView = findViewById(R.id.replyingToView);
         closeReply = findViewById(R.id.closeReply);
@@ -135,6 +138,14 @@ public class PostComments extends AppCompatActivity {
         });
         getDataFromDB();
         getPostFromDB();
+        viewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PostComments.this, ViewPost.class);
+                i.putExtra("postId", postId);
+                startActivity(i);
+            }
+        });
 
 //        getUserFromDB();
     }

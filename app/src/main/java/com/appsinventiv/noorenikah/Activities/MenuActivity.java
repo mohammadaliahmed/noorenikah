@@ -117,10 +117,11 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(new Intent(MenuActivity.this, VerifyPhone.class));
             }
         });
+        contactAdmin.setVisibility(View.GONE);
         contactAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, VerifyPhone.class));
+                startActivity(new Intent(MenuActivity.this, ContactAdmin.class));
             }
         });
 

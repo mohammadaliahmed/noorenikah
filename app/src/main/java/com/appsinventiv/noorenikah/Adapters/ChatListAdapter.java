@@ -19,6 +19,7 @@ import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -57,19 +58,27 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                 .placeholder(R.drawable.picked)
                 .into(holder.picture);
         if (BuildConfig.VERSION_CODE > 22) {
-            if (model.getStatus() != null && model.getStatus().equalsIgnoreCase("read")) {
+            if (model.getSenderId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                 holder.unreadDot.setVisibility(View.GONE);
                 holder.name.setTypeface(null, Typeface.NORMAL);
                 holder.message.setTypeface(null, Typeface.NORMAL);
                 holder.time.setTypeface(null, Typeface.NORMAL);
             } else {
-                holder.unreadDot.setVisibility(View.VISIBLE);
-                holder.name.setTypeface(null, Typeface.BOLD);
-                holder.message.setTypeface(null, Typeface.BOLD);
-                holder.time.setTypeface(null, Typeface.BOLD);
-                countUnreadChats++;
+                if (model.getStatus() != null && model.getStatus().equalsIgnoreCase("read")) {
+                    holder.unreadDot.setVisibility(View.GONE);
+                    holder.name.setTypeface(null, Typeface.NORMAL);
+                    holder.message.setTypeface(null, Typeface.NORMAL);
+                    holder.time.setTypeface(null, Typeface.NORMAL);
+                } else {
+                    holder.unreadDot.setVisibility(View.VISIBLE);
+                    holder.name.setTypeface(null, Typeface.BOLD);
+                    holder.message.setTypeface(null, Typeface.BOLD);
+                    holder.time.setTypeface(null, Typeface.BOLD);
+                    countUnreadChats++;
+                }
             }
-        }else{
+
+        } else {
             holder.unreadDot.setVisibility(View.GONE);
             holder.name.setTypeface(null, Typeface.NORMAL);
             holder.message.setTypeface(null, Typeface.NORMAL);

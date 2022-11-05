@@ -396,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
         getUserFromDb();
         getNotificationCountFromDB();
         getRequestDataFromDB();
+        CommonUtils.sendCustomerStatus("Online");
 
 
     }
@@ -486,6 +487,12 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CommonUtils.sendCustomerStatus("" + System.currentTimeMillis());
+    }
 
     private void loadFragment(Fragment fragment) {
         // load fragment

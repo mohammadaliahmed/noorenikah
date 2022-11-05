@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/badge_text_view"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:textSize="11sp"
         android:textColor="#fff"
         android:background="@drawable/news_bottom_nav_bg"

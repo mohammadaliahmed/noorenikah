@@ -111,11 +111,21 @@ public class ChatScreen extends AppCompatActivity {
     ImageView emoji;
     EmojiPopup emojiPopup;
     TextView userStatus;
+    private boolean emojiShowing;
 
     @Override
     protected void onResume() {
         super.onResume();
         screenActive = true;
+        CommonUtils.sendCustomerStatus("Online");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CommonUtils.sendCustomerStatus("" + System.currentTimeMillis());
+
     }
 
     @Override
@@ -252,13 +262,20 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onToggleSoftKeyboard(boolean isVisible) {
                 if (isVisible) {
+                    if (emojiShowing) {
+                        recordButton.setVisibility(View.INVISIBLE);
+                    } else {
+                        recordButton.setVisibility(View.VISIBLE);
 
+                    }
                 } else {
                     params.setMargins(0, 0, 150, 0);
                     messagingArea.setLayoutParams(params);
+                    emojiPopup.dismiss();
+                    recordButton.setVisibility(View.VISIBLE);
+
+
                 }
-                recordButton.setVisibility(View.VISIBLE);
-                recyclerView.scrollToPosition(itemList.size() - 1);
             }
         });
 
@@ -296,13 +313,14 @@ public class ChatScreen extends AppCompatActivity {
                     params.setMargins(0, 0, 150, 0);
                     messagingArea.setLayoutParams(params);
                     recordButton.setVisibility(View.VISIBLE);
-
+                    emojiShowing = false;
                 } else {
                     emojiPopup.toggle();
 
                     params.setMargins(0, 0, 150, 70);
                     messagingArea.setLayoutParams(params);
                     recordButton.setVisibility(View.INVISIBLE);
+                    emojiShowing = true;
 
 
                 }
@@ -440,7 +458,7 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    if(screenActive) {
+                    if (screenActive) {
                         otherUser = dataSnapshot.getValue(User.class);
                         name.setText(otherUser.getName());
                         try {

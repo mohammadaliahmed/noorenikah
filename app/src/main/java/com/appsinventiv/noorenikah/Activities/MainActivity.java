@@ -47,6 +47,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private RewardedAd mRewardedAd;
     private AdRequest adRequest;
     boolean firstTimeShow = false;
-
+    private InterstitialAd interstitialAda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         if (SharedPrefs.getDemoShown().equalsIgnoreCase("")) {
             showHowToUse();
         }
+        LoadInterstritial();
+
     }
 
     private void showHowToUse() {
@@ -528,6 +532,67 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+    public void LoadInterstritial() {
+        InterstitialAd.load(
+                this,
+                getResources().getString(R.string.interstital_ad_unit_id),
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        interstitialAda = interstitialAd;
+                        showInterstitial();
+
+                        interstitialAd.setFullScreenContentCallback(
+                                new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        // Called when fullscreen content is dismissed.
+                                        // Make sure to set your reference to null so you don't
+                                        // show it a second time.
+                                        interstitialAda = null;
+                                        Log.d("TAG", "The ad was dismissed.");
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                        // Called when fullscreen content failed to show.
+                                        // Make sure to set your reference to null so you don't
+                                        // show it a second time.
+                                        interstitialAda = null;
+                                        Log.d("TAG", "The ad failed to show.");
+                                    }
+
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                        // Called when fullscreen content is shown.
+                                        Log.d("TAG", "The ad was shown.");
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        interstitialAda = null;
+
+                    }
+                });
+
+
+    }
+
+    private void showInterstitial() {
+        // Show the ad if it's ready. Otherwise toast and restart the game.
+        if (interstitialAda != null) {
+            interstitialAda.show(this);
+        } else {
+//            Toast.makeText(getContext(), "Ad did not load", Toast.LENGTH_SHORT).show();
+
         }
     }
 

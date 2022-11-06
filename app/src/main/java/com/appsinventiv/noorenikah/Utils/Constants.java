@@ -10,6 +10,7 @@ public class Constants {
     public static boolean MARKETING_MSG=false;
     public static String MARKETING_MSG_TITLE="";
     public static String MARKETING_MSG_MESSAGE="";
+    public static String MARKETING_MSG_IMAGE="";
     public static String MESSAGE_TYPE_IMAGE="IMAGE";
     public static String MESSAGE_TYPE_REPLY="REPLY";
     public static String MESSAGE_TYPE_TEXT="TEXT";

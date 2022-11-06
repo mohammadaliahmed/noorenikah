@@ -41,6 +41,7 @@ import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.NotificationFragment;
 import com.appsinventiv.noorenikah.fragments.PostsFragment;
 import com.appsinventiv.noorenikah.fragments.RequestsFragment;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -265,11 +266,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                        PromotionBanner promotionBanner = snapshot.getValue(PromotionBanner.class);
-
-                        SharedPrefs.setPromotionalBanner(promotionBanner, promotionBanner.getPlacement());
+                        PromotionBanner postBanner = snapshot.getValue(PromotionBanner.class);
+                        SharedPrefs.setPromotionalBanner(postBanner, postBanner.getPlacement());
                     }
+
                 } catch (Exception e) {
 
                 }
@@ -294,9 +294,18 @@ public class MainActivity extends AppCompatActivity {
         TextView title = layout.findViewById(R.id.title);
         TextView message = layout.findViewById(R.id.message);
         ImageView close = layout.findViewById(R.id.close);
+        ImageView image = layout.findViewById(R.id.image);
+
 
         title.setText(Constants.MARKETING_MSG_TITLE);
         message.setText(Constants.MARKETING_MSG_MESSAGE);
+        if (!Constants.MARKETING_MSG_IMAGE.equalsIgnoreCase("")) {
+            image.setVisibility(View.VISIBLE);
+            Glide.with(MainActivity.this).load(Constants.MARKETING_MSG_IMAGE).into(image);
+        } else {
+            image.setVisibility(View.GONE);
+
+        }
         message.setMovementMethod(new ScrollingMovementMethod());
 
 

@@ -133,6 +133,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Constants.MARKETING_MSG = true;
             Constants.MARKETING_MSG_TITLE = notificationTitle;
             Constants.MARKETING_MSG_MESSAGE = messageBody;
+            Constants.MARKETING_MSG_IMAGE = imageFromNotification;
             resultIntent = new Intent(this, MainActivity.class);
         } else if (type.equals("comment")) {
             resultIntent = new Intent(this, CommentsActivity.class);

@@ -24,7 +24,7 @@
         <activity
             android:name="com.appsinventiv.noorenikah.Activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.VerifyPe.NoActionBar" >
+            android:theme="@style/Theme.VerifyPe.NoActionBar">
 
         </activity>
         <activity
@@ -62,13 +62,15 @@
             android:name=".Activities.CompleteProfileScreen"
             android:theme="@style/Theme.VerifyPe.NoActionBar" />
         <activity android:name=".Activities.SearchActivity" />
-        <activity android:name=".Activities.ViewUserProfile"
+        <activity
+            android:name=".Activities.ViewUserProfile"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="noorenikah.com"
                     android:pathPrefix="/profile"
@@ -82,11 +84,11 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.VerifyPe.NoActionBar">
-<!--                                    <intent-filter>-->
-<!--                                        <action android:name="android.intent.action.MAIN" />-->
+            <!--                                    <intent-filter>-->
+            <!--                                        <action android:name="android.intent.action.MAIN" />-->
 
-<!--                                        <category android:name="android.intent.category.LAUNCHER" />-->
-<!--                                    </intent-filter>-->
+            <!--                                        <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--                                    </intent-filter>-->
         </activity>
         <activity android:name=".Activities.VerifyPhone" />
         <activity android:name=".Activities.PaymentProof" />
@@ -117,6 +119,9 @@
         <activity android:name=".Activities.Posts.ViewPost" />
         <activity android:name=".Activities.ViewMyProfile" />
         <activity android:name=".Activities.ContactAdmin" />
+        <activity
+            android:name=".Activities.SocialRegister"
+            android:theme="@style/Theme.VerifyPe.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

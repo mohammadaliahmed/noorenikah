@@ -10,8 +10,8 @@ android {
         applicationId "com.appsinventiv.noorenikah"
         minSdk 21
         targetSdk 32
-        versionCode 25
-        versionName "1.25"
+        versionCode 26
+        versionName "1.26"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.github.nomiuaf15:jazzcashpaymentgateway:1.1'
     implementation 'com.github.3llomi:RecordView:3.1.1'
     implementation 'com.vanniktech:emoji-google:0.6.0'
-
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
     implementation 'com.bogdwellers:pinchtozoom:0.1'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:1.0.1'
 

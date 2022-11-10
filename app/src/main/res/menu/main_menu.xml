@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_block"
+        android:icon="@drawable/block"
+        android:title="BLock"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_chat"
         android:icon="@drawable/chat"
-        app:showAsAction="ifRoom"
-        android:title="Chat">
-    </item>
+        android:title="Chat"
+        app:showAsAction="ifRoom"/>
 
 </menu>

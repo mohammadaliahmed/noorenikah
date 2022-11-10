@@ -2,10 +2,13 @@ package com.appsinventiv.noorenikah.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,10 +64,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Glide.with(context).load(postModel.getImageUrl()).into(holder.postImage);
 
         }
-        if(postModel.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())){
+        if (postModel.getUserId().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
             holder.removePost.setVisibility(View.VISIBLE);
-        }else{
+            holder.postMenu.setVisibility(View.GONE);
+        } else {
             holder.removePost.setVisibility(View.GONE);
+            holder.postMenu.setVisibility(View.VISIBLE);
 
         }
 
@@ -151,6 +156,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 context.startActivity(i);
             }
         });
+        holder.postMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(context, holder.postMenu);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.options_menu);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_report:
+                                //handle menu1 click
+                                callbacks.onReportPost(postModel, position);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                //displaying the popup
+                popup.show();
+
+            }
+        });
         holder.userView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,12 +193,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.removePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              callbacks.onRemovePost(postModel);
+                callbacks.onRemovePost(postModel);
             }
         });
 
 
-        if(postModel.getText().length()>100){
+        if (postModel.getText().length() > 100) {
 
         }
 
@@ -178,9 +209,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return itemList.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, text, commentCount, likesCount, time;
-        ImageView postImage, likeUnlike, comment, share, removePost;
+        ImageView postImage, likeUnlike, comment, share, removePost, postMenu;
         CircleImageView userImage;
         RelativeLayout userView;
 
@@ -197,6 +229,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             commentCount = itemView.findViewById(R.id.commentCount);
             userView = itemView.findViewById(R.id.userView);
             userImage = itemView.findViewById(R.id.userImage);
+            postMenu = itemView.findViewById(R.id.postMenu);
             removePost = itemView.findViewById(R.id.removePost);
 
         }
@@ -210,6 +243,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void onShare(PostModel model);
 
         public void onRemovePost(PostModel model);
+
+        public void onReportPost(PostModel model, int position);
     }
 
 }

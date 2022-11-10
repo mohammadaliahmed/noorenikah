@@ -38,7 +38,7 @@
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_home.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_invite_history.xml" value="0.22" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_list_of_friends.xml" value="0.1675929884566054" />
-        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_login.xml" value="0.16547066272688898" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_main.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_match_maker_profile.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/activity_notifications.xml" value="0.1675929884566054" />
@@ -72,14 +72,16 @@
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/notification_item_layout.xml" value="0.22" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/notification_profile_item_layout.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/payout_history_item_layout.xml" value="0.22" />
-        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/post_item_layout.xml" value="0.1675929884566054" />
+        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/post_item_layout.xml" value="0.47468354430379744" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/profile_item_layout.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/request_item_layout.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/right_chat_layout.xml" value="0.2" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/user_item_layout.xml" value="0.2" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/layout/user_post_item_layout.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/home.xml" value="0.1675929884566054" />
+        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/main_menu.xml" value="0.25" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/navigation.xml" value="0.1675929884566054" />
+        <entry key="..\:/Android Projects/noorenikah/app/src/main/res/menu/options_menu.xml" value="0.1675929884566054" />
         <entry key="..\:/Android Projects/noorenikah/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/btn_bg.xml" value="0.1795" />
         <entry key="..\:/android projects/noorenikah/app/src/main/res/drawable/btn_red_outline.xml" value="0.1795" />

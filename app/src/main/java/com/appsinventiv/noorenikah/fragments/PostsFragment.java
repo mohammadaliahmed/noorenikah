@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class PostsFragment extends Fragment {
@@ -120,12 +121,66 @@ public class PostsFragment extends Fragment {
             public void onRemovePost(PostModel model) {
                 showAlert(model);
             }
+
+            @Override
+            public void onReportPost(PostModel model, int pos) {
+                ShowReportAlert(model, pos);
+            }
         });
         recycler.setAdapter(adapter);
 
         getDataFromDB();
 
         return rootView;
+    }
+
+    private void ShowReportAlert(PostModel model, int pos) {
+        final String[] reason = {""};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose a reason for report");
+
+// add a radio button list
+        String[] reasonList = {
+                "It's Spam",
+                "Hate Speech",
+                "I don't like it",
+                "False information",
+                "Bully or harassment",
+                "False information",
+                "Scam or fraud",
+                "Violence or Dangerous",
+                "Scam or fraud",
+                "Sexual or nudity",
+                "Something else",
+
+        };
+        builder.setSingleChoiceItems(reasonList, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // user checked an item
+                reason[0] = reasonList[which];
+            }
+        });
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // user clicked OK
+                HashMap<String, String> map = new HashMap<>();
+                map.put("reason", reason[0]);
+                map.put("phone", SharedPrefs.getUser().getPhone());
+                mDatabase.child("PostReports").child(model.getId())
+                        .child(SharedPrefs.getUser().getPhone()).setValue(map);
+                adapter.notifyItemRemoved(pos);
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+// create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void showAlert(PostModel model) {
@@ -197,7 +252,15 @@ public class PostsFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PostModel model = snapshot.getValue(PostModel.class);
                     if (model != null && model.getType() != null) {
-                        itemList.add(model);
+                        if (SharedPrefs.getUser().getiBlocked() != null) {
+                            if (!SharedPrefs.getUser().getiBlocked().containsKey(model.getUserId())) {
+                                itemList.add(model);
+                            }
+                        } else {
+                            itemList.add(model);
+                        }
+
+
                     }
                 }
                 Collections.reverse(itemList);

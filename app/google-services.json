@@ -1,9 +1,8 @@
 {
   "project_info": {
     "project_number": "1062411159973",
+    "firebase_url": "https://noorenikah-default-rtdb.firebaseio.com",
     "project_id": "noorenikah",
-    "firebase_url": "https://noorenikah-default-rtdb.firebaseio.com/",
-
     "storage_bucket": "noorenikah.appspot.com"
   },
   "client": [
@@ -12,6 +11,59 @@
         "mobilesdk_app_id": "1:1062411159973:android:0bc232de7526f65540404c",
         "android_client_info": {
           "package_name": "com.appsinventiv.noorenikah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062411159973-cl71hk96jce0826qh9rcf62eacn3ol0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsinventiv.noorenikah",
+            "certificate_hash": "027f09eadfb71c1f205613d3ff238dbb0c6e1e02"
+          }
+        },
+        {
+          "client_id": "1062411159973-ogpsd1dhd1masafmbp9bgiv3drtjcbnh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsinventiv.noorenikah",
+            "certificate_hash": "1c29baf0db59470ec954682ffa9d240cf8cb7592"
+          }
+        },
+        {
+          "client_id": "1062411159973-opt74nsguooj94egcn8ej6u21i1n8olc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsinventiv.noorenikah",
+            "certificate_hash": "97055fbf57e0800300883dd73480ad40a6a0f4c4"
+          }
+        },
+        {
+          "client_id": "1062411159973-13j7s1terhbadip8qqe9krni2jqbfpfo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAyst7DBvkY1E8eu8Oo1YVLEEn25kaBCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062411159973-13j7s1terhbadip8qqe9krni2jqbfpfo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062411159973:android:04e96d2895cdb6a540404c",
+        "android_client_info": {
+          "package_name": "com.appsinventiv.noorenikahadmin"
         }
       },
       "oauth_client": [

@@ -1,5 +1,6 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -256,10 +258,40 @@ public class ViewUserProfile extends AppCompatActivity {
                     startActivity(i);
                 }
                 return true;
+            case R.id.action_block:
+                if (user != null) {
+                    showBlockALert();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void showBlockALert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
+        builder.setMessage("Do you want to block this user? ");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
+                        .child(profileId).setValue(profileId);
+                mDatabase.child("Users").child(profileId).child("blockedMe")
+                        .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+
+                CommonUtils.showToast("You have blocked this user");
+                finish();
+
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -271,8 +271,8 @@ public class ViewUserProfile extends AppCompatActivity {
     private void showBlockALert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
-        builder.setMessage("Do you want to block this user? ");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Take Action on this user");
+        builder.setPositiveButton("Block", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
@@ -285,9 +285,67 @@ public class ViewUserProfile extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Report", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showReportAlert();
+            }
+        });
 
         // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showReportAlert() {
+        final String[] reason = {""};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose a reason for report");
+
+// add a radio button list
+        String[] reasonList = {
+                "It's Spam",
+                "Hate Speech",
+                "I don't like it",
+                "False information",
+                "Bully or harassment",
+                "False information",
+                "Scam or fraud",
+                "Violence or Dangerous",
+                "Scam or fraud",
+                "Sexual or nudity",
+                "Something else",
+
+        };
+        builder.setSingleChoiceItems(reasonList, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // user checked an item
+                reason[0] = reasonList[which];
+            }
+        });
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // user clicked OK
+                HashMap<String, String> map = new HashMap<>();
+                map.put("reason", reason[0]);
+                map.put("phone", SharedPrefs.getUser().getPhone());
+                mDatabase.child("PostReports").child(profileId)
+                        .child(SharedPrefs.getUser().getPhone()).setValue(map);
+                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
+                        .child(profileId).setValue(profileId);
+                mDatabase.child("Users").child(profileId).child("blockedMe")
+                        .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+                CommonUtils.showToast("User reported\nThanks for feedback\nWe will take action");
+                finish();
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+// create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }

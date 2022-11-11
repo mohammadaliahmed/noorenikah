@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
     CheckBox checkit;
     boolean checked = false;
     ProgressBar progress;
-    LinearLayout google;
+    ImageView google;
     GoogleApiClient apiClient;
     public static GoogleSignInAccount account;
 

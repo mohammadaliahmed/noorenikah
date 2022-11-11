@@ -173,6 +173,11 @@ public class PostsFragment extends Fragment {
                 mDatabase.child("PostReports").child(model.getId())
                         .child(SharedPrefs.getUser().getPhone()).setValue(map);
                 adapter.notifyItemRemoved(pos);
+                mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("iBlocked")
+                        .child(model.getUserId()).setValue(model.getUserId());
+                mDatabase.child("Users").child(model.getUserId()).child("blockedMe")
+                        .child(SharedPrefs.getUser().getPhone()).setValue(SharedPrefs.getUser().getPhone());
+                CommonUtils.showToast("Post reported\nThanks for feedback\nWe will take action");
             }
         });
         builder.setNegativeButton("Cancel", null);

@@ -133,7 +133,13 @@ public class AlertsUtils {
                             "                  If you have any questions or suggestions about our\n" +
                             "                  Privacy Policy, do not hesitate to contact us at naatshamds@gmail.com.\n" +
                             "                </p> \n" +
-                            "    </body>\n" +
+                            "<strong>Note</strong><br>" +
+                            "<br>1-Noor e nikah is a platform designed to gather users, who are searching for their soulmates by their own will. We are just a platform.\n" +
+                            "<br>2- Noor e Nikah will not took the responsible of any user, it is just a medium of comunication.\n" +
+                            "<br>3- Noor e Nikah not visited any user's home to inquire them.\n" +
+                            "<br>4- The proper investigation of a User, is family's prior responsibility, Noor e Nikah will not took any user's responsibilty.\n" +
+                            "<br>5-Noor e nikah, provided user an option to block or report user, who are not fulling their requirement, it is totaly upto user." +
+                            " <br><br><br>   </body>\n" +
                             "    </html>\n" +
                             "      ";
             textHere.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT));
@@ -142,7 +148,8 @@ public class AlertsUtils {
         dialog.show();
 
     }
-    public static void customTextView(Context context,TextView view) {
+
+    public static void customTextView(Context context, TextView view) {
         SpannableStringBuilder spanTxt = new SpannableStringBuilder(
                 "I agree to the ");
         spanTxt.append("Term of services");

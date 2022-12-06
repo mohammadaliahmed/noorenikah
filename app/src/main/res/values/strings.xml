@@ -17,4 +17,11 @@
     <string name="interstital_ad_unit_id">ca-app-pub-8337731531668373/1115094010</string>
 <!--    <string name="reward_ad_unit_id">ca-app-pub-3940256099942544/5224354917</string>test-->
     <string name="reward_ad_unit_id">ca-app-pub-8337731531668373/1424804604</string>
+
+
+
+
+    <string name="facebook_app_id">461937606039381</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
 </resources>

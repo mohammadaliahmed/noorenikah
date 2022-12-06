@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -107,6 +108,7 @@ public class ViewMyProfile extends AppCompatActivity {
                 if (model != null && model.getId() != null) {
                     itemList.add(model);
                 }
+                Collections.reverse(itemList);
                 adapter.setItemList(itemList);
             }
             @Override

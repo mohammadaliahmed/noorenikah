@@ -23,21 +23,21 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         webView = findViewById(R.id.activity_payment_webview);
-
-        Intent intentData = getIntent();
-        String price = intentData.getStringExtra("price");
-        try {
-            jazzCash = new JazzCash(this, this, ResponseActivity.class, webView,
-                    "MC46377",
-                    "9a03ye858s",
-                    "5a8x221228",
-                    "localhost.com", price);
-
-            jazzCash.integrateNow();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//
+//        Intent intentData = getIntent();
+//        String price = intentData.getStringExtra("price");
+//        try {
+//            jazzCash = new JazzCash(this, this, ResponseActivity.class, webView,
+//                    "MC46377",
+//                    "9a03ye858s",
+//                    "5a8x221228",
+//                    "localhost.com", price);
+//
+//            jazzCash.integrateNow();
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 
     }
 

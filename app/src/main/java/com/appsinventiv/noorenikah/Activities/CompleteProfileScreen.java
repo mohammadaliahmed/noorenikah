@@ -17,7 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -30,7 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 
 
@@ -231,7 +230,7 @@ public class CompleteProfileScreen extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.getValue() != null) {
-                                        User user = dataSnapshot.getValue(User.class);
+                                        UserModel user = dataSnapshot.getValue(UserModel.class);
                                         SharedPrefs.setUser(user);
                                         startActivity(new Intent(CompleteProfileScreen.this, MainActivity.class));
                                         finish();

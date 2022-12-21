@@ -14,14 +14,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -166,7 +165,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             if (snapshot.getValue() != null) {
-                                                User user = snapshot.getValue(User.class);
+                                                UserModel user = snapshot.getValue(UserModel.class);
                                                 if (user != null && user.getPhone() != null) {
                                                     if (!user.isRejected()) {
                                                         SharedPrefs.setUser(user);
@@ -279,7 +278,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.getValue() != null) {
-                        User user = snapshot.getValue(User.class);
+                        UserModel user = snapshot.getValue(UserModel.class);
                         if (user != null && user.getPhone() != null) {
                             if (!user.isRejected()) {
                                 SharedPrefs.setUser(user);
@@ -328,7 +327,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 progress.setVisibility(View.INVISIBLE);
                 if (dataSnapshot.getValue() != null) {
-                    User user = dataSnapshot.getValue(User.class);
+                    UserModel user = dataSnapshot.getValue(UserModel.class);
                     if (user != null && user.getPhone() != null) {
                         if (user.getPassword().equals(pass)) {
                             if (!user.isRejected()) {

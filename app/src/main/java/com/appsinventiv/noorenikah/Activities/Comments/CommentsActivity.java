@@ -20,7 +20,7 @@ import com.appsinventiv.noorenikah.Adapters.CommentsAdapter;
 import com.appsinventiv.noorenikah.Models.CommentReplyModel;
 import com.appsinventiv.noorenikah.Models.CommentsModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -48,7 +48,7 @@ public class CommentsActivity extends AppCompatActivity {
     private String cmnt;
     private List<CommentsModel> itemList = new ArrayList<>();
     CommentsAdapter adapter;
-    private User otherUser;
+    private UserModel otherUser;
     private AdView mAdView;
     private AdRequest adRequest;
     boolean replying;
@@ -239,7 +239,7 @@ public class CommentsActivity extends AppCompatActivity {
         mDatabase.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                otherUser = dataSnapshot.getValue(User.class);
+                otherUser = dataSnapshot.getValue(UserModel.class);
 
             }
 

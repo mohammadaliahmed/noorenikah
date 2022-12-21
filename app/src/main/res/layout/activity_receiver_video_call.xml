@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+>
+
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/fullScreen_video_call"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        />
+   <include
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       layout="@layout/call_topview_layout"
+       />
+    <include
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/call_accept_decline_layout"
+        android:layout_marginBottom="20dp"
+        android:visibility="visible"/>
+    <include
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/call_widget_layout"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_marginBottom="120dp"/>
+
+    <ImageButton
+        android:id="@+id/inGoingcallEnd"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparentColr"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_call_decline" />
+
+
+
+</RelativeLayout>

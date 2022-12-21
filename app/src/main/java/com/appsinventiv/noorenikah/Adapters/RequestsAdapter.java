@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.bumptech.glide.Glide;
 
@@ -25,16 +25,16 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHolder> {
     Context context;
-    List<User> userList;
+    List<UserModel> userList;
     RequestsAdapterCallbacks callbacks;
 
-    public RequestsAdapter(Context context, List<User> userList, RequestsAdapterCallbacks callbacks) {
+    public RequestsAdapter(Context context, List<UserModel> userList, RequestsAdapterCallbacks callbacks) {
         this.context = context;
         this.userList = userList;
         this.callbacks = callbacks;
     }
 
-    public void setUserList(List<User> userList) {
+    public void setUserList(List<UserModel> userList) {
         this.userList = userList;
         notifyDataSetChanged();
     }
@@ -49,7 +49,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = userList.get(position);
+        UserModel user = userList.get(position);
 
         Glide.with(context)
                 .load(user.getLivePicPath())
@@ -109,8 +109,8 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.ViewHo
     }
 
     public interface RequestsAdapterCallbacks {
-        public void onAcceptClicked(User user);
+        public void onAcceptClicked(UserModel user);
 
-        public void onRejectClicked(User user);
+        public void onRejectClicked(UserModel user);
     }
 }

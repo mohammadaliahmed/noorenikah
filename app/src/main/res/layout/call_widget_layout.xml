@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_call_widget"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/layout_call_accept_reject"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/ic_muteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparentColr"
+        android:padding="16dp"
+        android:src="@drawable/ic_mute" />
+
+    <ImageButton
+        android:id="@+id/ic_hold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@color/transparentColr"
+        android:padding="16dp"
+        android:src="@drawable/ic_mute" />
+
+    <ImageButton
+        android:id="@+id/btn_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@color/transparentColr"
+        android:padding="16dp"
+        android:src="@drawable/manuser" />
+
+
+    <ImageButton
+        android:id="@+id/ic_callEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparentColr"
+        android:padding="16dp"
+        android:src="@drawable/ic_call_decline" />
+
+</LinearLayout>
+
+

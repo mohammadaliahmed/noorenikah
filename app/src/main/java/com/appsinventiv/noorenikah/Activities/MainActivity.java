@@ -17,8 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +29,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.appsinventiv.noorenikah.Adapters.MainSliderAdapter;
 import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -56,7 +54,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -441,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
+                            UserModel user = dataSnapshot.getValue(UserModel.class);
                             SharedPrefs.setUser(user);
                             if (user.isRejected()) {
                                 SharedPrefs.logout();

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Adapters.RequestsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
@@ -36,7 +36,7 @@ public class RequestsFragment extends Fragment {
     private View rootView;
     RecyclerView recyclerView;
     private DatabaseReference mDatabase;
-    private List<User> userList = new ArrayList<>();
+    private List<UserModel> userList = new ArrayList<>();
     RequestsAdapter adapter;
     TextView noRequests;
     ProgressBar progress;
@@ -48,7 +48,7 @@ public class RequestsFragment extends Fragment {
         noRequests=rootView.findViewById(R.id.noRequests);
         adapter = new RequestsAdapter(getActivity(), userList, new RequestsAdapter.RequestsAdapterCallbacks() {
             @Override
-            public void onAcceptClicked(User user) {
+            public void onAcceptClicked(UserModel user) {
 //                if(SharedPrefs.getUser().isPaid()) {
                     mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                             .child("received").child(user.getPhone()).removeValue();
@@ -72,7 +72,7 @@ public class RequestsFragment extends Fragment {
             }
 
             @Override
-            public void onRejectClicked(User user) {
+            public void onRejectClicked(UserModel user) {
                 mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
                         .child("received").child(user.getPhone()).removeValue();
                 mDatabase.child("Requests").child(user.getPhone())
@@ -90,7 +90,7 @@ public class RequestsFragment extends Fragment {
         return rootView;
     }
 
-    private void sendNotification(User user) {
+    private void sendNotification(UserModel user) {
 
         NotificationAsync notificationAsync = new NotificationAsync(getActivity());
         String NotificationTitle = "Request Accepted by: "+SharedPrefs.getUser().getName();
@@ -142,7 +142,7 @@ public class RequestsFragment extends Fragment {
         mDatabase.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+                UserModel user = dataSnapshot.getValue(UserModel.class);
                 if (user != null && user.getName() != null) {
                     userList.add(user);
                     adapter.setUserList(userList);

@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
@@ -60,7 +60,7 @@ public class EditProfile extends AppCompatActivity {
     DatabaseReference mDatabase;
     private String genderSelected;
     private String jobOrBusiness;
-    private User userModel;
+    private UserModel userModel;
     private ArrayAdapter maritalAdapter;
     private ArrayAdapter homeAdapter;
 
@@ -194,7 +194,7 @@ public class EditProfile extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
-                                    User user = dataSnapshot.getValue(User.class);
+                                    UserModel user = dataSnapshot.getValue(UserModel.class);
                                     SharedPrefs.setUser(user);
 
                                 }
@@ -218,7 +218,7 @@ public class EditProfile extends AppCompatActivity {
         mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userModel = dataSnapshot.getValue(User.class);
+                userModel = dataSnapshot.getValue(UserModel.class);
                 if (userModel != null) {
                     if(userModel.getGender()!=null) {
                         if (userModel.getGender().equalsIgnoreCase("female")) {

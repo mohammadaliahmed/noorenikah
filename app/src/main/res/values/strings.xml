@@ -24,4 +24,45 @@
     <string name="facebook_app_id">461937606039381</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
+
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+    <string name="createaccount"> <u>Create an Account</u></string>
+    <string name="privacy"> <u>Privacy Polices</u></string>
+    <string name="termsof"> <u>Terms of Services</u></string>
+    <string name="signin"> <u>SignIn</u></string>
+
+    <string name="dialog_done_text">DONE</string>
+    <string name="dialog_cancel_text">CANCEL</string>
+    <string name="list_empty">No items to display</string>
+    <string name="select_entry">Select Categories</string>
+    <string name="validation_text">Please select atleast one option</string>
+    <string name="please_select_atleast">Please select atleast </string>
+    <string name="you_can_only_select_upto">You can only select upto </string>
+    <string name="option"> option</string>
+    <string name="options"> options</string>
+    <string name="select_all">select all</string>
+    <string name="de_select_all">deselect all</string>
+    <string name="slide_1_title" translatable="false">Hello Food!</string>
+    <string name="slide_1_desc">hello</string>
+    <string name="channel_name">channel_name</string>
+
+    <string name="slide_2_title">Movie Tickets</string>
+    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+
+    <string name="slide_3_title">Great Discounts</string>
+    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+
+    <string name="slide_4_title">World Travel</string>
+    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
 </resources>

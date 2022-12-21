@@ -12,10 +12,14 @@ android {
         targetSdk 32
         versionCode 27
         versionName "1.27"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+        jni.srcDirs = [] //disable automatic ndk-build call
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -34,6 +38,18 @@ android {
 
             maven { url 'https://jitpack.io' }
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
@@ -70,7 +86,22 @@ dependencies {
     implementation 'com.bogdwellers:pinchtozoom:0.1'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:1.0.1'
     implementation 'com.facebook.android:facebook-login:[5,6)'
-
+    implementation('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    //greenbot event bus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation files('libs/httpcore-4.3.3.jar')
+    implementation files('libs/httpmime-4.3.6.jar')
+    // webrtc updated libs
+    implementation files('libs/audio_device_java.jar')
+    implementation files('libs/autobanh.jar')
+    implementation files('libs/base_java.jar')
+    implementation files('libs/libjingle_peerconnection.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/httpclient-4.3.6.jar')
+    implementation 'com.android.support:multidex:1.0.3'
 
 
 }

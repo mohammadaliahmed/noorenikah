@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.BuildConfig;
 import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -34,7 +34,7 @@ public class Register extends AppCompatActivity {
     Button register;
     TextView login;
     DatabaseReference mDatabase;
-    private HashMap<String, User> usersMap = new HashMap<>();
+    private HashMap<String, UserModel> usersMap = new HashMap<>();
     private CountryCodePicker ccp;
     private String foneCode;
     private String referalIdFromLink;
@@ -145,7 +145,7 @@ public class Register extends AppCompatActivity {
         ph = ph.replaceAll("\\s+", "");
 
         String myReferralCode = CommonUtils.getRandomCode(7);
-        User user = new User(
+        UserModel user = new UserModel(
                 name.getText().toString(),
                 ph,
                 password.getText().toString(), referralCode.getText().toString(), myReferralCode, gender,

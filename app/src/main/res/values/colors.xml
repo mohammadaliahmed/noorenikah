@@ -11,5 +11,57 @@
 
     <color name="colorBlack">#000000</color>
     <color name="colorGrey">#aaa</color>
+    <color name="white">#fff</color>
+
+
+    <color name="colorLeftChat">#008267</color>
+    <color name="colorRightChat">#303C46</color>
+    <color name="colorSelected">#3800fbff</color>
+
+    <color name="black">#433a3a</color>
+    <color name="blacknew">#bc433a3a</color>
+    <color name="bodyBackground">#ededed</color>
+    <color name="transparentColr">#00ffffff</color>
+
+    <color name="colorWhiteTransparent">#80ffffff</color>
+    <color name="card_background">#ffffff</color>
+
+    <color name="colorEditTextHint">#cccccc</color>
+    <color name="colorBlackBottomBar">#40484E</color>
+
+    <!-- Screens background color-->
+    <color name="bg_screen1">#f64c73</color>
+    <color name="error">#e91c4b</color>
+    <color name="bg_screen2">#20d2bb</color>
+    <color name="bg_screen3">#3395ff</color>
+    <color name="bg_screen4">#c873f4</color>
+
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">@color/black</color>
+    <color name="dot_dark_screen2">@color/black</color>
+    <color name="dot_dark_screen3">@color/black</color>
+    <color name="dot_dark_screen4">@color/black</color>
+
+    <!-- dots active colors -->
+    <color name="dot_light_screen1">@color/white</color>
+    <color name="dot_light_screen2">@color/white</color>
+    <color name="dot_light_screen3">@color/white</color>
+    <color name="dot_light_screen4">@color/white</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+        <item>@color/dot_light_screen4</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+        <item>@color/dot_dark_screen4</item>
+    </array>
+
+
 
 </resources>

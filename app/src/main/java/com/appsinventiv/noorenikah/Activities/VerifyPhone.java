@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -40,7 +40,7 @@ public class VerifyPhone extends AppCompatActivity {
     TextView sendAgain;
     DatabaseReference mDatabase;
     private String mVerificationId;
-    private HashMap<String, User> usersMap = new HashMap<>();
+    private HashMap<String, UserModel> usersMap = new HashMap<>();
 
     RelativeLayout wholeLayout;
     String name, password, referralCode;

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -163,30 +163,30 @@ public class SharedPrefs {
     }
 
 
-    public static void setUser(User model) {
+    public static void setUser(UserModel model) {
 
         Gson gson = new Gson();
         String json = gson.toJson(model);
         preferenceSetter("customerModel", json);
     }
 
-    public static User getUser() {
+    public static UserModel getUser() {
         Gson gson = new Gson();
-        User customer = gson.fromJson(preferenceGetter("customerModel"), User.class);
+        UserModel customer = gson.fromJson(preferenceGetter("customerModel"), UserModel.class);
 
         return customer;
     }
 
-    public static void setTempUser(User model) {
+    public static void setTempUser(UserModel model) {
 
         Gson gson = new Gson();
         String json = gson.toJson(model);
         preferenceSetter("setTempUser", json);
     }
 
-    public static User getTempUser() {
+    public static UserModel getTempUser() {
         Gson gson = new Gson();
-        User customer = gson.fromJson(preferenceGetter("setTempUser"), User.class);
+        UserModel customer = gson.fromJson(preferenceGetter("setTempUser"), UserModel.class);
 
         return customer;
     }

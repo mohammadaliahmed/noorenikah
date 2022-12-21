@@ -13,13 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.UserPostsAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.PostModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
@@ -34,7 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,7 +41,7 @@ public class ViewUserProfile extends AppCompatActivity {
 
     CircleImageView image;
     TextView name, city, maritalStatus, education, cast, jobOrBusiness, about;
-    private User user;
+    private UserModel user;
     private String profileIdFromLink;
     private String profileId;
 
@@ -140,7 +138,7 @@ public class ViewUserProfile extends AppCompatActivity {
     }
 
 
-    private void sendNotification(User user) {
+    private void sendNotification(UserModel user) {
 
         NotificationAsync notificationAsync = new NotificationAsync(this);
         String NotificationTitle = "New request from: " + user.getName();
@@ -216,7 +214,7 @@ public class ViewUserProfile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    user = dataSnapshot.getValue(User.class);
+                    user = dataSnapshot.getValue(UserModel.class);
                     if (user != null) {
                         ViewUserProfile.this.setTitle(user.getName());
                         showUserData();

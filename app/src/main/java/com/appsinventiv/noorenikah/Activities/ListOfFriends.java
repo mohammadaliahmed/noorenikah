@@ -1,8 +1,6 @@
 package com.appsinventiv.noorenikah.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.FriendsAdapter;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +26,7 @@ public class ListOfFriends extends AppCompatActivity {
 
 
     DatabaseReference mDatabase;
-    private List<User> userList = new ArrayList<>();
+    private List<UserModel> userList = new ArrayList<>();
     FriendsAdapter adapter;
     RecyclerView recycler;
 
@@ -77,7 +74,7 @@ public class ListOfFriends extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    User user = dataSnapshot.getValue(User.class);
+                    UserModel user = dataSnapshot.getValue(UserModel.class);
                     if(user!=null && user.getName()!=null && user.getPhone()!=null) {
                         userList.add(user);
                     }

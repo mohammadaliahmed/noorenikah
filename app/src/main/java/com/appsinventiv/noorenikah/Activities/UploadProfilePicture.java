@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
@@ -134,7 +134,7 @@ public class UploadProfilePicture extends AppCompatActivity {
                                             mDatabase.child("Users").child(SharedPrefs.getUser().getPhone()).child("livePicPath").setValue(livePicPath).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    User us = SharedPrefs.getUser();
+                                                    UserModel us = SharedPrefs.getUser();
                                                     us.setLivePicPath(livePicPath);
                                                     SharedPrefs.setUser(us);
                                                     startActivity(new Intent(UploadProfilePicture.this, CompleteProfileScreen.class));

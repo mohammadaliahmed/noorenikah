@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -28,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.collection.ArraySet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.ChatAdapter;
 import com.appsinventiv.noorenikah.Models.ChatModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.CompressImage;
@@ -44,6 +42,7 @@ import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.KeyboardUtils;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.appsinventiv.noorenikah.call.CallManager;
 import com.bumptech.glide.Glide;
 import com.devlomi.record_view.OnBasketAnimationEnd;
 import com.devlomi.record_view.OnRecordListener;
@@ -71,7 +70,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -82,7 +80,7 @@ public class ChatScreen extends AppCompatActivity {
     ImageView send;
     private DatabaseReference mDatabase;
     String msg = "";
-    private User otherUser;
+    private UserModel otherUser;
     TextView name;
     CircleImageView picture;
     private List<ChatModel> itemList = new ArrayList<>();
@@ -112,6 +110,7 @@ public class ChatScreen extends AppCompatActivity {
     EmojiPopup emojiPopup;
     TextView userStatus;
     private boolean emojiShowing;
+    ImageView dialVideo, dialAudio;
 
     @Override
     protected void onResume() {
@@ -148,6 +147,8 @@ public class ChatScreen extends AppCompatActivity {
         emoji = findViewById(R.id.emoji);
         userStatus = findViewById(R.id.userStatus);
         messagingArea = findViewById(R.id.messagingArea);
+        dialAudio = findViewById(R.id.dialAudio);
+        dialVideo = findViewById(R.id.dialVideo);
         recordingArea = findViewById(R.id.recordingArea);
         recordView = (RecordView) findViewById(R.id.record_view);
         recordButton = (RecordButton) findViewById(R.id.record_button);
@@ -337,7 +338,30 @@ public class ChatScreen extends AppCompatActivity {
         adapter.setItemList(itemList);
         recyclerView.scrollToPosition(itemList.size() - 1);
 
+        dialAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<UserModel> userList = new ArrayList<>();
+                userList.add(otherUser);
+//            for(UserModel u:pList) {
+                CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
+                callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
+//            }
+                CommonUtils.showToast("Dialing audio");
+            }
+        });
+        dialVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                ArrayList<UserModel> userList = new ArrayList<>();
+                userList.add(otherUser);
+//                userList.add(itemList.get(5));
+                CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
+                callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
+                CommonUtils.showToast("Dialing Video");
+            }
+        });
         getDataFromDb();
 
     }
@@ -459,7 +483,7 @@ public class ChatScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     if (screenActive) {
-                        otherUser = dataSnapshot.getValue(User.class);
+                        otherUser = dataSnapshot.getValue(UserModel.class);
                         name.setText(otherUser.getName());
                         try {
                             Glide.with(ChatScreen.this).load(otherUser.getLivePicPath())

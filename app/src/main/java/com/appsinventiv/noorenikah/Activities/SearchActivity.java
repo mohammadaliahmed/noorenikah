@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     RecyclerView recycler;
     private UsersRecyclerAdapter adapter;
-    private List<User> usersList = new ArrayList<>();
+    private List<UserModel> usersList = new ArrayList<>();
     ProgressBar progress;
     TextView noData;
 
@@ -105,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
+                        UserModel user = snapshot.getValue(UserModel.class);
                         if (user != null && user.getName() != null && user.getGender() != null &&
                                 !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
                             try {
@@ -178,7 +178,7 @@ public class SearchActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotification(User user) {
+    private void sendNotification(UserModel user) {
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(this);
         String NotificationTitle = "New request from: " + user.getName();

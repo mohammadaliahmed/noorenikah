@@ -16,8 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appsinventiv.noorenikah.BuildConfig;
-import com.appsinventiv.noorenikah.Models.ReferralCodePaidModel;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.AlertsUtils;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -25,10 +24,6 @@ import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.rilixtech.CountryCodePicker;
-
-import java.util.HashMap;
 
 public class SocialRegister extends AppCompatActivity {
     EditText  name;
@@ -120,7 +115,7 @@ public class SocialRegister extends AppCompatActivity {
     private void requestCode() {
 
         String myReferralCode = CommonUtils.getRandomCode(7);
-        User user = new User(
+        UserModel user = new UserModel(
                 name.getText().toString(),
                 userId,
                 userId, "", myReferralCode, gender,

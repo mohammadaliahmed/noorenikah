@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
-import com.appsinventiv.noorenikah.Models.User;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.bumptech.glide.Glide;
 
@@ -20,14 +20,14 @@ import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     Context context;
-    List<User> userList;
+    List<UserModel> userList;
 
-    public FriendsAdapter(Context context, List<User> userList) {
+    public FriendsAdapter(Context context, List<UserModel> userList) {
         this.context = context;
         this.userList = userList;
     }
 
-    public void setUserList(List<User> userList) {
+    public void setUserList(List<UserModel> userList) {
         this.userList = userList;
         notifyDataSetChanged();
     }
@@ -42,7 +42,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = userList.get(position);
+        UserModel user = userList.get(position);
         Glide.with(context)
                 .load(user.getLivePicPath())
                 .placeholder(R.drawable.picked)

@@ -1506,11 +1506,10 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
                 jsonObject.put("roomId", mRoomId);
                 jsonObject.put("userstring", StringUtils.getGson().toJson(UserManager.getInstance().getUserIfLoggedIn()));
                 jsonObject.put("groupname", groupname);
-                jsonObject.put("type", "audio");
+                jsonObject.put("Type", "audio");
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
 
                 json.put("data", jsonObject);
-                json.put("type", "audio");
                 json.put("to", sendTo);
                 json.put("priority", "high");
 
@@ -1597,9 +1596,10 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
 
                 json.put("data", jsonObject);
-                json.put("type", "audio");
+                json.put("Type", "audio");
                 json.put("to", sendTo);
                 json.put("priority", "high");
+
 
 
                 Log.d("json", "" + json);

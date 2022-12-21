@@ -28,12 +28,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.appsinventiv.noorenikah.Adapters.MainSliderAdapter;
 import com.appsinventiv.noorenikah.BuildConfig;
+import com.appsinventiv.noorenikah.Models.MetaData;
 import com.appsinventiv.noorenikah.Models.PromotionBanner;
 import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.appsinventiv.noorenikah.Utils.UserManager;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.NotificationFragment;
@@ -440,6 +442,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             UserModel user = dataSnapshot.getValue(UserModel.class);
                             SharedPrefs.setUser(user);
+                            MetaData metaData = new MetaData(user);
+                            saveUserData(metaData);
                             if (user.isRejected()) {
                                 SharedPrefs.logout();
                                 Intent i = new Intent(MainActivity.this, Splash.class);
@@ -458,6 +462,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void saveUserData(MetaData metaData) {
+        UserManager.getInstance().setMetaData(metaData);
+        UserManager.getInstance().setUserLogin();
+
+
+    }
 
     private NavigationBarView.OnItemSelectedListener mOnNavigationItemSelectedListener
             = new NavigationBarView.OnItemSelectedListener() {

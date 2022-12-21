@@ -77,8 +77,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             room = roomId;
             Bitmap bitmap = getBitmapfromUrl(imageFromNotification);
 
+            if(type!=null){
+                if(type.equalsIgnoreCase("audio")){
+                    final String groupname = map.get("groupname");
+                    final String userstring = map.get("userstring");
+                    final String callerId = map.get("callerId");
 
-            handleNow(title, message, bitmap);
+                    startcallactivity(groupname, userstring, roomId, callerId, type);
+                }else{
+                    handleNow(title, message, bitmap);
+
+                }
+
+            }else{
+
+            }
 
 
         }

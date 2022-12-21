@@ -397,7 +397,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
 
                 json.put("data", jsonObject);
-                json.put("type", "callRejected");
+                json.put("Type", "callRejected");
                 json.put("to", sendTo);
                 json.put("priority", "high");
 

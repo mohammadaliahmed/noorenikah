@@ -545,7 +545,7 @@ public class VideoRecieverCallService extends Service implements AudioCallBackIn
         notificationBuilder.setTicker("@Ustad App");
         notificationBuilder.setColor(getResources().getColor(R.color.colorAccent));
         notificationBuilder.setContentText(notificationState + " " + mUserName);
-        notificationBuilder.setSmallIcon(R.drawable.call);
+        notificationBuilder.setSmallIcon(R.drawable.ic_phone_white);
         notificationBuilder.setLargeIcon(icon);
         notificationBuilder.setContentIntent(pendingIntent);
         notificationBuilder.setOngoing(true);

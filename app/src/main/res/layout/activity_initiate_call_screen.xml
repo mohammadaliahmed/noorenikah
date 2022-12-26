@@ -1,151 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/call_bg"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#56000000" />
+
 
     <LinearLayout
         android:id="@+id/layoutCall"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="90"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layoutCallInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginLeft="10dp"
-            android:minWidth="160dp"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvBandwidth"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvTotalBandwidth"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvBitRate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvPacket"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Signal Strength: High"
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/ivStrength"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:src="@drawable/user"
-                android:textColor="#ffffff"
-                android:visibility="visible" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_marginTop="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ReceivingPlaceHolder"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/ic_profile_plc"
-
-                app:civ_border_color="#fff"
-                app:civ_border_width="2dp" />
-        </RelativeLayout>
 
         <TextView
             android:id="@+id/CallerNameTxt"
-            android:layout_width="wrap_content"
+            android:shadowColor="#000000"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
             android:text="Caller Name"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="50sp" />
 
         <TextView
-            android:id="@+id/CallerDept"
+            android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text=""
+            android:layout_marginStart="30dp"
+            android:gravity="center"
+            android:text="Dialing"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-        <LinearLayout
-            android:id="@+id/layout_call_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Dialing"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-        </LinearLayout>
+            android:textSize="16sp" />
 
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
             android:padding="5dp"
             android:textColor="@color/white"
             android:visibility="gone" />
@@ -153,20 +63,13 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivCallInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/user"
-        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/layout_widget_call"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="visible">
@@ -178,108 +81,56 @@
             android:orientation="horizontal"
             android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/ic_speaker"
 
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/transparentColr"
-                android:padding="5dp"
-                android:src="@drawable/ic_speaker" />
-
-            <ImageButton
-                android:id="@+id/btn_keypad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparentColr"
-                android:padding="16dp"
-                android:src="@drawable/user"
-                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ic_muteBtn"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_marginEnd="30dp"
                 android:background="@color/transparentColr"
-                android:padding="16dp"
+
                 android:src="@drawable/ic_mute" />
 
+            <ImageView
+                android:id="@+id/ic_speaker"
+                android:layout_marginStart="30dp"
+
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@color/transparentColr"
+
+                android:src="@drawable/ic_speaker" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <ImageButton
-                android:id="@+id/btn_addCall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparentColr"
-                android:padding="16dp"
-                android:src="@drawable/user" />
-
-            <ImageButton
-                android:id="@+id/btn_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparentColr"
-                android:padding="16dp"
-                android:src="@drawable/user" />
-
-            <ImageButton
-                android:id="@+id/ic_hold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparentColr"
-                android:padding="16dp"
-                android:src="@drawable/user" />
-        </LinearLayout>
 
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="30">
+    <ImageView
+        android:id="@+id/CallEndBtn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
 
-        <ImageView
-            android:id="@+id/CallEndBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="20"
-            android:background="@color/transparentColr"
-            android:src="@drawable/ic_call_decline"
-            android:visibility="visible" />
+        android:background="@color/transparentColr"
+        android:src="@drawable/ic_call_decline"
+        android:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/ConnectedCallEndBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_below="@id/layout_widget_call"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="20"
-            android:background="@color/transparentColr"
-            android:src="@drawable/ic_call_decline"
-            android:visibility="gone" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/ConnectedCallEndBtn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/layout_widget_call"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@color/transparentColr"
+        android:src="@drawable/ic_call_decline"
+        android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/black_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"
-        android:orientation="vertical"
-        android:visibility="gone">
 
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

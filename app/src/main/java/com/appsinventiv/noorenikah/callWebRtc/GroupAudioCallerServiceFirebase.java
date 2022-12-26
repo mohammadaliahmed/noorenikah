@@ -1378,7 +1378,7 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
         notificationBuilder.setTicker(getResources().getString(R.string.app_name));
         notificationBuilder.setColor(getResources().getColor(R.color.colorAccent));
         notificationBuilder.setContentText(notificationState + " " + mUserName); // todo add groupName here...
-        notificationBuilder.setSmallIcon(R.drawable.call);
+        notificationBuilder.setSmallIcon(R.drawable.ic_phone_white);
         notificationBuilder.setLargeIcon(icon);
         notificationBuilder.setContentIntent(pendingIntent);
         notificationBuilder.setOngoing(true);
@@ -1387,12 +1387,12 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
             intent.setAction(Constants.ForegroundService.CANCEL_INGOING_CALL);
             PendingIntent pendingIntent1 = PendingIntent.getService(this, 0,
                     intent,  PendingIntent.FLAG_MUTABLE);
-            notificationBuilder.addAction(R.drawable.call, "End call", pendingIntent1);
+            notificationBuilder.addAction(R.drawable.ic_phone_white, "End call", pendingIntent1);
         } else if (action.equals(Constants.ForegroundService.END_CALL)) {
             intent.setAction(Constants.ForegroundService.END_CALL);
             PendingIntent pendingIntent1 = PendingIntent.getService(this, 0,
                     intent,  PendingIntent.FLAG_MUTABLE);
-            notificationBuilder.addAction(R.drawable.call, "End call", pendingIntent1);
+            notificationBuilder.addAction(R.drawable.ic_phone_white, "End call", pendingIntent1);
         }
         Notification notification = notificationBuilder.build();
         startForeground(101, notification);

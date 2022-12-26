@@ -61,7 +61,7 @@ Whatsapp: 03142288492"
                 android:layout_gravity="center"
 
                 android:layout_margin="10dp"
-                android:src="@drawable/jazzcash" />
+               />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -14,6 +14,10 @@ public class Constants {
     public static String MESSAGE_TYPE_IMAGE = "IMAGE";
     public static String MESSAGE_TYPE_TEXT = "TEXT";
     public static String MESSAGE_TYPE_AUDIO = "AUDIO";
+    public static String CALL_OUTGOING = "OUTGOING";
+    public static String CALL_INCOMING = "INCOMING";
+    public static String CALL_ENDED = "ENDED";
+    public static String CALL_MISSED = "INCOMING";
 
     public static DatabaseReference M_DATABASE = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
     public static final String FirebaseMessaging = "AAAA91yjyaU:APA91bFM4SHeu_4MCchQSW19DODeaHGCyZP2fPw7vPgNYnEu020By2uAMuXFUDRagCHOs86VZWRfI6ZjtPyrYJu-vNeuEHPDlNmZrQpQuSlTvg3TU8CZ2655G3fwu7bCPBO8OVUunDxn";

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/call_bg"
     android:gravity="center"
     >
 
@@ -22,7 +21,6 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_profile"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp" />
 
@@ -92,7 +90,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/user"
         android:visibility="gone" />
 
     <LinearLayout
@@ -155,7 +152,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:src="@drawable/user"
             android:textColor="#ffffff"
             android:visibility="gone" />
     </LinearLayout>
@@ -184,7 +180,6 @@
                 android:id="@+id/dotted_line"
                 android:layout_width="wrap_content"
                 android:layout_height="5dp"
-                android:background="@drawable/user"
                 android:layerType="software"
                 android:visibility="gone" />
 
@@ -196,7 +191,6 @@
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/dotted_line"
                 android:background="@color/transparentColr"
-                android:src="@drawable/user"
                 android:visibility="gone" />
 
             <ImageView
@@ -206,7 +200,6 @@
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/callCenterBtn"
                 android:layerType="software"
-                android:src="@drawable/user"
                 android:visibility="gone" />
 
             <ImageView
@@ -236,7 +229,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
             android:padding="16dp"
-            android:src="@drawable/user" />
+      />
 
         <ImageButton
             android:id="@+id/btn_msg"
@@ -244,7 +237,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
             android:padding="16dp"
-            android:src="@drawable/user" />
+      />
 
         <ImageButton
             android:id="@+id/ic_speaker"
@@ -252,7 +245,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
             android:padding="16dp"
-            android:src="@drawable/user" />
+          />
 
         <ImageButton
             android:id="@+id/ic_hold"
@@ -260,7 +253,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
             android:padding="16dp"
-            android:src="@drawable/user" />
+           />
     </LinearLayout>
 
     <ImageView
@@ -280,5 +273,5 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
+        android:visibility="gone"/>
 </RelativeLayout>

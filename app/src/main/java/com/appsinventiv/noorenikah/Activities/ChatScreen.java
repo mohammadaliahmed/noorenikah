@@ -163,7 +163,7 @@ public class ChatScreen extends AppCompatActivity {
         mAdView.loadAd(adRequest);
         mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
         otherUserPhone = getIntent().getStringExtra("phone");
-//        otherUserPhone = "3097748424";
+        otherUserPhone = "3097748424";
         adapter = new ChatAdapter(this, itemList);
 
         dropdown_menu = findViewById(R.id.dropdown_menu);

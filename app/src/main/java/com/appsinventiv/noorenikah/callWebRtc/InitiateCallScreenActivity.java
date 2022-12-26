@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Chronometer;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,28 +39,31 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Models.CallModel;
 import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.ApplicationClass;
+import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.DynamicPermission;
 import com.appsinventiv.noorenikah.Utils.GlobalMethods;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.StringUtils;
 import com.appsinventiv.noorenikah.call.CallManager;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.CallWidgetState;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventFromService;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventsFromActivity;
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Timer;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InitiateCallScreenActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
     private final static int sREQUEST_CODE = 1001;
@@ -69,33 +71,21 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     Long mCallId = -1L;
     CallManager.CallType mCallType;
     CallWebRTCManger callWebRTCManger;
-    //    private CallViewModel callViewModel;
     ImageView mBtnEndCall;
-    ImageView mIvCallInfo;
-    CircleImageView mAttendeDp;
     TextView mTxtAttendeName;
-    TextView mTxtAttendePost;
     Chronometer mChronometer;
     ImageView mConnectedCallEnd;
     ImageView mBtn_Speaker;
     ImageView mBtn_microphone;
-    ImageButton mBtn_msg;
-    ImageButton mBtn_hold;
-    ImageButton mBtn_addCall;
-    ImageButton mBtn_keypad;
     TextView mTvStatus;
-    Long callStartTime = -1L;
     ToneGenerator mToneGenerator;
     boolean isCallStartedflag = true;
     Timer mTimer = new Timer();
     boolean isMute = false;
     boolean isHold = false;
     boolean isSpeaker = false;
-    // Enum callState;
     boolean isCallStartedflagFromService = false;
-    String mUserName;
-    String mUserPost;
-    String mUserDpUrl;
+
     Enum mCallStatusFromService;
     SensorManager sensorManager;
     Sensor proximitySensor;
@@ -120,6 +110,8 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     private long userId;
     private String mfirebaseId;
     private UserModel userModel;
+    ImageView image;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +126,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
+        mDatabase=Constants.M_DATABASE;
         showActivity();
         initViews();
         registerViews();
@@ -236,25 +229,19 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     }
 
     private void initViews() {
+        image = findViewById(R.id.image);
         mTvStatus = findViewById(R.id.tv_status);
         mBtnEndCall = findViewById(R.id.CallEndBtn);
-        mAttendeDp = findViewById(R.id.ReceivingPlaceHolder);
         mTxtAttendeName = findViewById(R.id.CallerNameTxt);
-        mTxtAttendePost = findViewById(R.id.CallerDept);
         mChronometer = findViewById(R.id.chronometer);
         black_layout = findViewById(R.id.black_layout);
         mLayoutCallInfo = ((LinearLayout) findViewById(R.id.layoutCallInfo));
 //        callViewModel = ViewModelProviders.of(InitiateCallScreenActivity.this).get(CallViewModel.class);
         mConnectedCallEnd = findViewById(R.id.ConnectedCallEndBtn);
         mBtn_Speaker = findViewById(R.id.ic_speaker);
-        mIvCallInfo = (ImageView) findViewById(R.id.ivCallInfo);
         mBtn_microphone = findViewById(R.id.ic_muteBtn);
-        mBtn_msg = findViewById(R.id.btn_msg);
         mCallStatusLinearLayouot = findViewById(R.id.layout_call_status);
-        
-        mBtn_hold = (ImageButton) findViewById(R.id.ic_hold);
-        mBtn_keypad = (ImageButton) findViewById(R.id.btn_keypad);
-        mBtn_addCall = (ImageButton) findViewById(R.id.btn_addCall);
+
     }
 
     private void startInitiateCallerService(String mUserPost, String mUserName, String mUserDpUrl, String mgroupName, Long attendentId, String userfirebaseId) {
@@ -281,11 +268,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         mConnectedCallEnd.setOnClickListener(this);
         mBtn_Speaker.setOnClickListener(this);
         mBtn_microphone.setOnClickListener(this);
-        mBtn_msg.setOnClickListener(this);
-        mIvCallInfo.setOnClickListener(this);
-        mBtn_addCall.setOnClickListener(this);
-        mBtn_keypad.setOnClickListener(this);
-        mBtn_hold.setOnClickListener(this);
+
     }
 
 
@@ -310,7 +293,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         }
 
         mTxtAttendeName.setText(userModel.getName());
-        Glide.with(InitiateCallScreenActivity.this).load(userModel.getPicUrl()).into(mAttendeDp);
+        Glide.with(InitiateCallScreenActivity.this).load(userModel.getLivePicPath()).into(image);
 
 
     }
@@ -369,7 +352,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 
                 mChronometer.setVisibility(View.GONE);
             } else if (callState.equals(EventFromService.CALL_END)) {
-
+                CommonUtils.showToast("Call end");
             } else if (callState.equals(EventFromService.CALL_RECONNECTING)) {
                 mChronometer.setVisibility(View.GONE);
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
@@ -431,32 +414,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             } else if (callState.equals(EventFromService.UPDATE_CALL_ID)) {
                 mCallId = intent.getLongExtra(Constants.IntentExtra.CALL_ID, -1L);
             } else if (callState.equals(EventFromService.UPDATE_CALL_STATS)) {
-//                final Long packets = intent.getLongExtra(Constants.IntentExtra.PACKETS, 0);
-//                final double bandwidth = intent.getDoubleExtra(Constants.IntentExtra.BANDWIDTH, 0);
-//                final double totalBandwidth = intent.getDoubleExtra(Constants.IntentExtra.TOTAL_BANDWIDTH, 0);
-//                final double bitrate = intent.getDoubleExtra(Constants.IntentExtra.BITRATE, 0);
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Log.i("Call Stats: ", "Total Data Used: " + totalBandwidth + " Current Bandwidth: " + bandwidth + " Bitrate: " + bitrate + " Packet Sent: " + packets);
-////                        ((TextView) findViewById(R.id.tvTotalBandwidth)).setText("Data Used: " + Utils.getTwoDecimalplaces(totalBandwidth) + " kb/s");
-////                        ((TextView) findViewById(R.id.tvBandwidth)).setText("Bandwidth: " + Utils.getTwoDecimalplaces(bandwidth) + " kb/s");
-////                        ((TextView) findViewById(R.id.tvBitRate)).setText("Bit Rate: " + Utils.getTwoDecimalplaces(bitrate) + " b/s");
-//
-//                        ((ImageView) findViewById(R.id.ivStrength)).setVisibility(View.VISIBLE);
-//                        if (bandwidth > 1 && bandwidth < 2.5) {
-////                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_orange));
-////                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: Normal");
-//                        } else if (bandwidth < 1) {
-////                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: Low");
-////                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_red));
-//                        } else {
-////                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: High");
-////                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_green));
-//                        }
-////                        ((TextView) findViewById(R.id.tvPacket)).setText(packets + "");
-//                    }
-//                });
+
             }
         }
     };
@@ -621,21 +579,17 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_msg:
-                startChatActivity(mGroupId);
-                break;
             case R.id.CallEndBtn:
+                endCallInDb();
                 closeConnectionFromSocket();
-                //  individualMissedCall();
-//                GlobalMethods.vibrateMobile();
                 callerCancelAudioCall();
                 Intent intent1 = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
                 intent1.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.END_CALL_INGOING);
                 LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent1);
-
                 startHomeActivity();
                 break;
             case R.id.ConnectedCallEndBtn:
+                endCallInDb();
                 // finishConnectedCall();
 //                GlobalMethods.vibrateMobile();
                 Intent intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
@@ -693,102 +647,62 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             case R.id.ivCallInfo:
                 mLayoutCallInfo.setVisibility(mLayoutCallInfo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
-            case R.id.btn_addCall:
-                startAddMemberActivity();
-                break;
+
             case R.id.ic_hold:
                 isMute = false;
-////                Drawable replacer = getResources().getDrawable(R.drawable.ic_mute);
-//                mBtn_microphone.setImageDrawable(replacer);
+
                 if (isHold) {
                     isHold = false;
-////                    replacer = getResources().getDrawable(R.drawable.ic_hold);
-//                    mBtn_hold.setImageDrawable(replacer);
+
                     intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
                     intent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.UNHOLD_BUTTON_PRESSED);
                     LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
                 } else {
                     isHold = true;
-////                    replacer = getResources().getDrawable(R.drawable.ic_unhold);
-////                    mBtn_hold.setImageDrawable(replacer);
+
                     intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
                     intent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.HOLD_BUTTON_PRESSED);
                     LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
                 }
                 break;
-            case R.id.btn_keypad:
-                //   Toast.makeText(this, "Dailer Appear", Toast.LENGTH_SHORT).show();
-                break;
+
             default:
                 break;
 
         }
     }
 
-    private final static String GROUPS_PATH = "groups";
-    private final static String GROUPS_MEMEBVER = "memeber";
+    private void endCallInDb() {
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("endTime",System.currentTimeMillis());
+        map.put("callType",Constants.CALL_ENDED);
+
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
+
+    }
 
     public void initAudioCall(final Long mGroupId) {
-//        GroupRepository groupRepository = new GroupRepository();
-//        groupRepository.getCallGroup(mGroupId, new ICommandResultListener() {
-//            @Override
-//            public void onCommandResult(ICommandResult result) {
-//                final CallsGroup callsGroup = (CallsGroup) result.getData();
-////                GlideHelper.loadImage(InitiateCallScreenActivity.this, callsGroup.getmUserDpUrl(), mAttendeDp, R.drawable.ic_profile_plc);
-//                mTxtAttendePost.setText(callsGroup.getUserPost());
-//                mTxtAttendeName.setText(callsGroup.getmUserName());
-
-//        DatabaseReference dataReference = FirebaseDatabase.getInstance().getReference();
-//        dataReference.getRoot().child(GROUPS_MEMEBVER).child(mgroupName).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (!flag) {
-//                    GroupMembers groupMembers = dataSnapshot.getValue(GroupMembers.class);
-//                    Long userId;
-//                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                        Map<String, Object> map = (Map) postSnapshot.getValue();
-//                        if (map != null) {
-//                            String groupmember2FirebaseId = (String) map.get("groupmember2FirebaseId");
-//                            Long groupMember1Id = (Long) map.get("groupMember1Id");
-//                            Long groupMember2Id = (Long) map.get("groupMember2Id");
-//                            String groupmember1FirebaseId = (String) map.get("groupmember1FirebaseId");
-////                            String groupId = (String) map.get("groupId");
-//                            String userfirebaseId;
-//                            if (groupmember1FirebaseId.equalsIgnoreCase(UserManager.getInstance().getUser().getmFireBaseId())) {
-//                                userId = Long.valueOf(groupMember2Id);
-//                                userfirebaseId = groupmember2FirebaseId;
-//                            } else {
-//                                userId = Long.valueOf(groupMember1Id);
-//                                userfirebaseId = groupmember1FirebaseId;
-//                            }
-        Long currentTime = Calendar.getInstance().getTimeInMillis();
-        mRoomId = 555L;
-        mRoomId = Long.valueOf(String.valueOf(currentTime)) / 10;
         Random rand = new Random();
-        int n = rand.nextInt(50) + 1;
+        int n = rand.nextInt(998) + 1;
         mRoomId = Long.valueOf(n);
-//        mRoomId = 12345l;
-
-//                            flag = true;
-
         startInitiateCallerService("admin", userModel.getName(), userModel.getPicUrl(), mgroupName, userId, mfirebaseId);
-//
-//                        }
-//                    }
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        CallModel model=new CallModel(""+mRoomId,
+                SharedPrefs.getUser().getPhone(),
+                SharedPrefs.getUser().getName(),
+                userModel.getPhone(),
+                userModel.getName(),
+                Constants.CALL_OUTGOING,
+                false,
+                0,
+                System.currentTimeMillis(),
+                System.currentTimeMillis()
+                );
 
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
+                .child(""+mRoomId).setValue(model);
 
-//            }
-//        });
     }
 
     private void finishConnectedCall() {
@@ -878,37 +792,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
 //    }
 
     private void callerCancelAudioCall() {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("userId", UserManager.getInstance().getUserIfLoggedIn().getmFireBaseId());
-//        params.put("callId", mCallId);
-//        params.put("lastActivityTime", Calendar.getInstance().getTimeInMillis());
-//        callViewModel.callerCancelAudioCall(params, new INetworkRequestListener() {
-//            @Override
-//            public void onSuccess(Response result) {
-//                String response = (String) result.getmObj();
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response);
-//                    jsonObject = jsonObject.getJSONObject("data");
-//                    Long callStateCode = jsonObject.getLong("callStateCode");
-//                    Long responseType = jsonObject.getLong("responseTypeCode");
-//                    callViewModel.updateCallStatusAndResponse(mCallId, callStateCode, responseType, 0L, 0L);
-//                    removeTimer();
-////                    GlobalMethods.updateUiToUpdateCallLogs();
-//                    closeConnectionFromSocket();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Response result) {
-////                showToast("Server Error");
-//                //todo make discussion on this one...
-//                closeConnectionFromSocket();
-////                GlobalMethods.updateUiToUpdateCallLogs();
-//                InitiateCallScreenActivity.this.finish();
-//            }
-//        });
+
     }
 
     private void askForDangerousPermissions() {
@@ -980,22 +864,6 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             if (!wakeLock.isHeld()) {
                 wakeLock.acquire();
             }
-//            View decorView = getWindow().getDecorView();
-//            getWindow().getDecorView().setBackgroundColor(Color.BLACK);
-//            black_layout.setVisibility(View.VISIBLE);
-//            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_FULLSCREEN;
-//            decorView.setSystemUiVisibility(uiOptions);
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-//                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-//                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-//                    WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON |
-//                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        } else {
-//            if(!wakeLock.isHeld()) {
-//                wakeLock.release();
-//            }
-//            black_layout.setVisibility(View.GONE);
         }
     }
 
@@ -1013,15 +881,10 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         InitiateCallScreenActivity.this.finish();
     }
 
-    public void startChatActivity(long groupId) {
-//        Intent intent = new Intent(InitiateCallScreenActivity.this, ChatActivity.class);
-//        intent.putExtra("groupId", groupId);
-//        startActivity(intent);
-//        finish();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == sREQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 String participantJson = data.getStringExtra("result");
@@ -1036,33 +899,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         }
     }
 
-    public void startAddMemberActivity() {
-//        GroupRepository groupRepository = new GroupRepository();
-//        groupRepository.getGroupsWithMembers(mGroupId, new ICommandResultListener() {
-//
-//
-//            @Override
-//            public void onCommandResult(ICommandResult result) {
-//                GroupWithMembers groupWithMembers = (GroupWithMembers) result.getData();
-//                ArrayList<User> userlist = new ArrayList<>();
-//                Long userId = -1L;
-//                for (GroupMembers groupMembers :
-//                        groupWithMembers.memberIds) {
-//                    if (!Objects.equals(groupMembers.getmFireBaseId(), UserManager.getInstance().getUserIfLoggedIn().getmFireBaseId())) {
-//                        userId = groupMembers.getmFireBaseId();
-//                    }
-//                }
-//                if (userId != -1L) {
-//                    userlist.add(StudentApp.getInstance().getHubDatabase().userDao().getUser(userId));
-//                    Intent intent = new Intent(InitiateCallScreenActivity.this, AddMemberToCallActivity.class);
-//                    intent.putExtra("selectedContacts", StringUtils.getGson().toJson(userlist));
-//                    intent.putExtra("noOfPresentParticipant", 2);
-//                    startActivityForResult(intent, sREQUEST_CODE);
-//                }
-//
-//            }
-//        });
-    }
+
 
     private void checkIfReciverOnHold(boolean isHold) {
         if (isHold) {

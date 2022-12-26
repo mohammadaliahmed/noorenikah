@@ -313,7 +313,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private void displayCallerInfo() {
 //        GlideHelper.loadImage(RecieveCallActivity.this, user.getLogo(), mCallerDp, R.drawable.ic_profile_plc);
         if (user.getPicUrl() != null) {
-            Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.ic_profile).into(mCallerDp);
+            Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.users).into(mCallerDp);
         }
         mTxtCallerName.setText(user.getName());
         mUserName = user.getName();
@@ -321,7 +321,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 
     private void populateCallerInfo() {
 //        GlideHelper.loadImage(RecieveCallActivity.this, mUserDpUrl, mCallerDp, R.drawable.ic_profile_plc);
-        Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.ic_profile).into(mCallerDp);
+        Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.users).into(mCallerDp);
         mTxtCallerName.setText(mUserName);
     }
 

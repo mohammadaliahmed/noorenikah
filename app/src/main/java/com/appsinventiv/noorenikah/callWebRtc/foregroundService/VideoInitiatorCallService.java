@@ -474,7 +474,7 @@ public class VideoInitiatorCallService extends Service implements AudioCallBackI
         notificationBuilder.setTicker("@Wateen Hub");
         notificationBuilder.setColor(getResources().getColor(R.color.colorAccent));
         notificationBuilder.setContentText(notificationState + " " + mUserName);
-        notificationBuilder.setSmallIcon(R.drawable.call);
+        notificationBuilder.setSmallIcon(R.drawable.phonereceiver);
         notificationBuilder.setLargeIcon(icon);
         notificationBuilder.setContentIntent(pendingIntent);
         notificationBuilder.setOngoing(true);

@@ -499,7 +499,7 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
     private void setCallWidget(Enum videoState, Enum micState, Enum holdState) {
         if (videoState.equals(CallWidgetState.VIDEO_BUTTON_DISABLE)) {
             isVideoEnable = true;
-            Drawable replacer = getResources().getDrawable(R.drawable.ic_vid_cam_pressed);
+            Drawable replacer = getResources().getDrawable(R.drawable.ic_speaker);
             toggleVideoBtn.setImageDrawable(replacer);
         } else if (videoState.equals(CallWidgetState.VIDEO_BUTTON_ENABLE)) {
             isVideoEnable = false;
@@ -621,7 +621,7 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
             if (isVideoEnable) {
                 isVideoEnable = false;
                 isVideoEnablePressed = false;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_vid_cam_pressed);
+                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam);
                 toggleVideoBtn.setImageDrawable(replacer);
                 sendRequestToService(EventsFromActivity.DISABLE_VIDEO);
             } else {

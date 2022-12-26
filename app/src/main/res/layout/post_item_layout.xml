@@ -65,7 +65,7 @@
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:padding="2dp"
-                android:src="@drawable/three_dots"
+                android:src="@drawable/ic_three_dots"
                 android:visibility="visible" />
 
         </RelativeLayout>

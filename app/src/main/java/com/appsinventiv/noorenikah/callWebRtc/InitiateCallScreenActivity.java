@@ -90,10 +90,8 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     SensorManager sensorManager;
     Sensor proximitySensor;
     SensorEventListener proximitySensorListener;
-    private LinearLayout black_layout;
     private LinearLayout mCallStatusLinearLayouot;
     private String duration = "";
-    private LinearLayout mLayoutCallInfo;
     private String mParticipantsJson;
     private Long mRoomId;
     boolean isloudButtonPressed = false;
@@ -234,8 +232,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         mBtnEndCall = findViewById(R.id.CallEndBtn);
         mTxtAttendeName = findViewById(R.id.CallerNameTxt);
         mChronometer = findViewById(R.id.chronometer);
-        black_layout = findViewById(R.id.black_layout);
-        mLayoutCallInfo = ((LinearLayout) findViewById(R.id.layoutCallInfo));
+
 //        callViewModel = ViewModelProviders.of(InitiateCallScreenActivity.this).get(CallViewModel.class);
         mConnectedCallEnd = findViewById(R.id.ConnectedCallEndBtn);
         mBtn_Speaker = findViewById(R.id.ic_speaker);
@@ -644,9 +641,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                     Toast.makeText(this, "Call is onhold", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.ivCallInfo:
-                mLayoutCallInfo.setVisibility(mLayoutCallInfo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                break;
+
 
             case R.id.ic_hold:
                 isMute = false;
@@ -680,6 +675,9 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
                 .child(""+mRoomId).updateChildren(map);
 
+        mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
 
     }
 
@@ -689,10 +687,9 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         mRoomId = Long.valueOf(n);
         startInitiateCallerService("admin", userModel.getName(), userModel.getPicUrl(), mgroupName, userId, mfirebaseId);
         CallModel model=new CallModel(""+mRoomId,
-                SharedPrefs.getUser().getPhone(),
-                SharedPrefs.getUser().getName(),
                 userModel.getPhone(),
                 userModel.getName(),
+                userModel.getLivePicPath(),
                 Constants.CALL_OUTGOING,
                 false,
                 0,
@@ -702,6 +699,21 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
 
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
                 .child(""+mRoomId).setValue(model);
+
+        CallModel model2=new CallModel(""+mRoomId,
+                SharedPrefs.getUser().getPhone(),
+                SharedPrefs.getUser().getName(),
+                SharedPrefs.getUser().getLivePicPath(),
+                Constants.CALL_INCOMING,
+                false,
+                0,
+                System.currentTimeMillis(),
+                System.currentTimeMillis()
+        );
+
+        mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child(""+mRoomId).setValue(model);
+
 
     }
 

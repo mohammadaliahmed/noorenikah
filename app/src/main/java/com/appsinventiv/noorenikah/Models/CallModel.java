@@ -1,19 +1,19 @@
 package com.appsinventiv.noorenikah.Models;
 
 public class CallModel {
-    String id, callFrom, callFromName,callTo, callToName, callType;
+    String id, phone, name, pic, callType;
     boolean video;
     long seconds;
     long startTime;
     long endTime;
 
-    public CallModel(String id, String callFrom, String callFromName, String callTo,
-                     String callToName, String callType, boolean video, long seconds, long startTime, long endTime) {
+
+    public CallModel(String id, String phone, String name,
+                     String pic, String callType, boolean video, long seconds, long startTime, long endTime) {
         this.id = id;
-        this.callFrom = callFrom;
-        this.callFromName = callFromName;
-        this.callTo = callTo;
-        this.callToName = callToName;
+        this.phone = phone;
+        this.name = name;
+        this.pic = pic;
         this.callType = callType;
         this.video = video;
         this.seconds = seconds;
@@ -21,20 +21,47 @@ public class CallModel {
         this.endTime = endTime;
     }
 
-    public String getCallFromName() {
-        return callFromName;
+    public CallModel() {
     }
 
-    public void setCallFromName(String callFromName) {
-        this.callFromName = callFromName;
+    public String getId() {
+        return id;
     }
 
-    public String getCallToName() {
-        return callToName;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setCallToName(String callToName) {
-        this.callToName = callToName;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getCallType() {
+        return callType;
+    }
+
+    public void setCallType(String callType) {
+        this.callType = callType;
     }
 
     public boolean isVideo() {
@@ -43,6 +70,14 @@ public class CallModel {
 
     public void setVideo(boolean video) {
         this.video = video;
+    }
+
+    public long getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(long seconds) {
+        this.seconds = seconds;
     }
 
     public long getStartTime() {
@@ -59,48 +94,5 @@ public class CallModel {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public CallModel() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCallFrom() {
-        return callFrom;
-    }
-
-    public void setCallFrom(String callFrom) {
-        this.callFrom = callFrom;
-    }
-
-    public String getCallTo() {
-        return callTo;
-    }
-
-    public void setCallTo(String callTo) {
-        this.callTo = callTo;
-    }
-
-    public String getCallType() {
-        return callType;
-    }
-
-    public void setCallType(String callType) {
-        this.callType = callType;
-    }
-
-    public long getSeconds() {
-        return seconds;
-    }
-
-    public void setSeconds(long seconds) {
-        this.seconds = seconds;
     }
 }

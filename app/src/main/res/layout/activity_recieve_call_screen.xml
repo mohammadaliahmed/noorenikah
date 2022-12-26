@@ -3,9 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    >
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#56000000" />
 
     <LinearLayout
         android:id="@+id/callLayout"
@@ -16,209 +25,82 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/callerDp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp" />
-
         <TextView
             android:id="@+id/callerName"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="30dp"
-            android:text=""
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:shadowColor="#000000"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:text="Caller Name"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="50sp" />
 
         <TextView
-            android:id="@+id/callerPost"
+            android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
             android:gravity="center"
-            android:paddingTop="2dp"
-            android:text=""
+            android:text="Dialing"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:textSize="16sp"
+            android:visibility="gone" />
+
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
             android:padding="5dp"
             android:textColor="@color/white"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/layout_call_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="  Connecting"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivCallInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/layoutCallInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:minWidth="160dp"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/tvBandwidth"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:text=""
-            android:textColor="#ffffff"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvTotalBandwidth"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-            android:textColor="#ffffff"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvBitRate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-            android:textColor="#ffffff" />
-
-        <TextView
-            android:id="@+id/tvPacket"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-            android:textColor="#ffffff"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Signal Strength: High"
-            android:textColor="#ffffff"
-            android:visibility="gone" />
 
 
-        <ImageView
-            android:id="@+id/ivStrength"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:textColor="#ffffff"
-            android:visibility="gone" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_call_accept_reject"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/callLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
+        <ImageView
+            android:id="@+id/CallDeclineBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="50dp"
+            android:background="@color/transparentColr"
+            android:src="@drawable/ic_call_decline" />
 
-            <ImageView
-                android:id="@+id/CallDeclineBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@color/transparentColr"
-                android:src="@drawable/ic_call_decline" />
+        <ImageView
+            android:id="@+id/CallAttendBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="50dp"
+            android:background="@color/transparentColr"
+            android:src="@drawable/ic_call_accept" />
 
-            <ImageView
-                android:id="@+id/dotted_line"
-                android:layout_width="wrap_content"
-                android:layout_height="5dp"
-                android:layerType="software"
-                android:visibility="gone" />
-
-
-            <ImageButton
-                android:id="@+id/callCenterBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/dotted_line"
-                android:background="@color/transparentColr"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/dotted_line_right"
-                android:layout_width="wrap_content"
-                android:layout_height="5dp"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/callCenterBtn"
-                android:layerType="software"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/CallAttendBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/dotted_line_right"
-                android:background="@color/transparentColr"
-                android:src="@drawable/ic_call_accept" />
-        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_call_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout_call_accept_reject"
-        android:layout_weight="10"
+        android:layout_above="@+id/ConnectedCallEndBtn"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -228,50 +110,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
-            android:padding="16dp"
-      />
+            android:padding="16dp" />
 
         <ImageButton
             android:id="@+id/btn_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
-            android:padding="16dp"
-      />
+            android:padding="16dp" />
 
         <ImageButton
             android:id="@+id/ic_speaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
-            android:padding="16dp"
-          />
+            android:padding="16dp" />
 
         <ImageButton
             android:id="@+id/ic_hold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparentColr"
-            android:padding="16dp"
-           />
+            android:padding="16dp" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/ConnectedCallEndBtn"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_below="@id/layout_call_widget"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
         android:background="@color/transparentColr"
         android:src="@drawable/ic_call_decline"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/black_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:visibility="gone"/>
 </RelativeLayout>

@@ -47,6 +47,7 @@ import com.appsinventiv.noorenikah.Utils.ApplicationClass;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.DynamicPermission;
 import com.appsinventiv.noorenikah.Utils.GlobalMethods;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.StringUtils;
 import com.appsinventiv.noorenikah.Utils.UserManager;
 
@@ -59,6 +60,7 @@ import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.CallWidgetState;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventFromService;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventsFromActivity;
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
@@ -71,6 +73,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,9 +86,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private ImageView mBtnAcceptCall;
     private ImageView mBtnDeclineCall;
     private TextView mTxtCallerName;
-    private TextView mTxtCallerPost;
     private float x1, x2;
-    private CircleImageView mCallerDp;
     Long mGroupId = -1L;
     Long mUserId = -1L;
     Long mCallId = -1L;
@@ -114,16 +115,12 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     Sensor proximitySensor;
     SensorEventListener proximitySensorListener;
     private static final int SENSOR_SENSITIVITY = 4;
-    private LinearLayout black_layout;
     String mUserName;
     String mUserPost;
     String mUserDpUrl;
     boolean isCallStartedflagFromService = false;
     Enum mCallStatusFromService;
-    ImageButton mcallCenterBtn;
     LinearLayout mCallStatusLayout;
-    private ImageView mIvCallInfo;
-    private LinearLayout mLayoutCallInfo;
     private String mParticipantJson;
     private Long mRoomId;
     private PowerManager powerManager;
@@ -131,6 +128,8 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private int field = 0x00000020;
     private String mGroupname;
     private String mCallerId;
+    ImageView image;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
+        mDatabase=Constants.M_DATABASE;
         initViews();
         registerViews();
         getValuesFromIntent();
@@ -277,20 +277,13 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     @SuppressLint("ClickableViewAccessibility")
     private void initViews() {
         mTvStatus = findViewById(R.id.tv_status);
+        image = findViewById(R.id.image);
         mBtnAcceptCall = findViewById(R.id.CallAttendBtn);
         mBtnDeclineCall = findViewById(R.id.CallDeclineBtn);
         mTxtCallerName = findViewById(R.id.callerName);
-        mTxtCallerPost = findViewById(R.id.callerPost);
-        mCallerDp = findViewById(R.id.callerDp);
-        black_layout = findViewById(R.id.black_layout);
-        mcallCenterBtn = findViewById(R.id.callCenterBtn);
         mCallStatusLayout = findViewById(R.id.layout_call_status);
-        mLayoutCallInfo = ((LinearLayout) findViewById(R.id.layoutCallInfo));
-        mIvCallInfo = (ImageView) findViewById(R.id.ivCallInfo);
-//        mBtn_hold = (ImageButton) findViewById(R.id.ic_hold);
-        //mcallCenterBtn.setClickable(false);
+
         mBtnAcceptCall.setOnClickListener(this);
-        mIvCallInfo.setOnClickListener(this);
         mBtnDeclineCall.setOnClickListener(this);
         mChronometer = findViewById(R.id.chronometer);
         mLayoutCallAcceptReject = findViewById(R.id.layout_call_accept_reject);
@@ -313,25 +306,25 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private void displayCallerInfo() {
 //        GlideHelper.loadImage(RecieveCallActivity.this, user.getLogo(), mCallerDp, R.drawable.ic_profile_plc);
         if (user.getPicUrl() != null) {
-            Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.users).into(mCallerDp);
+            Glide.with(this).load(user.getLivePicPath()).into(image);
         }
         mTxtCallerName.setText(user.getName());
         mUserName = user.getName();
     }
 
     private void populateCallerInfo() {
-//        GlideHelper.loadImage(RecieveCallActivity.this, mUserDpUrl, mCallerDp, R.drawable.ic_profile_plc);
-        Glide.with(this).load(user.getPicUrl()).placeholder(R.drawable.users).into(mCallerDp);
         mTxtCallerName.setText(mUserName);
     }
 
     public void callAttend() {
+
         Intent intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
         intent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.ACCEPT_CALL_PRESSED);
         LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
     }
 
     public void callDecline() {
+        endCallInDb();
         new NotificationAsyncRejectCall(RecieveCallActivity.this, user.getFcmKey()).execute();
 
 
@@ -341,6 +334,20 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
         callIntent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.END_CALL_INCOMING);
         LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(callIntent);
         startHomeActivity();
+
+    }
+
+    private void endCallInDb() {
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("endTime",System.currentTimeMillis());
+        map.put("callType",Constants.CALL_ENDED);
+
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(user.getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
+        mDatabase.child("Calls").child(user.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
     }
 
     public class NotificationAsyncRejectCall extends AsyncTask<String, String, String> {
@@ -436,27 +443,22 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
         switch (v.getId()) {
             case R.id.CallAttendBtn:
                 callAttend();
-//                acceptIncommingCall();
-//                stopIncommingCall();
-//                mLayoutCallAcceptReject.setVisibility(View.GONE);
-//                mLayoutCallConnected.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
-//                intent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.ACCEPT_CALL_PRESSED);
-//                LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
+
                 break;
-            case R.id.callCenterBtn:
-                break;
+
             case R.id.CallDeclineBtn:
                 callDecline();
                 // terminateCall();
 //                rejectIncomingCall();
 //                stopIncommingCall();
 //                GlobalMethods.vibrateMobile();
+                Intent intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
 //                intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
 //                intent.putExtra(Constants.IntentExtra.EVENT_FROM_UI, EventsFromActivity.END_CALL_INCOMING);
 //                LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
                 break;
             case R.id.ConnectedCallEndBtn:
+                endCallInDb();
                 // finishConnectedCall();
 //                GlobalMethods.vibrateMobile();
                 intent = new Intent(Constants.Broadcasts.BROADCAST_FROM_ACTIVITY);
@@ -526,9 +528,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 //                    LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
 //                }
 //                break;
-            case R.id.ivCallInfo:
-                mLayoutCallInfo.setVisibility(mLayoutCallInfo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                break;
+
             default:
         }
     }
@@ -537,6 +537,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
         if (callWebRTCManger != null) {
             callWebRTCManger.endCall();
             callWebRTCManger = null;
+
         }
     }
 
@@ -555,44 +556,6 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
         RecieveCallActivity.this.startService(startServiceIntent);
     }
 
-   /* private void captureStream() {
-        //  VideoCapturerAndroid capturer = VideoCapturerAndroid.create();
-        // Returns the number of camera devices
-//        VideoCapturerAndroid.getDeviceCount();
-//
-//// Returns the front face device name
-//        VideoCapturerAndroid.getNameOfFrontFacingDevice();
-//// Returns the back facing device name
-//        VideoCapturerAndroid.getNameOfBackFacingDevice();
-
-// Creates a VideoCapturerAndroid instance for the device name
-        VideoCapturerAndroid capturer = VideoCapturerAndroid.create("hello", new VideoCapturerAndroid.CameraEventsHandler() {
-            @Override
-            public void onCameraError(String s) {
-
-            }
-
-            @Override
-            public void onCameraFreezed(String s) {
-
-            }
-
-            @Override
-            public void onCameraOpening(int i) {
-
-            }
-
-            @Override
-            public void onFirstFrameAvailable() {
-
-            }
-
-            @Override
-            public void onCameraClosed() {
-
-            }
-        });
-    }*/
 
     private BroadcastReceiver mIncomingCall = new BroadcastReceiver() {
         @Override
@@ -791,33 +754,6 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
                 mTvStatus.setText("  Connecting");
             } else if (callState.equals(EventFromService.UPDATE_TO_CONNECTING_STATE)) {
                 updateConnectingStatus();
-            } else if (callState.equals(EventFromService.UPDATE_CALL_STATS)) {
-                final Long packets = intent.getLongExtra(Constants.IntentExtra.PACKETS, 0);
-                final double bandwidth = intent.getDoubleExtra(Constants.IntentExtra.BANDWIDTH, 0);
-                final double totalBandwidth = intent.getDoubleExtra(Constants.IntentExtra.TOTAL_BANDWIDTH, 0);
-                final double bitrate = intent.getDoubleExtra(Constants.IntentExtra.BITRATE, 0);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void run() {
-                        Log.i("Call Stats: ", "Total Bandwidth: " + totalBandwidth + " Current Bandwidth: " + bandwidth + " Bitrate: " + bitrate + " Packet Sent: " + packets);
-//                        ((TextView) findViewById(R.id.tvTotalBandwidth)).setText("Data Used: " + Utils.getTwoDecimalplaces(totalBandwidth) + " kb/s");
-//                        ((TextView) findViewById(R.id.tvBandwidth)).setText("Bandwidth: " + Utils.getTwoDecimalplaces(bandwidth) + " kb/s");
-//                        ((TextView) findViewById(R.id.tvBitRate)).setText("Bit Rate: " + Utils.getTwoDecimalplaces(bitrate) + " b/s");
-                        ((ImageView) findViewById(R.id.ivStrength)).setVisibility(View.VISIBLE);
-                        if (bandwidth > 1 && bandwidth < 2.5) {
-//                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_orange));
-//                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: Normal");
-                        } else if (bandwidth < 1) {
-//                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: Low");
-//                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_red));
-                        } else {
-//                            ((TextView) findViewById(R.id.tvDuration)).setText("Signals: High");
-//                            ((ImageView) findViewById(R.id.ivStrength)).setImageDrawable(getDrawable(R.drawable.ic_signal_green));
-                        }
-//                        ((TextView) findViewById(R.id.tvPacket)).setText(packets + "");
-                    }
-                });
             }
         }
     };

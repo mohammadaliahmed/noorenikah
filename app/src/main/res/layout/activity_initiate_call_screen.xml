@@ -27,36 +27,45 @@
 
         <TextView
             android:id="@+id/CallerNameTxt"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
             android:shadowColor="#000000"
             android:shadowDx="1.5"
             android:shadowDy="1.3"
             android:shadowRadius="1.6"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="30dp"
             android:text="Caller Name"
             android:textColor="@color/white"
             android:textSize="50sp" />
 
-        <TextView
-            android:id="@+id/tv_status"
+        <LinearLayout
+            android:id="@+id/layout_call_status"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:gravity="center"
-            android:text="Dialing"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dialing"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
 
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="5dp"
+
             android:padding="5dp"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:textSize="25sp"
             android:textColor="@color/white"
             android:visibility="gone" />
 
@@ -71,15 +80,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:visibility="visible">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
 
 
@@ -91,18 +93,25 @@
                 android:background="@color/transparentColr"
 
                 android:src="@drawable/ic_mute" />
+            <ImageView
+                android:id="@+id/ConnectedCallEndBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/transparentColr"
+                android:src="@drawable/ic_call_decline"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/ic_speaker"
-                android:layout_marginStart="30dp"
-
                 android:layout_width="70dp"
+
                 android:layout_height="70dp"
+                android:layout_marginStart="30dp"
                 android:background="@color/transparentColr"
 
                 android:src="@drawable/ic_speaker" />
-
-        </LinearLayout>
 
 
     </LinearLayout>
@@ -120,17 +129,7 @@
         android:src="@drawable/ic_call_decline"
         android:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/ConnectedCallEndBtn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/layout_widget_call"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:background="@color/transparentColr"
-        android:src="@drawable/ic_call_decline"
-        android:visibility="gone" />
+
 
 
 </RelativeLayout>

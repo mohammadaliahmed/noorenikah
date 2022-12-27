@@ -99,8 +99,8 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     LinearLayout mLayoutCallAcceptReject;
     LinearLayout mLayoutCallWidget;
     ImageView mConnectedCallEnd;
-    ImageButton mBtn_microphone;
-    ImageButton mBtn_Speaker;
+    ImageView mBtn_microphone;
+    ImageView mBtn_Speaker;
     //    ImageButton mBtn_hold;
     TextView mTvStatus;
     Long callStartTime = -1L;
@@ -304,8 +304,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 
 
     private void displayCallerInfo() {
-//        GlideHelper.loadImage(RecieveCallActivity.this, user.getLogo(), mCallerDp, R.drawable.ic_profile_plc);
-        if (user.getPicUrl() != null) {
+        if (user.getLivePicPath() != null) {
             Glide.with(this).load(user.getLivePicPath()).into(image);
         }
         mTxtCallerName.setText(user.getName());
@@ -400,7 +399,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
                 jsonObject.put("roomId", mRoomId);
                 jsonObject.put("userstring", StringUtils.getGson().toJson(UserManager.getInstance().getUserIfLoggedIn()));
                 jsonObject.put("groupname", "abc");
-                jsonObject.put("type", "callRejected");
+                jsonObject.put("Type", "callRejected");
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
 
                 json.put("data", jsonObject);
@@ -750,7 +749,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
                 mLayoutCallAcceptReject.setVisibility(View.GONE);
                 mLayoutCallWidget.setVisibility(View.VISIBLE);
                 mConnectedCallEnd.setVisibility(View.VISIBLE);
-                mCallStatusLayout.setVisibility(View.VISIBLE);
+//                mCallStatusLayout.setVisibility(View.VISIBLE);
                 mTvStatus.setText("  Connecting");
             } else if (callState.equals(EventFromService.UPDATE_TO_CONNECTING_STATE)) {
                 updateConnectingStatus();

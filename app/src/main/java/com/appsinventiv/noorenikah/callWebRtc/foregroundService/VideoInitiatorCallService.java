@@ -469,9 +469,9 @@ public class VideoInitiatorCallService extends Service implements AudioCallBackI
         } else {
             notificationBuilder = new NotificationCompat.Builder(this);
         }
-        notificationBuilder.setContentTitle("Wateen Hub");
-        notificationBuilder.setContentTitle("Wateen Hub");
-        notificationBuilder.setTicker("@Wateen Hub");
+        notificationBuilder.setContentTitle(getResources().getString(R.string.app_name));
+        notificationBuilder.setContentTitle(getResources().getString(R.string.app_name));
+        notificationBuilder.setTicker(getResources().getString(R.string.app_name));
         notificationBuilder.setColor(getResources().getColor(R.color.colorAccent));
         notificationBuilder.setContentText(notificationState + " " + mUserName);
         notificationBuilder.setSmallIcon(R.drawable.phonereceiver);
@@ -828,7 +828,7 @@ public class VideoInitiatorCallService extends Service implements AudioCallBackI
                 jsonObject.put("roomId", mRoomId);
                 jsonObject.put("userstring", StringUtils.getGson().toJson(UserManager.getInstance().getUserIfLoggedIn()));
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
-                jsonObject.put("type", "video");
+                jsonObject.put("Type", "video");
 
                 json.put("data", jsonObject);
                 json.put("to", sendTo);

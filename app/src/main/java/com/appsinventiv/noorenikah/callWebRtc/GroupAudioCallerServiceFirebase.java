@@ -1592,7 +1592,7 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
                 jsonObject.put("roomId", mRoomId);
                 jsonObject.put("userstring", StringUtils.getGson().toJson(UserManager.getInstance().getUserIfLoggedIn()));
                 jsonObject.put("groupname", groupname);
-                jsonObject.put("type", "callerCancelCall");
+                jsonObject.put("Type", "callerCancelCall");
                 jsonObject.put("callerId", UserManager.getInstance().getUserIfLoggedIn().getId());
 
                 json.put("data", jsonObject);

@@ -17,13 +17,12 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
 
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            android:padding="5dp"
 
             android:src="@drawable/back" />
 
@@ -39,6 +38,7 @@
             android:foreground="?android:attr/selectableItemBackground" />
 
         <LinearLayout
+            android:id="@+id/menuOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -49,14 +49,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="3dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_video_call" />
 
             <ImageView
                 android:id="@+id/dialAudio"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_width="30dp"
                 android:padding="3dp"
                 android:layout_height="40dp"
@@ -69,6 +69,7 @@
                 android:id="@+id/dropdown_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:padding="5dp"
@@ -79,7 +80,8 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_toLeftOf="@id/menuOption"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="5dp"

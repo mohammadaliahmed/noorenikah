@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +76,10 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
 
     private TextView userName, tvStatus;
     Chronometer mChrometer;
-    private ImageButton endIngoingCallBtn, endConnectedCallBtn, holdBtn, muteBtn, msgBtn, toggleVideoBtn;
+    ImageView holdBtn,muteBtn;
+    private ImageButton endIngoingCallBtn, endConnectedCallBtn, msgBtn;
+
+    ImageView toggleVideoBtn;
     private LinearLayout callWidgetLayout, acceptRejectLayout, layoutCallStatus;
     private boolean isMute, isHold, isVideoEnable;
     private String mfirebaseId;
@@ -627,7 +631,7 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
             } else {
                 isVideoEnable = true;
                 isVideoEnablePressed = true;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam);
+                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam_dis);
                 toggleVideoBtn.setImageDrawable(replacer);
                 sendRequestToService(EventsFromActivity.ENABLE_VIDEO);
             }

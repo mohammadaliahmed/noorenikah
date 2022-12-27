@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,8 +74,9 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
   include layout  params
    */
     private TextView userName, tvStatus;
-    private ImageButton endIncomingCallBtn, endConnectedCallBtn, holdBtn, muteBtn,
-            msgBtn, toggleVideoBtn,
+    ImageView  holdBtn, muteBtn,toggleVideoBtn;
+    private ImageButton endIncomingCallBtn, endConnectedCallBtn,
+            msgBtn,
             declineIncomingCall, acceptIncoming;
     private LinearLayout callWidgetLayout, acceptRejectLayout, layoutCallStatus;
     private boolean isMute, isHold, isVideoEnable;
@@ -168,11 +170,11 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         Type listType = new TypeToken<UserModel>() {
         }.getType();
         user = StringUtils.getGson().fromJson(userstring, listType);
-//        mCallerName = user.getName();
+        mCallerName = user.getName();
         mGroupId = getIntent().getLongExtra(Constants.IntentExtra.INTENT_GROUP_ID, -1);
-//        userName = findViewById(R.id.userName);
+        userName = findViewById(R.id.userName);
 
-//        userName.setText(mCallerName);
+        userName.setText(mCallerName);
 
     }
 
@@ -502,7 +504,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
             } else {
                 isVideoEnable = true;
                 isVideoEnablePressed = true;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam);
+                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam_dis);
                 toggleVideoBtn.setImageDrawable(replacer);
                 sendRequestToService(EventsFromActivity.ENABLE_VIDEO);
             }

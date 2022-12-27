@@ -7,27 +7,26 @@
     android:gravity="center_horizontal"
     android:orientation="horizontal">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/ic_muteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/transparentColr"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:padding="16dp"
+
         android:src="@drawable/ic_mute" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/ic_hold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:visibility="gone"
-        android:background="@color/transparentColr"
         android:padding="16dp"
         android:src="@drawable/ic_mute" />
 
     <ImageButton
         android:id="@+id/btn_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:visibility="gone"
         android:background="@color/transparentColr"
         android:padding="16dp"
@@ -36,10 +35,10 @@
 
     <ImageButton
         android:id="@+id/ic_callEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@color/transparentColr"
-        android:padding="16dp"
+
         android:src="@drawable/ic_call_decline" />
 
 </LinearLayout>

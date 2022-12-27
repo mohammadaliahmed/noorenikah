@@ -1545,9 +1545,9 @@ public class GroupAudioRecieverServiceFirebase extends Service implements AudioC
         } else {
             notificationBuilder = new NotificationCompat.Builder(this);
         }
-        notificationBuilder.setContentTitle("Wateen Hub");
-        notificationBuilder.setContentTitle("Wateen Hub");
-        notificationBuilder.setTicker("@Wateen Hub");
+        notificationBuilder.setContentTitle(getResources().getString(R.string.app_name));
+        notificationBuilder.setContentTitle(getResources().getString(R.string.app_name));
+        notificationBuilder.setTicker(getResources().getString(R.string.app_name));
         notificationBuilder.setColor(getResources().getColor(R.color.colorAccent));
         notificationBuilder.setContentText(notificationState + " " + mUserName); // todo add groupName here...
         notificationBuilder.setSmallIcon(R.drawable.users);

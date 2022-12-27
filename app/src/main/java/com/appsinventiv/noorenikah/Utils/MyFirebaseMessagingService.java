@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.appsinventiv.noorenikah.Activities.ChatScreen;
 import com.appsinventiv.noorenikah.Activities.Comments.CommentsActivity;
@@ -77,19 +78,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             room = roomId;
             Bitmap bitmap = getBitmapfromUrl(imageFromNotification);
 
-            if(type!=null){
-                if(type.equalsIgnoreCase("audio")){
-                    final String groupname = map.get("groupname");
-                    final String userstring = map.get("userstring");
-                    final String callerId = map.get("callerId");
+            if (type != null) {
+                final String groupname = map.get("groupname");
+                final String userstring = map.get("userstring");
+                final String callerId = map.get("callerId");
+                if (type.equalsIgnoreCase("audio")) {
+
 
                     startcallactivity(groupname, userstring, roomId, callerId, type);
-                }else{
+                } else if (type.equalsIgnoreCase("video")) {
+                    startcallactivity(groupname, userstring, roomId, callerId, type);
+                } else if (type.equalsIgnoreCase("callerCancelCall")) {
+                    boolean isCallReceiverSerciveRunning = isMyServiceRunning(GroupAudioRecieverServiceFirebase.class);
+                    if (isCallReceiverSerciveRunning) {
+                        Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
+                        abc.putExtra(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll, Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
+                        LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
+                    }
+                } else if (type.equalsIgnoreCase("callRejected")) {
+                    Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALL_REJECTED);
+                    abc.putExtra(Constants.Broadcasts.BROADCAST_CALL_REJECTED, Constants.Broadcasts.BROADCAST_CALL_REJECTED);
+                    LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
+                } else {
                     handleNow(title, message, bitmap);
 
                 }
 
-            }else{
+            } else {
 
             }
 
@@ -274,11 +289,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 ApplicationClass.getInstance().
                         getApplicationContext().
                         startActivity(intent);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
     }
+
     public static boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) ApplicationClass.getInstance().getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

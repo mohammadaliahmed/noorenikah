@@ -59,7 +59,7 @@ public class MenuActivity extends AppCompatActivity {
         terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertsUtils.showTermsAlert(MenuActivity.this);
+                AlertsUtils.showTermsAlert2(MenuActivity.this);
             }
         });
         myProfile.setOnClickListener(new View.OnClickListener() {

@@ -82,7 +82,13 @@ public class CommonUtils {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeInMillis(smsTimeInMilis);
 
-        return DateFormat.format("dd MMM , h:mm aa", smsTime).toString();
+        return DateFormat.format("dd MMM, h:mm aa", smsTime).toString();
+
+    }  public static String getFormattedDateOnlyy(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("dd MMM y, h:mm:s aa", smsTime).toString();
 
     }
 

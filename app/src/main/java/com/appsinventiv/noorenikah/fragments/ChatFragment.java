@@ -45,13 +45,11 @@ public class ChatFragment extends Fragment {
     private DatabaseReference mDatabase;
     ChatListAdapter adapter;
     private List<ChatModel> itemList=new ArrayList<>();
-    ImageView promotionBanner;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         mDatabase = Constants.M_DATABASE;
-        promotionBanner=rootView.findViewById(R.id.promotionBanner);
         recyclerView=rootView.findViewById(R.id.recyclerView);
         adapter=new ChatListAdapter(getContext(),itemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
@@ -76,18 +74,6 @@ public class ChatFragment extends Fragment {
             adapter.setItemList(itemList);
         }
         getDataFromDB();
-        if (SharedPrefs.getPromotionalBanner("chatScreen") != null) {
-            Glide.with(getContext()).load(SharedPrefs.getPromotionalBanner("chatScreen").getImgUrl())
-                    .into(promotionBanner);
-
-        }
-        promotionBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(SharedPrefs.getPromotionalBanner("chatScreen").getUrl()));
-                getContext().startActivity(i);
-            }
-        });
 
         return rootView;
     }

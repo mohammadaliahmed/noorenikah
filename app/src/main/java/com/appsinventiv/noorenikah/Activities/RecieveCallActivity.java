@@ -130,6 +130,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private String mCallerId;
     ImageView image;
     DatabaseReference mDatabase;
+    private long duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -339,7 +340,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
     private void endCallInDb() {
         HashMap<String,Object> map=new HashMap<>();
         map.put("endTime",System.currentTimeMillis());
-        map.put("callType",Constants.CALL_ENDED);
+        map.put("seconds",duration);
 
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(user.getPhone())
                 .child(""+mRoomId).updateChildren(map);
@@ -656,6 +657,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 
     }
 
+
     private BroadcastReceiver mBroadCastFromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -870,7 +872,7 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 
     private void finishConnectedCall() {
         final Long currentTime = Calendar.getInstance().getTimeInMillis();
-        final long duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
+         duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
         mChronometer.stop();
 //        HashMap<String, Object> params = new HashMap<>();
 //        params.put("userId", UserManager.getInstance().getUserIfLoggedIn().getUserId());

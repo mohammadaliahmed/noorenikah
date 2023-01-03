@@ -36,6 +36,7 @@ import com.appsinventiv.noorenikah.Utils.ApplicationClass;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.DynamicPermission;
 import com.appsinventiv.noorenikah.Utils.GlobalMethods;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.StringUtils;
 import com.appsinventiv.noorenikah.call.CallManager;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.CallWidgetState;
@@ -43,6 +44,7 @@ import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventFromService;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventsFromActivity;
 import com.appsinventiv.noorenikah.callWebRtc.foregroundService.VideoRecieverCallService;
 import com.appsinventiv.noorenikah.callWebRtc.foregroundService.VideoRendererEvent;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,6 +56,7 @@ import org.webrtc.SurfaceViewRenderer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressLint("SetTextI18n")
 public class ReceiverVideoCallActivity extends AppCompatActivity implements View.OnClickListener {
@@ -74,7 +77,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
   include layout  params
    */
     private TextView userName, tvStatus;
-    ImageView  holdBtn, muteBtn,toggleVideoBtn;
+    ImageView holdBtn, muteBtn, toggleVideoBtn;
     private ImageButton endIncomingCallBtn, endConnectedCallBtn,
             msgBtn,
             declineIncomingCall, acceptIncoming;
@@ -84,11 +87,14 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
     private boolean isPermissionFailed = false;
     private UserModel user;
     private String userstring;
+    DatabaseReference mDatabase;
+    private long duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stayAlive();
+        mDatabase = Constants.M_DATABASE;
         setContentView(R.layout.activity_receiver_video_call);
         registerEventBus();
         registerLocalBroadCast();
@@ -422,7 +428,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         toggleVideoBtn.setVisibility(View.GONE);
         tvStatus.setText("   Connecting");
         tvStatus.setVisibility(View.VISIBLE);
-        
+
     }
 
     private void setCallStartedStatus(Long elapsedTime) {
@@ -463,7 +469,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         mChrometer.setVisibility(View.GONE);
         layoutCallStatus.setVisibility(View.VISIBLE);
         tvStatus.setText("Call-Disconnected ");
-        
+
     }
 
     public void startChatActivity(long groupId) {
@@ -495,19 +501,19 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
 
     public void videoDisableBtnPressed() {
 //        if (!isHold) {
-            if (isVideoEnable) {
-                isVideoEnable = false;
-                isVideoEnablePressed = false;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam);
-                toggleVideoBtn.setImageDrawable(replacer);
-                sendRequestToService(EventsFromActivity.DISABLE_VIDEO);
-            } else {
-                isVideoEnable = true;
-                isVideoEnablePressed = true;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam_dis);
-                toggleVideoBtn.setImageDrawable(replacer);
-                sendRequestToService(EventsFromActivity.ENABLE_VIDEO);
-            }
+        if (isVideoEnable) {
+            isVideoEnable = false;
+            isVideoEnablePressed = false;
+            Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam);
+            toggleVideoBtn.setImageDrawable(replacer);
+            sendRequestToService(EventsFromActivity.DISABLE_VIDEO);
+        } else {
+            isVideoEnable = true;
+            isVideoEnablePressed = true;
+            Drawable replacer = getResources().getDrawable(R.drawable.ic_video_cam_dis);
+            toggleVideoBtn.setImageDrawable(replacer);
+            sendRequestToService(EventsFromActivity.ENABLE_VIDEO);
+        }
 //        } else {
 //            Toast.makeText(this, "Call is onhold", Toast.LENGTH_SHORT).show();
 //        }
@@ -556,7 +562,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
             layoutCallStatus.setVisibility(View.VISIBLE);
             tvStatus.setVisibility(View.VISIBLE);
             tvStatus.setText(" Caller on hold");
-            
+
         }
     }
 
@@ -566,7 +572,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
             layoutCallStatus.setVisibility(View.VISIBLE);
             tvStatus.setVisibility(View.VISIBLE);
             tvStatus.setText("Caller on Mute");
-            
+
         }
     }
 
@@ -576,7 +582,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
             layoutCallStatus.setVisibility(View.VISIBLE);
             tvStatus.setVisibility(View.VISIBLE);
             tvStatus.setText("Caller on video disable-mode");
-            
+
         }
     }
 
@@ -615,12 +621,12 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         layoutCallStatus.setVisibility(View.VISIBLE);
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText("   Reconnecting");
-        
+
     }
 
     private void setParticipantUnMute() {
         tvStatus.setVisibility(View.GONE);
-        
+
         layoutCallStatus.setVisibility(View.GONE);
         mChrometer.setVisibility(View.VISIBLE);
     }
@@ -630,7 +636,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         layoutCallStatus.setVisibility(View.VISIBLE);
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText("  Caller on Mute");
-        
+
     }
 
     private void setParticpantHoldCall() {
@@ -638,13 +644,13 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         layoutCallStatus.setVisibility(View.VISIBLE);
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText(" Caller on hold");
-        
+
     }
 
     private void setParticipantUnHold() {
         isHold = false;
         tvStatus.setVisibility(View.GONE);
-        
+
         layoutCallStatus.setVisibility(View.GONE);
         mChrometer.setVisibility(View.VISIBLE);
     }
@@ -661,13 +667,13 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         layoutCallStatus.setVisibility(View.VISIBLE);
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText(" Caller on video disable-mode");
-        
+
     }
 
     private void setParticipantVideoUnable() {
         isVideoEnable = false;
         tvStatus.setVisibility(View.GONE);
-        
+
         layoutCallStatus.setVisibility(View.GONE);
         mChrometer.setVisibility(View.VISIBLE);
     }
@@ -772,9 +778,11 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
                 break;
             case R.id.ic_callEnd:
                 onCallHangUp();
+                endCallInDb();
                 break;
             case R.id.CallDeclineBtn:
                 rejectIncomingCall();
+                endCallInDb();
                 break;
             case R.id.CallAttendBtn:
                 acceptIncomingCall();
@@ -783,6 +791,21 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
                 videoDisableBtnPressed();
                 break;
         }
+    }
+
+    private void endCallInDb() {
+        duration = SystemClock.elapsedRealtime() - mChrometer.getBase();
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("endTime", System.currentTimeMillis());
+        map.put("seconds", duration);
+
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(user.getPhone())
+                .child("" + mRoomId).updateChildren(map);
+
+        mDatabase.child("Calls").child(user.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child("" + mRoomId).updateChildren(map);
     }
 
     @Override

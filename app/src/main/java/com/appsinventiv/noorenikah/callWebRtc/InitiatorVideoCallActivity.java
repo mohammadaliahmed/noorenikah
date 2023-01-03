@@ -31,17 +31,24 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 import com.appsinventiv.noorenikah.Activities.MainActivity;
+import com.appsinventiv.noorenikah.Models.CallModel;
+import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.ApplicationClass;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.DynamicPermission;
 import com.appsinventiv.noorenikah.Utils.GlobalMethods;
+import com.appsinventiv.noorenikah.Utils.SharedPrefs;
+import com.appsinventiv.noorenikah.Utils.StringUtils;
 import com.appsinventiv.noorenikah.call.CallManager;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.CallWidgetState;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventFromService;
 import com.appsinventiv.noorenikah.callWebRtc.callBroadCast.EventsFromActivity;
 import com.appsinventiv.noorenikah.callWebRtc.foregroundService.VideoInitiatorCallService;
 import com.appsinventiv.noorenikah.callWebRtc.foregroundService.VideoRendererEvent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,7 +57,9 @@ import org.webrtc.EglBase;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -76,18 +85,23 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
 
     private TextView userName, tvStatus;
     Chronometer mChrometer;
-    ImageView holdBtn,muteBtn;
+    ImageView holdBtn, muteBtn;
     private ImageButton endIngoingCallBtn, endConnectedCallBtn, msgBtn;
 
     ImageView toggleVideoBtn;
     private LinearLayout callWidgetLayout, acceptRejectLayout, layoutCallStatus;
     private boolean isMute, isHold, isVideoEnable;
     private String mfirebaseId;
+    private Long mRoomId;
+    private UserModel userModel;
+    private DatabaseReference mDatabase;
+    private long duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stayAlive();
+        mDatabase=Constants.M_DATABASE;
         setContentView(R.layout.activity_receiver_video_call);
         registerEventBus();
         registerLocalBroadCast();
@@ -180,6 +194,10 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
         }
         mGroupId = getIntent().getLongExtra(Constants.IntentExtra.INTENT_GROUP_ID, -1);
         mfirebaseId = getIntent().getStringExtra(Constants.IntentExtra.USER_FIREBASEID);
+        Type listType = new TypeToken<ArrayList<UserModel>>() {
+        }.getType();
+        ArrayList<UserModel> ustadArrayList = StringUtils.getGson().fromJson(mParticipantsJson, listType);
+        userModel = ustadArrayList.get(0);
     }
 
     private void registerLocalBroadCast() {
@@ -242,24 +260,39 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
     }
 
     public void initVideoCall(final Long mGroupId) {
-//        GroupRepository groupRepository = new GroupRepository();
-//        groupRepository.getCallGroup(mGroupId, new ICommandResultListener() {
-//            @Override
-//            public void onCommandResult(ICommandResult result) {
-//                final CallsGroup callsGroup = (CallsGroup) result.getData();
-//                Long currentTime = Calendar.getInstance().getTimeInMillis();
-//                reciverName = callsGroup.getmUserName();
-//                userName.setText(reciverName);
-//                Long mRoomId = Long.valueOf(String.valueOf(UserManager.getInstance().getUser().getUserId()) + String.valueOf(currentTime));
-//                startInitiateCallerService(mRoomId, callsGroup.getmSingleUserId(), reciverName);
-        Random rand = new Random();
-        int n = rand.nextInt(50) + 1;
-        Long  mRoomId = Long.valueOf(n);
-//                            flag = true;
-                startInitiateCallerService(mRoomId, mfirebaseId, reciverName);
 
-//            }
-//        });
+        Random rand = new Random();
+        int n = rand.nextInt(998) + 1;
+        mRoomId = Long.valueOf(n);
+        startInitiateCallerService(mRoomId, mfirebaseId, reciverName);
+        CallModel model=new CallModel(""+mRoomId,
+                userModel.getPhone(),
+                userModel.getName(),
+                userModel.getLivePicPath(),
+                Constants.CALL_OUTGOING,
+                true,
+                0,
+                System.currentTimeMillis(),
+                System.currentTimeMillis()
+        );
+
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
+                .child(""+mRoomId).setValue(model);
+
+        CallModel model2=new CallModel(""+mRoomId,
+                SharedPrefs.getUser().getPhone(),
+                SharedPrefs.getUser().getName(),
+                SharedPrefs.getUser().getLivePicPath(),
+                Constants.CALL_INCOMING,
+                true,
+                0,
+                System.currentTimeMillis(),
+                System.currentTimeMillis()
+        );
+
+        mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child(""+mRoomId).setValue(model2);
+
     }
 
 
@@ -388,6 +421,20 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
                 setRingingStatus();
             }
         }
+    }
+    private void endCallInDb() {
+        duration=SystemClock.elapsedRealtime() - mChrometer.getBase();
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("endTime",System.currentTimeMillis());
+        map.put("seconds",duration);
+
+        mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
+        mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
+                .child(""+mRoomId).updateChildren(map);
+
+
     }
 
 
@@ -602,19 +649,19 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
 
     public void muteBtnPressed() {
 //        if (!isHold) {
-            if (isMute) {
-                isMute = false;
-                isMuteButtonPressed = false;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_mute);
-                muteBtn.setImageDrawable(replacer);
-                sendRequestToService(EventsFromActivity.UNMUTE_BUTTON_PRESSD);
-            } else {
-                isMute = true;
-                isMuteButtonPressed = true;
-                Drawable replacer = getResources().getDrawable(R.drawable.ic_mute_pressed);
-                muteBtn.setImageDrawable(replacer);
-                sendRequestToService(EventsFromActivity.MUTE_BUTTON_PRESSED);
-            }
+        if (isMute) {
+            isMute = false;
+            isMuteButtonPressed = false;
+            Drawable replacer = getResources().getDrawable(R.drawable.ic_mute);
+            muteBtn.setImageDrawable(replacer);
+            sendRequestToService(EventsFromActivity.UNMUTE_BUTTON_PRESSD);
+        } else {
+            isMute = true;
+            isMuteButtonPressed = true;
+            Drawable replacer = getResources().getDrawable(R.drawable.ic_mute_pressed);
+            muteBtn.setImageDrawable(replacer);
+            sendRequestToService(EventsFromActivity.MUTE_BUTTON_PRESSED);
+        }
 //        } else {
 //            Toast.makeText(this, "Call is onhold", Toast.LENGTH_SHORT).show();
 //        }
@@ -758,9 +805,11 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
                 break;
             case R.id.ic_callEnd:
                 onCallHangUp();
+                endCallInDb();
                 break;
             case R.id.inGoingcallEnd:
                 disConnectIngoingCall();
+                endCallInDb();
                 break;
         }
     }

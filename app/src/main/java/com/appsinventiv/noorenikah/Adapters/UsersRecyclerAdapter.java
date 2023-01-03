@@ -70,12 +70,12 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NewUserModel user = userList.get(position);
         callbacks.onShown(user);
-        if (user.isPhoneVerified()) {
-            holder.verified.setVisibility(View.VISIBLE);
-        } else {
-            holder.verified.setVisibility(View.GONE);
-
-        }
+//        if (user.isPhoneVerified()) {
+//            holder.verified.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.verified.setVisibility(View.GONE);
+//
+//        }
         if(user.getMatchMakerId()!=null){
             holder.matchMakerProfile.setVisibility(View.VISIBLE);
 
@@ -117,6 +117,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                 Intent i = new Intent(context, CommentsActivity.class);
                 i.putExtra("id", user.getPhone());
                 i.putExtra("fcmKey", user.getFcmKey());
+                i.putExtra("post", "true");
                 context.startActivity(i);
             }
         });
@@ -193,30 +194,29 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
             }
         });
 
-        if (SharedPrefs.getUser().getFriends() != null) {
-            if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
-                holder.lockedInfo.setVisibility(View.GONE);
-                Glide.with(context)
-                        .load(user.getLivePicPath())
-                        .placeholder(R.drawable.picked)
-                        .into(holder.image);
-            } else {
-                holder.lockedInfo.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(user.getLivePicPath())
-                        .apply(bitmapTransform(new BlurTransformation(50)))
-                        .placeholder(R.drawable.picked)
-
-                        .into(holder.image);
-            }
-        } else {
-            holder.lockedInfo.setVisibility(View.VISIBLE);
+//        if (SharedPrefs.getUser().getFriends() != null) {
+//            if (SharedPrefs.getUser().getFriends().containsKey(user.getPhone())) {
+//                holder.lockedInfo.setVisibility(View.GONE);
+//                Glide.with(context)
+//                        .load(user.getLivePicPath())
+//                        .placeholder(R.drawable.picked)
+//                        .into(holder.image);
+//            } else {
+//                holder.lockedInfo.setVisibility(View.VISIBLE);
+//                Glide.with(context)
+//                        .load(user.getLivePicPath())
+//                        .apply(bitmapTransform(new BlurTransformation(50)))
+//                        .placeholder(R.drawable.picked)
+//
+//                        .into(holder.image);
+//            }
+//        } else {
+//            holder.lockedInfo.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(user.getLivePicPath())
-                    .apply(bitmapTransform(new BlurTransformation(50)))
                     .placeholder(R.drawable.picked)
                     .into(holder.image);
-        }
+//        }
         String nm=user.getName();
         if(user.isMatchMakerProfile()){
             nm+="(Matchmaker)";

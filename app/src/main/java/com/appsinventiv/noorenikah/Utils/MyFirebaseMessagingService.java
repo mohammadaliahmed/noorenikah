@@ -82,26 +82,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 final String groupname = map.get("groupname");
                 final String userstring = map.get("userstring");
                 final String callerId = map.get("callerId");
-                if (type.equalsIgnoreCase("audio")) {
+                if (SharedPrefs.getUser() != null) {
+                    if (type.equalsIgnoreCase("audio")) {
 
 
-                    startcallactivity(groupname, userstring, roomId, callerId, type);
-                } else if (type.equalsIgnoreCase("video")) {
-                    startcallactivity(groupname, userstring, roomId, callerId, type);
-                } else if (type.equalsIgnoreCase("callerCancelCall")) {
-                    boolean isCallReceiverSerciveRunning = isMyServiceRunning(GroupAudioRecieverServiceFirebase.class);
-                    if (isCallReceiverSerciveRunning) {
-                        Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
-                        abc.putExtra(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll, Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
+                        startcallactivity(groupname, userstring, roomId, callerId, type);
+                    } else if (type.equalsIgnoreCase("video")) {
+                        startcallactivity(groupname, userstring, roomId, callerId, type);
+                    } else if (type.equalsIgnoreCase("callerCancelCall")) {
+                        boolean isCallReceiverSerciveRunning = isMyServiceRunning(GroupAudioRecieverServiceFirebase.class);
+                        if (isCallReceiverSerciveRunning) {
+                            Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
+                            abc.putExtra(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll, Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
+                            LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
+                        }
+                    } else if (type.equalsIgnoreCase("callRejected")) {
+                        Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALL_REJECTED);
+                        abc.putExtra(Constants.Broadcasts.BROADCAST_CALL_REJECTED, Constants.Broadcasts.BROADCAST_CALL_REJECTED);
                         LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
-                    }
-                } else if (type.equalsIgnoreCase("callRejected")) {
-                    Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALL_REJECTED);
-                    abc.putExtra(Constants.Broadcasts.BROADCAST_CALL_REJECTED, Constants.Broadcasts.BROADCAST_CALL_REJECTED);
-                    LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
-                } else {
-                    handleNow(title, message, bitmap);
+                    } else {
+                        handleNow(title, message, bitmap);
 
+                    }
                 }
 
             } else {

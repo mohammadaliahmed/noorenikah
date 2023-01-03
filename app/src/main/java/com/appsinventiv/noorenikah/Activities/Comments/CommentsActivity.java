@@ -57,11 +57,12 @@ public class CommentsActivity extends AppCompatActivity {
     TextView replyingToName;
     ImageView closeReply;
     private String replyingToId;
+    String post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
+        setContentView(R.layout.activity_profile_comments);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -69,6 +70,7 @@ public class CommentsActivity extends AppCompatActivity {
         }
         this.setTitle("Comments");
         adRequest = new AdRequest.Builder().build();
+        post=getIntent().getStringExtra("post");
 
         mAdView = findViewById(R.id.adView);
         replyingToView = findViewById(R.id.replyingToView);

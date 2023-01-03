@@ -36,6 +36,7 @@ import com.appsinventiv.noorenikah.Utils.CommonUtils;
 import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.appsinventiv.noorenikah.Utils.UserManager;
+import com.appsinventiv.noorenikah.fragments.ChatCallsFragment;
 import com.appsinventiv.noorenikah.fragments.ChatFragment;
 import com.appsinventiv.noorenikah.fragments.HomeFragment;
 import com.appsinventiv.noorenikah.fragments.NotificationFragment;
@@ -493,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_chat:
                     showReward();
-                    fragment = new ChatFragment();
+                    fragment = new ChatCallsFragment();
                     loadFragment(fragment);
 
                     return true;

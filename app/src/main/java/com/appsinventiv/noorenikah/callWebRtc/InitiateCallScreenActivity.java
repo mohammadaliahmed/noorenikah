@@ -91,7 +91,6 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     Sensor proximitySensor;
     SensorEventListener proximitySensorListener;
     private LinearLayout mCallStatusLinearLayouot;
-    private String duration = "";
     private String mParticipantsJson;
     private Long mRoomId;
     boolean isloudButtonPressed = false;
@@ -110,6 +109,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     private UserModel userModel;
     ImageView image;
     DatabaseReference mDatabase;
+    private long duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -670,7 +670,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     private void endCallInDb() {
         HashMap<String,Object> map=new HashMap<>();
         map.put("endTime",System.currentTimeMillis());
-        map.put("callType",Constants.CALL_ENDED);
+        map.put("seconds",duration);
 
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
                 .child(""+mRoomId).updateChildren(map);
@@ -712,14 +712,14 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         );
 
         mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
-                .child(""+mRoomId).setValue(model);
+                .child(""+mRoomId).setValue(model2);
 
 
     }
 
     private void finishConnectedCall() {
 //        final Long currentTime = Calendar.getInstance().getTimeInMillis();
-//        final long duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
+        duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
 //        mChronometer.stop();
 //        HashMap<String, Object> params = new HashMap<>();
 //        params.put("userId", UserManager.getInstance().getUserIfLoggedIn().getmFireBaseId());

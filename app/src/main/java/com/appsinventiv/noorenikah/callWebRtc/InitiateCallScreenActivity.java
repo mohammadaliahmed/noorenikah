@@ -329,12 +329,12 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setVisibility(View.VISIBLE);
                 mTvStatus.setText("   Ringing");
-                playToneGenerator();
+//                playToneGenerator();
 
             } else if (callState.equals(EventFromService.CALL_CONNNECTED)) {
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setText("  Connecting");
-                stopTone();
+//                stopTone();
 
 
             } else if (callState.equals(EventFromService.CALL_STARTED)) {

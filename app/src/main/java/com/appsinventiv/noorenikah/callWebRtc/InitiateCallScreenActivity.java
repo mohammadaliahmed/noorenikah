@@ -809,8 +809,8 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
 
     private void askForDangerousPermissions() {
         ArrayList<String> permissions = new ArrayList<String>();
-        permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
-        permissions.add(Manifest.permission.READ_PHONE_STATE);
+//        permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
+//        permissions.add(Manifest.permission.READ_PHONE_STATE);
         permissions.add(Manifest.permission.RECORD_AUDIO);
         DynamicPermission dynamicPermission = new DynamicPermission(this, permissions);
         boolean isPermissionGranted = dynamicPermission.checkAndRequestPermissions();

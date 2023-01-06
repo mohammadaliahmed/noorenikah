@@ -12,11 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsinventiv.noorenikah.Activities.ChatScreen;
-import com.appsinventiv.noorenikah.Activities.PaymentsHistory;
 import com.appsinventiv.noorenikah.Adapters.CallLogsAdapter;
 import com.appsinventiv.noorenikah.Models.CallModel;
-import com.appsinventiv.noorenikah.Models.CommentReplyModel;
 import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -27,8 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,41 +47,46 @@ public class CallsLogsFragment extends Fragment {
         adapter = new CallLogsAdapter(getContext(), logsList, new CallLogsAdapter.CallLogsCallback() {
             @Override
             public void DialCall(String phone, boolean video) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Alert");
-                builder.setMessage("Dial call?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mDatabase.child("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(checkForBlockages(phone)){
+                    CommonUtils.showToast("Blocked");
+                }else {
 
-                                UserModel userModel = snapshot.getValue(UserModel.class);
-                                ArrayList<UserModel> userList = new ArrayList<>();
-                                userList.add(userModel);
-                                CallManager callManager = new CallManager(userModel.getFcmKey(),
-                                        getContext(), "test", 1L, Long.valueOf(userModel.getId()), userList);
-                                if (video) {
-                                    callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
-                                } else {
-                                    callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Alert");
+                    builder.setMessage("Dial call?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mDatabase.child("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                    UserModel userModel = snapshot.getValue(UserModel.class);
+                                    ArrayList<UserModel> userList = new ArrayList<>();
+                                    userList.add(userModel);
+                                    CallManager callManager = new CallManager(userModel.getFcmKey(),
+                                            getContext(), "test", 1L, Long.valueOf(userModel.getId()), userList);
+                                    if (video) {
+                                        callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
+                                    } else {
+                                        callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
 
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", null);
 
-                // create and show the alert dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                    // create and show the alert dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
 
 
             }
@@ -95,6 +95,16 @@ public class CallsLogsFragment extends Fragment {
 
         getLogsFromDB();
         return rootView;
+    }
+    private boolean checkForBlockages(String phone) {
+
+        if (SharedPrefs.getUser().getBlockedMe() != null && SharedPrefs.getUser().getBlockedMe().containsKey(phone)) {
+          return true;
+        } else if (SharedPrefs.getUser().getiBlocked() != null && SharedPrefs.getUser().getiBlocked().containsKey(phone)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void getLogsFromDB() {

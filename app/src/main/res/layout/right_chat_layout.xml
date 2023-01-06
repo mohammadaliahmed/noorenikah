@@ -23,9 +23,10 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end
+"
 
             android:textSize="11sp" />
         <ImageView
@@ -42,7 +43,6 @@
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/pictureArea"
         android:background="@drawable/right_msg_bg"
         android:padding="5dp">

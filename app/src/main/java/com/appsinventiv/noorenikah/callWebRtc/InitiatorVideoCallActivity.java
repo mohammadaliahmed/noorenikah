@@ -156,10 +156,11 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
 
     private void askForDangerousPermissions() {
         ArrayList<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
-        permissions.add(Manifest.permission.READ_PHONE_STATE);
+//        permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
+//        permissions.add(Manifest.permission.READ_PHONE_STATE);
         permissions.add(Manifest.permission.CAMERA);
         permissions.add(Manifest.permission.RECORD_AUDIO);
+
         DynamicPermission dynamicPermission = new DynamicPermission(this, permissions);
         boolean isPermissionGranted = dynamicPermission.checkAndRequestPermissions();
         if (isPermissionGranted) {

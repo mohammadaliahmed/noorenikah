@@ -1,10 +1,15 @@
 package com.appsinventiv.noorenikah.Activities;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
@@ -14,11 +19,14 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -111,6 +119,7 @@ public class ChatScreen extends AppCompatActivity {
     TextView userStatus;
     private boolean emojiShowing;
     ImageView dialVideo, dialAudio;
+    private boolean bblocked;
 
     @Override
     protected void onResume() {
@@ -154,6 +163,14 @@ public class ChatScreen extends AppCompatActivity {
         recordButton = (RecordButton) findViewById(R.id.record_button);
         SetupFileName();
         setUpRecord();
+
+        if (MainActivity.canCall) {
+            dialAudio.setVisibility(View.VISIBLE);
+            dialVideo.setVisibility(View.VISIBLE);
+        } else {
+            dialAudio.setVisibility(View.INVISIBLE);
+            dialVideo.setVisibility(View.INVISIBLE);
+        }
 
 
 //IMPORTANT
@@ -341,29 +358,48 @@ public class ChatScreen extends AppCompatActivity {
         dialAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<UserModel> userList = new ArrayList<>();
-                userList.add(otherUser);
-//            for(UserModel u:pList) {
-                CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
-                callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
-//            }
-                CommonUtils.showToast("Dialing audio");
+                if (!bblocked) {
+//                    dialAudioCall();
+                    showAlert("audio");
+                } else {
+                    CommonUtils.showToast("Blocked");
+                }
             }
         });
         dialVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!bblocked) {
+                    showAlert("video");
 
-                ArrayList<UserModel> userList = new ArrayList<>();
-                userList.add(otherUser);
-//                userList.add(itemList.get(5));
-                CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
-                callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
-                CommonUtils.showToast("Dialing Video");
+//                    dialVideoCall();
+                } else {
+                    CommonUtils.showToast("Blocked");
+                }
             }
         });
         getDataFromDb();
 
+    }
+
+    private void dialVideoCall() {
+        if (otherUser != null) {
+            ArrayList<UserModel> userList = new ArrayList<>();
+            userList.add(otherUser);
+            CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
+            callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
+            CommonUtils.showToast("Dialing Video");
+        }
+    }
+
+    private void dialAudioCall() {
+        if (otherUser != null) {
+            ArrayList<UserModel> userList = new ArrayList<>();
+            userList.add(otherUser);
+            CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
+            callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
+            CommonUtils.showToast("Dialing audio");
+        }
     }
 
     private void setUpRecord() {
@@ -454,21 +490,82 @@ public class ChatScreen extends AppCompatActivity {
     private void checkForBlockages() {
 
         if (SharedPrefs.getUser().getBlockedMe() != null && SharedPrefs.getUser().getBlockedMe().containsKey(otherUserPhone)) {
+            bblocked = true;
             recordingArea.setVisibility(View.GONE);
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("This user has blocked you");
         } else if (SharedPrefs.getUser().getiBlocked() != null && SharedPrefs.getUser().getiBlocked().containsKey(otherUserPhone)) {
             recordingArea.setVisibility(View.GONE);
+            bblocked = true;
             bottomArea.setVisibility(View.GONE);
             blocked.setVisibility(View.VISIBLE);
             blocked.setText("You have blocked this user");
         } else {
+            bblocked = false;
+
             recordingArea.setVisibility(View.VISIBLE);
             bottomArea.setVisibility(View.VISIBLE);
             blocked.setVisibility(View.GONE);
             blocked.setText("");
         }
+    }
+
+    private void showAlert(String callType) {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_invite_call, null);
+        dialog.setContentView(layout);
+        TextView link = layout.findViewById(R.id.link);
+        LinearLayout copyLink = layout.findViewById(R.id.copyLink);
+        LinearLayout share = layout.findViewById(R.id.share);
+        Button skip = layout.findViewById(R.id.skip);
+        String url = "http://noorenikah.com/refer?id=" + SharedPrefs.getUser().getMyReferralCode();
+        link.setText(url);
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (callType.equals("audio")) {
+                    dialAudioCall();
+                } else {
+                    dialVideoCall();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        copyLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("noorenikahurl", url);
+                clipboard.setPrimaryClip(clip);
+                CommonUtils.showToast("Link copied!");
+            }
+        });
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                String msg = "*Noor-E-Nikah Marriage Bureau\n" +
+                        "(اچھے رشتوں کے لئے یہ نورنکاح میرج بیورو کی ایپ ڈاون لوڈ کریں)\n" +
+                        "\"Your Privacy is our Priority\"\n" +
+                        "\n" +
+                        "Download Now\n" +
+                        url;
+                shareIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                startActivity(Intent.createChooser(shareIntent, "Share link via.."));
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
     }
 
     @Override

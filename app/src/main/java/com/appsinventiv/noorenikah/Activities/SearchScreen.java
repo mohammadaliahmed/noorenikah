@@ -17,12 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.appsinventiv.noorenikah.R;
 
 public class SearchScreen extends AppCompatActivity {
-    private String selectedEducation;
-    EditText minAge, maxAge, minHeight, maxHeight, city, minIncome, maxIncome, cast;
+    private String maritalStatus;
+    EditText minAge, maxAge,  city;
     Button search;
-    private String selectedHomeType;
-    RadioButton jobRadio, businessRadio;
-    private String jobOrBusiness;
+    RadioButton male, female;
+    private String gender="male";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +36,12 @@ public class SearchScreen extends AppCompatActivity {
 
         minAge = findViewById(R.id.minAge);
         maxAge = findViewById(R.id.maxAge);
-        minIncome = findViewById(R.id.minIncome);
-        maxIncome = findViewById(R.id.maxIncome);
-        jobRadio = findViewById(R.id.jobRadio);
-        businessRadio = findViewById(R.id.businessRadio);
-        minHeight = findViewById(R.id.minHeight);
-        maxHeight = findViewById(R.id.maxHeight);
+
+        female = findViewById(R.id.female);
+        male = findViewById(R.id.male);
+
         city = findViewById(R.id.city);
         search = findViewById(R.id.search);
-        cast = findViewById(R.id.cast);
-        setEducationSpinner();
         setHomeSpinner();
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,15 +49,9 @@ public class SearchScreen extends AppCompatActivity {
                 Intent i = new Intent(SearchScreen.this, SearchActivity.class);
                 i.putExtra("minAge", Integer.parseInt(minAge.getText().toString()));
                 i.putExtra("maxAge", Integer.parseInt(maxAge.getText().toString()));
-                i.putExtra("minHeight", Float.parseFloat(minHeight.getText().toString()));
-                i.putExtra("maxHeight", Float.parseFloat(maxHeight.getText().toString()));
-                i.putExtra("maxIncome", Integer.parseInt(maxIncome.getText().toString().equals("")?"999999":maxIncome.getText().toString()));
-                i.putExtra("minIncome", Integer.parseInt(minIncome.getText().toString().equals("")?"0":minIncome.getText().toString()));
                 i.putExtra("city", city.getText().toString());
-                i.putExtra("selectedHomeType", selectedHomeType);
-                i.putExtra("jobOrBusiness", jobOrBusiness);
-                i.putExtra("education", selectedEducation);
-                i.putExtra("cast", cast.getText().toString());
+                i.putExtra("gender", gender);
+                i.putExtra("maritalStatus", maritalStatus);
                 startActivity(i);
             }
         });
@@ -70,25 +59,26 @@ public class SearchScreen extends AppCompatActivity {
     }
 
     private void setupRadio() {
-        jobRadio.setOnCheckedChangeListener((compoundButton, b) -> {
+        female.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
-                jobOrBusiness = "job";
+                gender = "female";
             }
         });
-        businessRadio.setOnCheckedChangeListener((compoundButton, b) -> {
+        male.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
-                jobOrBusiness = "business";
+                gender = "male";
             }
         });
     }
 
     private void setHomeSpinner() {
-        String[] homeTypeList = {"Home type", "Own", "Rental", "Flat", "Apartment"};
-        Spinner homeSpinner = findViewById(R.id.homeSpinner);
-        homeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        String[] maritalStatuses = {"Single", "Married", "Windowed", "Separated", "Khula",
+                "Divorced"};
+        Spinner maritalSpinner = findViewById(R.id.maritalSpinner);
+        maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedHomeType = homeTypeList[i];
+                maritalStatus = maritalStatuses[i];
             }
 
             @Override
@@ -96,32 +86,12 @@ public class SearchScreen extends AppCompatActivity {
 
             }
         });
-        ArrayAdapter aa = new ArrayAdapter(SearchScreen.this, android.R.layout.simple_spinner_item, homeTypeList);
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, maritalStatuses);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
-        homeSpinner.setAdapter(aa);
+        maritalSpinner.setAdapter(aa);
     }
 
-    private void setEducationSpinner() {
-        String[] educationList = {"Select", "FA", "BA",
-                "MA", "MPhil", "Phd"};
-        Spinner educationSpinner = findViewById(R.id.qualificationSpinner);
-        educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedEducation = educationList[i];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        ArrayAdapter aa = new ArrayAdapter(SearchScreen.this, android.R.layout.simple_spinner_item, educationList);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        educationSpinner.setAdapter(aa);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

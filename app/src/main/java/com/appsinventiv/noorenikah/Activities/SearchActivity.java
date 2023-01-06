@@ -13,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Adapters.SearchUsersRecyclerAdapter;
 import com.appsinventiv.noorenikah.Adapters.UsersRecyclerAdapter;
+import com.appsinventiv.noorenikah.Models.NewUserModel;
 import com.appsinventiv.noorenikah.Models.NotificationModel;
 import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
+import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
 import com.google.android.gms.ads.AdError;
@@ -33,21 +36,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
     int minAge = 18, maxAge = 50;
-    int maxIncome = 999999, minIncome = 0;
-    float minHeight = 4, maxHeight = 7;
-    String city = "";
-    String jobOrBusiness = "";
-    String selectedHomeType = "";
-    String education = "";
-    String cast = "";
+    String city = "Lahore", gender = "male";
+    String maritalStatus = "";
     private DatabaseReference mDatabase;
     RecyclerView recycler;
-    private UsersRecyclerAdapter adapter;
+    private SearchUsersRecyclerAdapter adapter;
     private List<UserModel> usersList = new ArrayList<>();
     ProgressBar progress;
     TextView noData;
@@ -64,18 +64,12 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         this.setTitle("Search results");
         adRequest = new AdRequest.Builder().build();
-
-        minHeight = getIntent().getFloatExtra("minHeight", 4.0f);
-        maxHeight = getIntent().getFloatExtra("maxHeight", 7.0f);
         minAge = getIntent().getIntExtra("minAge", 18);
-        minIncome = getIntent().getIntExtra("minIncome", 0);
-        maxIncome = getIntent().getIntExtra("maxIncome", 9999999);
+
         maxAge = getIntent().getIntExtra("maxAge", 50);
         city = getIntent().getStringExtra("city");
-        jobOrBusiness = getIntent().getStringExtra("jobOrBusiness");
-        selectedHomeType = getIntent().getStringExtra("selectedHomeType");
-        education = getIntent().getStringExtra("education");
-        cast = getIntent().getStringExtra("cast");
+        gender = getIntent().getStringExtra("gender");
+        maritalStatus = getIntent().getStringExtra("maritalStatus");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -85,66 +79,62 @@ public class SearchActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-//        adapter = new UsersRecyclerAdapter(this, usersList, new UsersRecyclerAdapter.UsersAdapterCallbacks() {
-//            @Override
-//            public void onLikeClicked(User user) {
-//
-//            }
-//
-//            @Override
-//            public void onRequestClicked(User user) {
-//                sendNotification(user);
-//            }
-//        });
+        adapter=new SearchUsersRecyclerAdapter(this, usersList, new SearchUsersRecyclerAdapter.UsersAdapterCallbacks() {
+            @Override
+            public void onLikeClicked(UserModel user) {
+                sendLikeNotification(user);
+            }
+
+            @Override
+            public void onRequestClicked(UserModel user) {
+                sendNotification(user);
+            }
+
+            @Override
+            public void onShown(UserModel user) {
+
+            }
+        });
         LoadInterstritial();
         recycler.setAdapter(adapter);
-        mDatabase = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
+        mDatabase = Constants.M_DATABASE;
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 progress.setVisibility(View.GONE);
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserModel user = snapshot.getValue(UserModel.class);
-                        if (user != null && user.getName() != null && user.getGender() != null &&
-                                !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
-                            try {
-                                if (
 
-                                        user.getCity().equalsIgnoreCase(city)
-                                                && user.getEducation().equalsIgnoreCase(education)
-                                                && user.getHomeType().equalsIgnoreCase(selectedHomeType)
-                                                && user.getJobOrBusiness().equalsIgnoreCase(jobOrBusiness)
-                                                && user.getCast().equalsIgnoreCase(cast)
-                                                && user.getHeight() > minHeight
-                                                && user.getHeight() < maxHeight
-                                                && user.getAge() > minAge
-                                                && user.getAge() < maxAge
-                                                && user.getIncome() > minIncome
-                                                && user.getIncome() < maxIncome
-
-                                ) {
-                                    usersList.add(user);
-                                }
-                            } catch (Exception e) {
-
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserModel user = snapshot.getValue(UserModel.class);
+                    if (user != null && user.getName() != null && user.getGender() != null &&
+                            !user.getPhone().equalsIgnoreCase(SharedPrefs.getUser().getPhone())) {
+                        try {
+                            if (user.getCity().toLowerCase().contains(city.toLowerCase())
+                                    && user.getGender().equalsIgnoreCase(gender)
+                                    && user.getMaritalStatus().toLowerCase().contains(maritalStatus.toLowerCase())) {
+                                usersList.add(user);
                             }
+                        } catch (Exception e) {
 
                         }
+
                     }
-                    if (usersList.size() > 0) {
+                }
+                if (usersList.size() > 0 ) {
+                    Collections.shuffle(usersList);
+                    if (usersList.size() > 200) {
+                        usersList = usersList.subList(0, 200);
+                    }
+                    adapter.setUserList(usersList);
+
+                } else {
+                    if (adapter != null) {
                         adapter.setUserList(new ArrayList<>());
-                        getRequestSent();
-
-                    } else {
-                        if (adapter != null) {
-                            adapter.setUserList(new ArrayList<>());
-                            noData.setVisibility(View.VISIBLE);
-                        }
-
+                        noData.setVisibility(View.VISIBLE);
                     }
 
                 }
+
+
             }
 
             @Override
@@ -156,32 +146,34 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void getRequestSent() {
-        mDatabase.child("Requests").child(SharedPrefs.getUser().getPhone())
-                .child("sent").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String key = snapshot.getValue(String.class);
-                            requestSentMap.put(key, key);
-                        }
-                        List<String> requestedList = new ArrayList<>(requestSentMap.values());
-                        adapter.setRequestedList(requestedList);
 
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+    private void sendLikeNotification(UserModel user) {
 
-                    }
-                });
+        showInterstitial();
+        NotificationAsync notificationAsync = new NotificationAsync(this);
+        String NotificationTitle = SharedPrefs.getUser().getName() + " liked your profile";
+        String NotificationMessage = "Click to view";
+        notificationAsync.execute(
+                "ali",
+                user.getFcmKey(),
+                NotificationTitle,
+                NotificationMessage,
+                SharedPrefs.getUser().getPhone(),
+                "like");
+        String key = "" + System.currentTimeMillis();
+        NotificationModel model = new NotificationModel(key, NotificationTitle,
+                NotificationMessage, "like", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
+        mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
+
     }
 
     private void sendNotification(UserModel user) {
+
         showInterstitial();
         NotificationAsync notificationAsync = new NotificationAsync(this);
-        String NotificationTitle = "New request from: " + user.getName();
+        String NotificationTitle = "New request from: " + SharedPrefs.getUser().getName();
         String NotificationMessage = "Click to view";
         notificationAsync.execute(
                 "ali",
@@ -197,8 +189,7 @@ public class SearchActivity extends AppCompatActivity {
 
         String key = "" + System.currentTimeMillis();
         NotificationModel model = new NotificationModel(key, NotificationTitle,
-                NotificationMessage, "request", user.getLivePicPath(), SharedPrefs.getUser().getPhone(),
-                System.currentTimeMillis());
+                NotificationMessage, "request", SharedPrefs.getUser().getLivePicPath(), SharedPrefs.getUser().getPhone(), System.currentTimeMillis());
         mDatabase.child("Notifications").child(user.getPhone()).child(key).setValue(model);
 
     }

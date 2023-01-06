@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Models.CallModel;
 import com.appsinventiv.noorenikah.R;
 import com.appsinventiv.noorenikah.Utils.CommonUtils;
@@ -25,7 +26,7 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.ViewHo
     List<CallModel> itemList;
     CallLogsCallback callback;
 
-    public CallLogsAdapter(Context context, List<CallModel> itemList,CallLogsCallback callback) {
+    public CallLogsAdapter(Context context, List<CallModel> itemList, CallLogsCallback callback) {
         this.context = context;
         this.callback = callback;
         this.itemList = itemList;
@@ -56,25 +57,33 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.ViewHo
         holder.time.setText(CommonUtils.getFormattedDate(callModel.getStartTime()));
         holder.seconds.setText(CommonUtils.getDuration(callModel.getSeconds()));
 
+        if (callModel.getCallType() != null) {
+            if (callModel.getCallType().equalsIgnoreCase(Constants.CALL_INCOMING)) {
+                Glide.with(context).load(R.drawable.ic_incoming_call).into(holder.incomingOutgoing);
+            } else {
+                Glide.with(context).load(R.drawable.ic_outgoing_call).into(holder.incomingOutgoing);
+            }
 
-        if (callModel.getCallType().equalsIgnoreCase(Constants.CALL_INCOMING)) {
-            Glide.with(context).load(R.drawable.ic_incoming_call).into(holder.incomingOutgoing);
+            if (callModel.isVideo()) {
+                Glide.with(context).load(R.drawable.ic_video_call).into(holder.callType);
+            } else {
+                Glide.with(context).load(R.drawable.ic_audio_call).into(holder.callType);
+            }
         } else {
-            Glide.with(context).load(R.drawable.ic_outgoing_call).into(holder.incomingOutgoing);
-        }
-
-        if (callModel.isVideo()) {
-            Glide.with(context).load(R.drawable.ic_video_call).into(holder.callType);
-        } else {
-            Glide.with(context).load(R.drawable.ic_audio_call).into(holder.callType);
+            holder.callType.setVisibility(View.GONE);
         }
         holder.callType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.DialCall(callModel.getPhone(),callModel.isVideo());
+                callback.DialCall(callModel.getPhone(), callModel.isVideo());
             }
         });
 
+        if (MainActivity.canCall) {
+            holder.callType.setVisibility(View.VISIBLE);
+        } else {
+            holder.callType.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -83,7 +92,7 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, seconds,time;
+        TextView name, seconds, time;
         CircleImageView image;
         ImageView incomingOutgoing, callType;
 
@@ -98,8 +107,9 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.ViewHo
 
         }
     }
-    public interface CallLogsCallback{
-        public void DialCall(String phone,boolean video);
+
+    public interface CallLogsCallback {
+        public void DialCall(String phone, boolean video);
     }
 
 }

@@ -20,18 +20,16 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/message"
-            android:gravity="right"
-            android:text="sfdfsd"
+            android:text=""
             android:textSize="11sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_toRightOf="@id/profileArea"
         android:background="@drawable/left_msg_bg"
         android:orientation="vertical"

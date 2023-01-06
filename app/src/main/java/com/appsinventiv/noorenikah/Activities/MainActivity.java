@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private AdRequest adRequest;
     boolean firstTimeShow = false;
     private InterstitialAd interstitialAda;
+     public static boolean canCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         search = findViewById(R.id.search);
         menuImg = findViewById(R.id.menu);
         mDatabase = Constants.M_DATABASE;
-        navigation = (BottomNavigationView) findViewById(R.id.customBottomBar);
+        navigation =  findViewById(R.id.customBottomBar);
         navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
         if (Constants.REQUEST_RECEIVED) {
             fragment = new RequestsFragment();
@@ -168,10 +169,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getVersionCOdeFromDB() {
-        mDatabase.child("Admin").child("versionCode").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Admin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Integer code = dataSnapshot.getValue(Integer.class);
+                Integer code = dataSnapshot.child("versionCode").getValue(Integer.class);
+                canCall= dataSnapshot.child("canCall").getValue(Boolean.class);
                 PackageInfo pInfo = null;
                 try {
                     pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);

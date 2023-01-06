@@ -458,6 +458,8 @@ public class RecieveCallActivity extends AppCompatActivity implements SensorEven
 //                LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(intent);
                 break;
             case R.id.ConnectedCallEndBtn:
+                duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
+
                 endCallInDb();
                 // finishConnectedCall();
 //                GlobalMethods.vibrateMobile();

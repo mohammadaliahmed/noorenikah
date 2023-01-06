@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,6 +67,14 @@ public class ViewMyProfile extends AppCompatActivity {
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
         recycler.setAdapter(adapter);
         showUserData();
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ViewMyProfile.this, ViewPictures.class);
+                i.putExtra("url", user.getLivePicPath());
+                startActivity(i);
+            }
+        });
 
     }
 

@@ -1527,7 +1527,7 @@ public class GroupAudioRecieverServiceFirebase extends Service implements AudioC
         notificationIntent.putExtra(Constants.IntentExtra.TIME_ELAPSED, time);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_MUTABLE);
         Bitmap icon = BitmapFactory.decodeResource(getResources(),
                 Constants.CALL_TOTAL_TIME);
         Intent intent = new Intent(this, GroupAudioRecieverServiceFirebase.class);

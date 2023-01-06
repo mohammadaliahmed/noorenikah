@@ -1354,7 +1354,7 @@ public class GroupAudioCallerServiceFirebase extends Service implements AudioCal
 
         }else {
             pendingIntent = PendingIntent.getActivity(this,
-                    0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_MUTABLE);
 
         }
         Bitmap icon = BitmapFactory.decodeResource(getResources(),

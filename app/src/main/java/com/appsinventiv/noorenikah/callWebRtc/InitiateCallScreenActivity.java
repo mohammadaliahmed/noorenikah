@@ -110,6 +110,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     ImageView image;
     DatabaseReference mDatabase;
     private long duration;
+    LinearLayout layout_widget_call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
-        mDatabase=Constants.M_DATABASE;
+        mDatabase = Constants.M_DATABASE;
         showActivity();
         initViews();
         registerViews();
@@ -192,7 +193,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                     mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                     mTvStatus.setVisibility(View.VISIBLE);
                     mTvStatus.setText("   Reconnecting");
-                    
+
                 }
             } else {
                 if (mCallStatusFromService.equals(EventFromService.CALL_RINGING)) {
@@ -200,9 +201,11 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                     mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                     mTvStatus.setVisibility(View.VISIBLE);
                     mTvStatus.setText("   Ringing");
-                    
+
                 }
             }
+
+
         }
     }
 
@@ -227,6 +230,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     }
 
     private void initViews() {
+        layout_widget_call = findViewById(R.id.layout_widget_call);
         image = findViewById(R.id.image);
         mTvStatus = findViewById(R.id.tv_status);
         mBtnEndCall = findViewById(R.id.CallEndBtn);
@@ -325,12 +329,16 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setVisibility(View.VISIBLE);
                 mTvStatus.setText("   Ringing");
-                
+                playToneGenerator();
+
             } else if (callState.equals(EventFromService.CALL_CONNNECTED)) {
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setText("  Connecting");
-                
+                stopTone();
+
+
             } else if (callState.equals(EventFromService.CALL_STARTED)) {
+                layout_widget_call.setVisibility(View.VISIBLE);
                 Long elapsedTime = intent.getLongExtra(Constants.IntentExtra.TIME_ELAPSED, -1);
                 mBtnEndCall.setVisibility(View.GONE);
                 mConnectedCallEnd.setVisibility(View.VISIBLE);
@@ -346,7 +354,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             } else if (callState.equals(EventFromService.CALL_RECONTECTED_FAILED)) {
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setText("call-Disconnected");
-                
+
                 mChronometer.setVisibility(View.GONE);
             } else if (callState.equals(EventFromService.CALL_END)) {
                 CommonUtils.showToast("Call end");
@@ -355,16 +363,16 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setVisibility(View.VISIBLE);
                 mTvStatus.setText("   Reconnecting");
-                
+
             } else if (callState.equals(EventFromService.PARTICIPANT_MUTE)) {
                 mChronometer.setVisibility(View.GONE);
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setVisibility(View.VISIBLE);
                 mTvStatus.setText("  Receiver on Mute");
-                
+
             } else if (callState.equals(EventFromService.PARTICIPANT_UNMUTE)) {
                 mTvStatus.setVisibility(View.GONE);
-                
+
                 mCallStatusLinearLayouot.setVisibility(View.GONE);
                 mChronometer.setVisibility(View.VISIBLE);
             } else if (callState.equals(EventFromService.HOLD_CALL)) {
@@ -372,7 +380,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
                 mTvStatus.setVisibility(View.VISIBLE);
                 mTvStatus.setText(" Receiver on hold");
-                
+
             } else if (callState.equals(EventFromService.NATIVE_CALL_HOLD)) {
                 isHold = true;
 ////                Drawable replacer = getResources().getDrawable(R.drawable.ic_unhold);
@@ -382,7 +390,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
 ////                //   Drawable replacer = getResources().getDrawable(R.drawable.ic_hold);
 //                //  mBtn_hold.setImageDrawable(replacer);
                 mTvStatus.setVisibility(View.GONE);
-                
+
                 mCallStatusLinearLayouot.setVisibility(View.GONE);
                 mChronometer.setVisibility(View.VISIBLE);
             } else if (callState.equals(EventFromService.MESSAGE)) {
@@ -536,6 +544,12 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         super.onDestroy();
     }
 
+    public void stopTone() {
+        if (mToneGenerator != null) {
+            mToneGenerator.stopTone();
+        }
+    }
+
     public void unregisterSensor() {
         try {
             isActive = false;
@@ -586,6 +600,8 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 startHomeActivity();
                 break;
             case R.id.ConnectedCallEndBtn:
+                duration = SystemClock.elapsedRealtime() - mChronometer.getBase();
+
                 endCallInDb();
                 // finishConnectedCall();
 //                GlobalMethods.vibrateMobile();
@@ -668,15 +684,15 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     }
 
     private void endCallInDb() {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("endTime",System.currentTimeMillis());
-        map.put("seconds",duration);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("endTime", System.currentTimeMillis());
+        map.put("seconds", duration);
 
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
-                .child(""+mRoomId).updateChildren(map);
+                .child("" + mRoomId).updateChildren(map);
 
         mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
-                .child(""+mRoomId).updateChildren(map);
+                .child("" + mRoomId).updateChildren(map);
 
 
     }
@@ -686,7 +702,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         int n = rand.nextInt(998) + 1;
         mRoomId = Long.valueOf(n);
         startInitiateCallerService("admin", userModel.getName(), userModel.getPicUrl(), mgroupName, userId, mfirebaseId);
-        CallModel model=new CallModel(""+mRoomId,
+        CallModel model = new CallModel("" + mRoomId,
                 userModel.getPhone(),
                 userModel.getName(),
                 userModel.getLivePicPath(),
@@ -695,12 +711,12 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
                 0,
                 System.currentTimeMillis(),
                 System.currentTimeMillis()
-                );
+        );
 
         mDatabase.child("Calls").child(SharedPrefs.getUser().getPhone()).child(userModel.getPhone())
-                .child(""+mRoomId).setValue(model);
+                .child("" + mRoomId).setValue(model);
 
-        CallModel model2=new CallModel(""+mRoomId,
+        CallModel model2 = new CallModel("" + mRoomId,
                 SharedPrefs.getUser().getPhone(),
                 SharedPrefs.getUser().getName(),
                 SharedPrefs.getUser().getLivePicPath(),
@@ -712,7 +728,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         );
 
         mDatabase.child("Calls").child(userModel.getPhone()).child(SharedPrefs.getUser().getPhone())
-                .child(""+mRoomId).setValue(model2);
+                .child("" + mRoomId).setValue(model2);
 
 
     }
@@ -772,36 +788,6 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
         });
     }
 
-//    private void individualMissedCall() {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("userId", UserManager.getInstance().getUserIfLoggedIn().getmFireBaseId());
-//        params.put("callId", mCallId);
-//        callViewModel.individualMissedCall(params, new INetworkRequestListener() {
-//            @Override
-//            public void onSuccess(Response result) {
-//                String response = (String) result.getmObj();
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response);
-//                    jsonObject = jsonObject.getJSONObject("data");
-//                    Long callStateCode = jsonObject.getLong("callStateCode");
-//                    Long responseType = jsonObject.getLong("responseTypeCode");
-//                    callViewModel.updateCallStatusAndResponse(mCallId, callStateCode, responseType, 0L, 0L);
-//                    removeTimer();
-//                    closeConnectionFromSocket();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Response result) {
-////                showToast("Server Error");
-//                //todo make discussion on this one...
-////                GlobalMethods.updateUiToUpdateCallLogs();
-//                InitiateCallScreenActivity.this.finish();
-//            }
-//        });
-//    }
 
     private void callerCancelAudioCall() {
 
@@ -912,14 +898,13 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
     }
 
 
-
     private void checkIfReciverOnHold(boolean isHold) {
         if (isHold) {
             mChronometer.setVisibility(View.GONE);
             mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
             mTvStatus.setVisibility(View.VISIBLE);
             mTvStatus.setText(" Receiver on hold");
-            
+
         }
     }
 
@@ -929,7 +914,7 @@ public class InitiateCallScreenActivity extends AppCompatActivity implements Sen
             mCallStatusLinearLayouot.setVisibility(View.VISIBLE);
             mTvStatus.setVisibility(View.VISIBLE);
             mTvStatus.setText(" Receiver on Mute");
-            
+
         }
     }
 

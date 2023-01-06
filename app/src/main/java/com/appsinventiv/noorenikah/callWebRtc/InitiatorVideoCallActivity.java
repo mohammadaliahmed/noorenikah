@@ -424,7 +424,6 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
         }
     }
     private void endCallInDb() {
-        duration=SystemClock.elapsedRealtime() - mChrometer.getBase();
         HashMap<String,Object> map=new HashMap<>();
         map.put("endTime",System.currentTimeMillis());
         map.put("seconds",duration);
@@ -809,6 +808,8 @@ public class InitiatorVideoCallActivity extends AppCompatActivity implements Vie
                 endCallInDb();
                 break;
             case R.id.inGoingcallEnd:
+                duration=SystemClock.elapsedRealtime() - mChrometer.getBase();
+
                 disConnectIngoingCall();
                 endCallInDb();
                 break;

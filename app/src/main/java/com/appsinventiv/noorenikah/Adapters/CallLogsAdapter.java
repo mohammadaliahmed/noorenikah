@@ -53,8 +53,7 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.ViewHo
                 .placeholder(R.drawable.picked)
                 .into(holder.image);
         holder.name.setText(callModel.getName());
-        holder.time.setText(CommonUtils.getFormattedDate(callModel.getStartTime()));
-        holder.time.setText(CommonUtils.getFormattedDate(callModel.getStartTime()));
+        holder.time.setText(CommonUtils.getFormattedDateOnlyy(callModel.getStartTime()));
         holder.seconds.setText(CommonUtils.getDuration(callModel.getSeconds()));
 
         if (callModel.getCallType() != null) {

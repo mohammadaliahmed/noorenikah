@@ -453,7 +453,7 @@ public class VideoInitiatorCallService extends Service implements AudioCallBackI
         notificationIntent.putExtra(Constants.IntentExtra.INTENT_GROUP_ID, mGroupId);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_MUTABLE);
         Bitmap icon = BitmapFactory.decodeResource(getResources(),
                 Constants.CALL_TOTAL_TIME);
         Intent intent = new Intent(this, VideoInitiatorCallService.class);

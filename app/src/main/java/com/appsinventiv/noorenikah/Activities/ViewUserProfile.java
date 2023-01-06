@@ -96,6 +96,15 @@ public class ViewUserProfile extends AppCompatActivity {
         recycler.setAdapter(adapter);
         getPostsFromDB();
 
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ViewUserProfile.this, ViewPictures.class);
+                i.putExtra("url", user.getLivePicPath());
+                startActivity(i);
+            }
+        });
+
     }
 
     private void getPostsFromDB() {
@@ -309,7 +318,6 @@ public class ViewUserProfile extends AppCompatActivity {
                 "I don't like it",
                 "False information",
                 "Bully or harassment",
-                "False information",
                 "Scam or fraud",
                 "Violence or Dangerous",
                 "Scam or fraud",

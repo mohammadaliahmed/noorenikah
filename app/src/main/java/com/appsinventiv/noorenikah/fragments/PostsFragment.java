@@ -146,7 +146,6 @@ public class PostsFragment extends Fragment {
                 "I don't like it",
                 "False information",
                 "Bully or harassment",
-                "False information",
                 "Scam or fraud",
                 "Violence or Dangerous",
                 "Scam or fraud",

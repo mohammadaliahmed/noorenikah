@@ -778,6 +778,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
                 startChatActivity(mGroupId);
                 break;
             case R.id.ic_callEnd:
+                duration=SystemClock.elapsedRealtime() - mChrometer.getBase();
                 onCallHangUp();
                 endCallInDb();
                 break;
@@ -795,8 +796,6 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
     }
 
     private void endCallInDb() {
-        duration = SystemClock.elapsedRealtime() - mChrometer.getBase();
-
         HashMap<String, Object> map = new HashMap<>();
 
         map.put("endTime", System.currentTimeMillis());

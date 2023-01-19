@@ -30,12 +30,14 @@ public class PeerFactory {
         switch (mCalltype) {
             case GROUP_AUDIO:
             case INDIVIDUAL_AUDIO:
-                PeerConnectionFactory.initializeAndroidGlobals(mApplicationContext, true, false, true);
-                break;
+                PeerConnectionFactory.initialize(
+                        PeerConnectionFactory.InitializationOptions.builder(mApplicationContext)
+                                .createInitializationOptions());                break;
             case GROUP_VIDEO:
             case INDIVIDUAL_VIDEO:
-                PeerConnectionFactory.initializeAndroidGlobals(mApplicationContext, true, true, true);
-                break;
+                PeerConnectionFactory.initialize(
+                        PeerConnectionFactory.InitializationOptions.builder(mApplicationContext)
+                                .createInitializationOptions());                break;
             default:
         }
         PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();

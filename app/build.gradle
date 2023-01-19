@@ -10,8 +10,8 @@ android {
         applicationId "com.appsinventiv.noorenikah"
         minSdk 21
         targetSdk 32
-        versionCode 28
-        versionName "1.28"
+        versionCode 29
+        versionName "1.29"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -95,14 +95,18 @@ dependencies {
     implementation files('libs/httpcore-4.3.3.jar')
     implementation files('libs/httpmime-4.3.6.jar')
     // webrtc updated libs
-    implementation files('libs/audio_device_java.jar')
+//    implementation files('libs/audio_device_java.jar')
     implementation files('libs/autobanh.jar')
-    implementation files('libs/base_java.jar')
-    implementation files('libs/libjingle_peerconnection.jar')
+//    implementation files('libs/base_java.jar')
+//    implementation files('libs/libjingle_peeronnection.jar')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/httpclient-4.3.6.jar')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.billingclient:billing:5.1.0'
+//    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    implementation 'org.webrtc:google-webrtc:1.0.22672'
+
+
 
 
 }

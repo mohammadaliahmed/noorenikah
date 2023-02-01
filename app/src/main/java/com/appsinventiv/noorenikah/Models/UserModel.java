@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class UserModel implements Serializable {
     String name, referralCode, phone, password;
     String fcmKey;
+    boolean paidViaGoogle;
     String livePicPath, belonging, houseSize, city, houseAddress,
             nationality, fatherName, motherName, gender, jobOrBusiness,
             maritalStatus, education, religion, cast, homeType, sect, companyName, fatherOccupation,
@@ -27,6 +28,18 @@ public class UserModel implements Serializable {
     String id;
 
     public UserModel() {
+    }
+
+    public boolean isPaidViaGoogle() {
+        return paidViaGoogle;
+    }
+
+    public void setPaidViaGoogle(boolean paidViaGoogle) {
+        this.paidViaGoogle = paidViaGoogle;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {

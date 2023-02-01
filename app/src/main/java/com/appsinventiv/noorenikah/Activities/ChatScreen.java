@@ -1,5 +1,9 @@
 package com.appsinventiv.noorenikah.Activities;
 
+import static androidx.core.content.PackageManagerCompat.LOG_TAG;
+
+import static com.appsinventiv.noorenikah.Utils.Constants.BILLING_LICENSE;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ClipData;
@@ -40,6 +44,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.appsinventiv.noorenikah.Adapters.ChatAdapter;
 import com.appsinventiv.noorenikah.Models.ChatModel;
 import com.appsinventiv.noorenikah.Models.UserModel;
@@ -120,6 +126,8 @@ public class ChatScreen extends AppCompatActivity {
     private boolean emojiShowing;
     ImageView dialVideo, dialAudio;
     private boolean bblocked;
+    private BillingProcessor bp;
+    private boolean readyToPurchase;
 
     @Override
     protected void onResume() {
@@ -147,6 +155,57 @@ public class ChatScreen extends AppCompatActivity {
 
         }
         getPermissions();
+        if (!BillingProcessor.isIabServiceAvailable(this)) {
+            CommonUtils.showToast("In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16");
+        }
+        bp = new BillingProcessor(this, BILLING_LICENSE, null, new BillingProcessor.IBillingHandler() {
+            @Override
+            public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo purchaseInfo) {
+                savePurchase(true);
+
+            }
+
+            @Override
+            public void onBillingError(int errorCode, @Nullable Throwable error) {
+//                showToast("onBillingError: " + errorCode);
+            }
+
+            @Override
+            public void onBillingInitialized() {
+//                showToast("onBillingInitialized");
+                readyToPurchase = true;
+
+//                CommonUtils.showToast("" + bp.isSubscribed("weekly"));
+
+            }
+
+            @Override
+            public void onPurchaseHistoryRestored() {
+//                showToast("onPurchaseHistoryRestored");
+                for (String sku : bp.listOwnedProducts())
+                    Log.d(LOG_TAG, "Owned Managed Product: " + sku);
+                for (String sku : bp.listOwnedSubscriptions())
+                    Log.d(LOG_TAG, "Owned Subscription: " + sku);
+                savePurchase(true);
+
+//                CommonUtils.showToast("" + bp.isSubscribed("weekly"));
+            }
+        });
+        bp.initialize();
+        bp.loadOwnedPurchasesFromGoogleAsync(new BillingProcessor.IPurchasesResponseListener() {
+            @Override
+            public void onPurchasesSuccess() {
+                savePurchase(true);
+
+
+            }
+
+            @Override
+            public void onPurchasesError() {
+                savePurchase(false);
+            }
+        });
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -360,7 +419,29 @@ public class ChatScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if (!bblocked) {
 //                    dialAudioCall();
-                    showAlert("audio");
+                    if (!SharedPrefs.getUser().isPaidViaGoogle()) {
+
+
+                        mDatabase.child("ReferralCodesHistory")
+                                .child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.getChildrenCount() > 4) {
+                                            dialAudioCall();
+                                        } else {
+                                            showAlert("audio", snapshot.getChildrenCount());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                    } else {
+                        dialAudioCall();
+                    }
+
                 } else {
                     CommonUtils.showToast("Blocked");
                 }
@@ -370,7 +451,27 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!bblocked) {
-                    showAlert("video");
+                    if (!SharedPrefs.getUser().isPaidViaGoogle()) {
+                        mDatabase.child("ReferralCodesHistory")
+                                .child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.getChildrenCount() > 4) {
+                                            dialVideoCall();
+                                        } else {
+                                            showAlert("video", snapshot.getChildrenCount());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                    } else {
+                        dialVideoCall();
+                    }
+//                    showAlert("video");
 
 //                    dialVideoCall();
                 } else {
@@ -380,6 +481,13 @@ public class ChatScreen extends AppCompatActivity {
         });
         getDataFromDb();
 
+    }
+
+    private void savePurchase(boolean b) {
+        UserModel userF = SharedPrefs.getUser();
+        userF.setPaidViaGoogle(b);
+        SharedPrefs.setUser(userF);
+        mDatabase.child(SharedPrefs.getUser().getPhone()).child("paidViaGoogle").setValue(true);
     }
 
     private void dialVideoCall() {
@@ -511,7 +619,7 @@ public class ChatScreen extends AppCompatActivity {
         }
     }
 
-    private void showAlert(String callType) {
+    private void showAlert(String callType, long count) {
         final Dialog dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -519,12 +627,16 @@ public class ChatScreen extends AppCompatActivity {
 
         View layout = layoutInflater.inflate(R.layout.alert_dialog_invite_call, null);
         dialog.setContentView(layout);
+        Button subscribe = layout.findViewById(R.id.subscribe);
+        TextView title = layout.findViewById(R.id.title);
         TextView link = layout.findViewById(R.id.link);
         LinearLayout copyLink = layout.findViewById(R.id.copyLink);
         LinearLayout share = layout.findViewById(R.id.share);
         Button skip = layout.findViewById(R.id.skip);
         String url = "http://noorenikah.com/refer?id=" + SharedPrefs.getUser().getMyReferralCode();
         link.setText(url);
+
+        title.setText("Please Invite " + count + "/5  friends to app to activate this feature");
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -535,6 +647,16 @@ public class ChatScreen extends AppCompatActivity {
                     dialVideoCall();
                 }
                 dialog.dismiss();
+            }
+        });
+        subscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                bp.subscribe(ChatScreen.this, "yearly");
+
+
             }
         });
 

@@ -18,6 +18,8 @@ public class Constants {
     public static String CALL_INCOMING = "INCOMING";
     public static String CALL_ENDED = "ENDED";
     public static String CALL_MISSED = "INCOMING";
+    public static String BILLING_LICENSE = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkAp0NDwF87Er95wbsTXl4UN8FFrmZvi9Bvt9x4wjpM5hJJEs7rYxJi5gg3GwbbFQ6dV6YqYVdBU60WyL8TkSCYIKX6tz519hV6fStbm+8CdeafC8aho/MzaSOyjsxkNR8dcWTe7EtFDVYSdVhI7rup5S5GoLyVCR8ktiDWxkdYeGqNr327wpyi5VRwv3Vo9v26OdOPNbOyH07TkBcW/hD0JKylXIYgjmUF7eUI1rg+iDvvxFJM7DQtI3v9IhJzig0Ato77DErbdSzAGLsQ8sSV6VHdslELyg9lRs1oSdc7HhqWScRzpQoHu5cg0WI0HL0pKXlBA3O94h3kqs5HYrkQIDAQAB";
+
 
     public static DatabaseReference M_DATABASE = FirebaseDatabase.getInstance("https://noorenikah-default-rtdb.firebaseio.com/").getReference();
     public static final String FirebaseMessaging = "AAAA91yjyaU:APA91bFM4SHeu_4MCchQSW19DODeaHGCyZP2fPw7vPgNYnEu020By2uAMuXFUDRagCHOs86VZWRfI6ZjtPyrYJu-vNeuEHPDlNmZrQpQuSlTvg3TU8CZ2655G3fwu7bCPBO8OVUunDxn";

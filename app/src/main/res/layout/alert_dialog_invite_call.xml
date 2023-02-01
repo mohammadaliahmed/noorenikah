@@ -13,6 +13,7 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -108,10 +109,24 @@
             android:textColor="#fff"
             android:layout_margin="10dp"
             android:textAllCaps="false"
+            android:visibility="gone"
             android:background="@drawable/btn_bg"
             android:layout_width="wrap_content"
             android:id="@+id/skip"
             android:text="Skip>"
+            android:layout_height="25dp"/>
+        <Button
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:layout_margin="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:textAllCaps="false"
+            android:visibility="visible"
+            android:background="@drawable/btn_bg"
+            android:layout_width="wrap_content"
+            android:id="@+id/subscribe"
+            android:text="Pay Rs 300/- to subscribe"
             android:layout_height="25dp"/>
 
     </LinearLayout>

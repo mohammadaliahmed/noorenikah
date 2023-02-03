@@ -238,7 +238,7 @@ public class ReceiverVideoCallActivity extends AppCompatActivity implements View
         fullScreenVideoView.init(rootEgl.getEglBaseContext(), null);
         fullScreenVideoView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
         fullScreenVideoView.setEnableHardwareScaler(true);
-        fullScreenVideoView.setMirror(true);
+        fullScreenVideoView.setMirror(false);
     }
 
     public void sendRequestToService(Enum requestEvent) {

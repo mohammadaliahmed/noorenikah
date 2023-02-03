@@ -303,7 +303,7 @@ public class VideoRecieverCallService extends Service implements AudioCallBackIn
         fullScreenVideoView.init(rootEgl.getEglBaseContext(), null);
         fullScreenVideoView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
         fullScreenVideoView.setEnableHardwareScaler(true);
-        fullScreenVideoView.setMirror(false);
+        fullScreenVideoView.setMirror(true);
         localVideoProxy.setTarget(fullScreenVideoView);
         // Setup remote Video Stream...
 
@@ -311,7 +311,7 @@ public class VideoRecieverCallService extends Service implements AudioCallBackIn
         bottomVideoView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
         bottomVideoView.setZOrderMediaOverlay(true);
         bottomVideoView.setEnableHardwareScaler(true);
-        bottomVideoView.setMirror(false);
+        bottomVideoView.setMirror(true);
         remoteVideoProxy.setTarget(bottomVideoView);
         remoteRenderers.add(remoteVideoProxy);
     }

@@ -14,8 +14,8 @@ android {
         applicationId "com.appsinventiv.noorenikah"
         minSdk 21
         targetSdk 32
-        versionCode 30
-        versionName "1.30"
+        versionCode 31
+        versionName "1.31"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -91,23 +91,11 @@ dependencies {
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:1.0.1'
     implementation 'com.facebook.android:facebook-login:[5,6)'
     implementation('io.socket:socket.io-client:1.0.0') {
-        // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
-    //greenbot event bus
     implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation files('libs/httpcore-4.3.3.jar')
-    implementation files('libs/httpmime-4.3.6.jar')
-    // webrtc updated libs
-//    implementation files('libs/audio_device_java.jar')
-    implementation files('libs/autobanh.jar')
-//    implementation files('libs/base_java.jar')
-//    implementation files('libs/libjingle_peeronnection.jar')
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation files('libs/httpclient-4.3.6.jar')
+
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.billingclient:billing:5.1.0'
-//    implementation 'org.webrtc:google-webrtc:1.0.32006'
     implementation 'org.webrtc:google-webrtc:1.0.22672'
 
     def billing_version = "5.1.0"

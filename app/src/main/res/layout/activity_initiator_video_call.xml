@@ -22,7 +22,6 @@
             android:id="@+id/bottom_video_view"
             android:layout_width="160dp"
             android:layout_height="180dp"
-
             android:visibility="invisible" />
 
         <LinearLayout

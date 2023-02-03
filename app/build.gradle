@@ -14,8 +14,8 @@ android {
         applicationId "com.appsinventiv.noorenikah"
         minSdk 21
         targetSdk 32
-        versionCode 31
-        versionName "1.31"
+        versionCode 32
+        versionName "1.32"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -34,9 +34,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildFeatures {
-        viewBinding true
-    }
+
     allprojects {
         repositories {
 
@@ -96,7 +94,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
 
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'org.webrtc:google-webrtc:1.0.22672'
 
     def billing_version = "5.1.0"
     implementation "com.android.billingclient:billing:$billing_version"

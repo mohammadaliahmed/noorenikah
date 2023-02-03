@@ -5,6 +5,7 @@ import static androidx.core.content.PackageManagerCompat.LOG_TAG;
 import static com.appsinventiv.noorenikah.Utils.Constants.BILLING_LICENSE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -56,7 +57,6 @@ import com.appsinventiv.noorenikah.Utils.Constants;
 import com.appsinventiv.noorenikah.Utils.KeyboardUtils;
 import com.appsinventiv.noorenikah.Utils.NotificationAsync;
 import com.appsinventiv.noorenikah.Utils.SharedPrefs;
-import com.appsinventiv.noorenikah.call.CallManager;
 import com.bumptech.glide.Glide;
 import com.devlomi.record_view.OnBasketAnimationEnd;
 import com.devlomi.record_view.OnRecordListener;
@@ -124,7 +124,6 @@ public class ChatScreen extends AppCompatActivity {
     EmojiPopup emojiPopup;
     TextView userStatus;
     private boolean emojiShowing;
-    ImageView dialVideo, dialAudio;
     private boolean bblocked;
     private BillingProcessor bp;
     private boolean readyToPurchase;
@@ -179,6 +178,7 @@ public class ChatScreen extends AppCompatActivity {
 
             }
 
+            @SuppressLint("RestrictedApi")
             @Override
             public void onPurchaseHistoryRestored() {
 //                showToast("onPurchaseHistoryRestored");
@@ -215,21 +215,12 @@ public class ChatScreen extends AppCompatActivity {
         emoji = findViewById(R.id.emoji);
         userStatus = findViewById(R.id.userStatus);
         messagingArea = findViewById(R.id.messagingArea);
-        dialAudio = findViewById(R.id.dialAudio);
-        dialVideo = findViewById(R.id.dialVideo);
+
         recordingArea = findViewById(R.id.recordingArea);
         recordView = (RecordView) findViewById(R.id.record_view);
         recordButton = (RecordButton) findViewById(R.id.record_button);
         SetupFileName();
         setUpRecord();
-
-        if (MainActivity.canCall) {
-            dialAudio.setVisibility(View.VISIBLE);
-            dialVideo.setVisibility(View.VISIBLE);
-        } else {
-            dialAudio.setVisibility(View.INVISIBLE);
-            dialVideo.setVisibility(View.INVISIBLE);
-        }
 
 
 //IMPORTANT
@@ -414,71 +405,7 @@ public class ChatScreen extends AppCompatActivity {
         adapter.setItemList(itemList);
         recyclerView.scrollToPosition(itemList.size() - 1);
 
-        dialAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!bblocked) {
-//                    dialAudioCall();
-                    if (!SharedPrefs.getUser().isPaidViaGoogle()) {
 
-
-                        mDatabase.child("ReferralCodesHistory")
-                                .child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.getChildrenCount() > 4) {
-                                            dialAudioCall();
-                                        } else {
-                                            showAlert("audio", snapshot.getChildrenCount());
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                    } else {
-                        dialAudioCall();
-                    }
-
-                } else {
-                    CommonUtils.showToast("Blocked");
-                }
-            }
-        });
-        dialVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!bblocked) {
-                    if (!SharedPrefs.getUser().isPaidViaGoogle()) {
-                        mDatabase.child("ReferralCodesHistory")
-                                .child(SharedPrefs.getUser().getMyReferralCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.getChildrenCount() > 4) {
-                                            dialVideoCall();
-                                        } else {
-                                            showAlert("video", snapshot.getChildrenCount());
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                    } else {
-                        dialVideoCall();
-                    }
-//                    showAlert("video");
-
-//                    dialVideoCall();
-                } else {
-                    CommonUtils.showToast("Blocked");
-                }
-            }
-        });
         getDataFromDb();
 
     }
@@ -490,25 +417,6 @@ public class ChatScreen extends AppCompatActivity {
         mDatabase.child(SharedPrefs.getUser().getPhone()).child("paidViaGoogle").setValue(true);
     }
 
-    private void dialVideoCall() {
-        if (otherUser != null) {
-            ArrayList<UserModel> userList = new ArrayList<>();
-            userList.add(otherUser);
-            CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
-            callManager.callHandler(CallManager.CallType.INDIVIDUAL_VIDEO);
-            CommonUtils.showToast("Dialing Video");
-        }
-    }
-
-    private void dialAudioCall() {
-        if (otherUser != null) {
-            ArrayList<UserModel> userList = new ArrayList<>();
-            userList.add(otherUser);
-            CallManager callManager = new CallManager(otherUser.getFcmKey(), ChatScreen.this, "test", 1L, Long.valueOf(otherUser.getId()), userList);
-            callManager.callHandler(CallManager.CallType.INDIVIDUAL_AUDIO);
-            CommonUtils.showToast("Dialing audio");
-        }
-    }
 
     private void setUpRecord() {
         recordButton.setRecordView(recordView);
@@ -638,17 +546,7 @@ public class ChatScreen extends AppCompatActivity {
 
         title.setText("Please Invite " + count + "/5  friends to app to activate this feature");
 
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (callType.equals("audio")) {
-                    dialAudioCall();
-                } else {
-                    dialVideoCall();
-                }
-                dialog.dismiss();
-            }
-        });
+
         subscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

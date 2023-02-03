@@ -22,16 +22,11 @@ import com.appsinventiv.noorenikah.Activities.MainActivity;
 import com.appsinventiv.noorenikah.Activities.MatchMaker.MatchMakerProfile;
 import com.appsinventiv.noorenikah.Activities.Posts.PostComments;
 import com.appsinventiv.noorenikah.Activities.Posts.PostLikes;
-import com.appsinventiv.noorenikah.Activities.RecieveCallActivity;
 import com.appsinventiv.noorenikah.Activities.Splash;
 import com.appsinventiv.noorenikah.Activities.ViewUserProfile;
 import com.appsinventiv.noorenikah.Models.UserModel;
 import com.appsinventiv.noorenikah.R;
-import com.appsinventiv.noorenikah.call.CallManager;
-import com.appsinventiv.noorenikah.callWebRtc.GroupAudioCallerServiceFirebase;
-import com.appsinventiv.noorenikah.callWebRtc.GroupAudioRecieverServiceFirebase;
-import com.appsinventiv.noorenikah.callWebRtc.ReceiverVideoCallActivity;
-import com.appsinventiv.noorenikah.callWebRtc.foregroundService.VideoRecieverCallService;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -83,27 +78,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 final String userstring = map.get("userstring");
                 final String callerId = map.get("callerId");
                 if (SharedPrefs.getUser() != null) {
-                    if (type.equalsIgnoreCase("audio")) {
 
-
-                        startcallactivity(groupname, userstring, roomId, callerId, type);
-                    } else if (type.equalsIgnoreCase("video")) {
-                        startcallactivity(groupname, userstring, roomId, callerId, type);
-                    } else if (type.equalsIgnoreCase("callerCancelCall")) {
-                        boolean isCallReceiverSerciveRunning = isMyServiceRunning(GroupAudioRecieverServiceFirebase.class);
-                        if (isCallReceiverSerciveRunning) {
-                            Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
-                            abc.putExtra(Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll, Constants.Broadcasts.BROADCAST_CALLER_CANCEL_AUDIO_CAll);
-                            LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
-                        }
-                    } else if (type.equalsIgnoreCase("callRejected")) {
-                        Intent abc = new Intent(Constants.Broadcasts.BROADCAST_CALL_REJECTED);
-                        abc.putExtra(Constants.Broadcasts.BROADCAST_CALL_REJECTED, Constants.Broadcasts.BROADCAST_CALL_REJECTED);
-                        LocalBroadcastManager.getInstance(ApplicationClass.getInstance().getApplicationContext()).sendBroadcast(abc);
-                    } else {
                         handleNow(title, message, bitmap);
 
-                    }
+
                 }
 
             } else {
@@ -253,59 +231,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(num /* Request Code */, mBuilder.build());
     }
 
-    private void startcallactivity(String groupname, String userstring, String roomId, String callerId, String type) {
 
-        boolean isIntiateCallerServiceRunning = isMyServiceRunning(GroupAudioCallerServiceFirebase.class);
-        boolean isCallReceiverSerciveRunning = isMyServiceRunning(GroupAudioRecieverServiceFirebase.class);
-        boolean isCallVideoSerciveRunning = isMyServiceRunning(VideoRecieverCallService.class);
-        Intent intent = null;
-
-        if (type != null && type.equalsIgnoreCase("audio")) {
-            intent = new Intent(ApplicationClass
-                    .getInstance().getApplicationContext(), RecieveCallActivity.class);
-
-        } else if (type != null && type.equalsIgnoreCase("video")) {
-            intent = new Intent(ApplicationClass
-                    .getInstance().getApplicationContext(), ReceiverVideoCallActivity.class);
-
-        }
-        if ((!isIntiateCallerServiceRunning) && (!isCallReceiverSerciveRunning) && (!isCallVideoSerciveRunning)) {
-            intent.putExtra(Constants.IntentExtra.INTENT_GROUP_NAME, groupname);
-            intent.putExtra(Constants.IntentExtra.USERSTRING, userstring);
-            intent.putExtra(Constants.IntentExtra.CALLER_USER_ID, callerId);
-            intent.putExtra("room", Long.parseLong(room));
-            intent.putExtra(Constants.IntentExtra.INTENT_ROOM_ID, Long.valueOf(roomId));
-            intent.putExtra(Constants.IntentExtra.CALL_TYPE, CallManager.CallType.INDIVIDUAL_AUDIO);
-            final ArrayList<UserModel> userList = new ArrayList<>();
-            UserModel user = UserManager.getInstance().getUserIfLoggedIn();
-            userList.add(user);
-            intent.putExtra(Constants.IntentExtra.INTENT_GROUP_NAME, groupname);
-            intent.putExtra(Constants.IntentExtra.CALLER_USER_ID, callerId);
-            intent.putExtra(Constants.IntentExtra.PARTICIPANTS, StringUtils.getGson().
-                    toJson(userList));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        }
-        if (roomId != null) {
-            try {
-                ApplicationClass.getInstance().
-                        getApplicationContext().
-                        startActivity(intent);
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    public static boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) ApplicationClass.getInstance().getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 }
